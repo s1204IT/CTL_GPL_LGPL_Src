@@ -1,0 +1,1 @@
+cmd_board/sunxi/android/built-in.o :=  ./../tools/toolchain/gcc-linaro-7.2.1-2017.11-x86_64_arm-linux-gnueabi/bin/arm-linux-gnueabi-ld.bfd     -r -o board/sunxi/android/built-in.o board/sunxi/android/sunxi_avb.o board/sunxi/android/sunxi_android_boot.o board/sunxi/android/sunxi_verify_boot_info.o 

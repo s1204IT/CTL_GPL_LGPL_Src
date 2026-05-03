@@ -1,0 +1,7 @@
+avb_cmdline.c:155:15:uint64_to_base10	64	static
+avb_cmdline.c:114:12:cmdline_append_option.isra.0	40	static
+avb_cmdline.c:17:7:avb_sub_cmdline	144	static
+avb_cmdline.c:215:21:avb_append_options	176	static
+avb_cmdline.c:395:22:avb_new_cmdline_subst_list	0	static
+avb_cmdline.c:399:6:avb_free_cmdline_subst_list	24	static
+avb_cmdline.c:409:21:avb_add_root_digest_substitution	32	static

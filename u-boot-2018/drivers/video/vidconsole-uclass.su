@@ -1,0 +1,13 @@
+vidconsole-uclass.c:408:12:vidconsole_pre_probe	16	static
+vidconsole-uclass.c:95:13:vidconsole_newline	24	static
+vidconsole-uclass.c:420:12:vidconsole_post_probe	16	static
+vidconsole-uclass.c:31:5:vidconsole_putc_xy	4	static
+vidconsole-uclass.c:40:5:vidconsole_move_rows	4	static
+vidconsole-uclass.c:50:5:vidconsole_set_row	0	static
+vidconsole-uclass.c:138:5:vid_console_color	0	static
+vidconsole-uclass.c:330:5:vidconsole_put_char	32	static
+vidconsole-uclass.c:398:13:vidconsole_puts	16	static
+vidconsole-uclass.c:390:13:vidconsole_putc	8	static
+vidconsole-uclass.c:479:12:do_video_puts	24	static
+vidconsole-uclass.c:451:6:vidconsole_position_cursor	24	static
+vidconsole-uclass.c:461:12:do_video_setcursor	24	static

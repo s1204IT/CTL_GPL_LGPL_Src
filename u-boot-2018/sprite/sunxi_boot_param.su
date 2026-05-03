@@ -1,0 +1,5 @@
+sunxi_boot_param.c:22:27:sunxi_bootparam_get_buf_in_relocate_f	0	static
+sunxi_boot_param.c:33:5:sunxi_bootparam_check_magic	16	static
+sunxi_boot_param.c:67:6:sunxi_bootparam_set_boot0_checksum	0	static
+sunxi_boot_param.c:73:5:sunxi_bootparam_format	8	static
+sunxi_boot_param.c:97:5:sunxi_bootparam_down	8	static

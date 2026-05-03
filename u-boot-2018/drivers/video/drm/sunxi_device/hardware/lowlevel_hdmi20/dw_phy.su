@@ -1,0 +1,13 @@
+dw_phy.c:239:11:_dw_phy_i2cm_wait_irq_state	16	static
+dw_phy.c:307:12:_dw_phy_set_slave_addr	8	static
+dw_phy.c:340:4:dw_phy_get_hpd	8	static
+dw_phy.c:345:6:dw_phy_config_svsret	8	static
+dw_phy.c:352:6:dw_phy_set_power	8	static
+dw_phy.c:358:5:dw_phy_config_interface	8	static
+dw_phy.c:379:5:dw_phy_standby	8	static
+dw_phy.c:397:4:dw_phy_wait_lock	8	static
+dw_phy.c:409:5:dw_phy_write	8	static
+dw_phy.c:424:5:dw_phy_read	16	static
+dw_phy.c:439:5:dw_phy_initialize	8	static
+dw_phy.c:473:5:dw_phy_init	16	static
+dw_phy.c:488:9:dw_phy_dump	24	static

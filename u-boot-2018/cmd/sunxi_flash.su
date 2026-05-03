@@ -1,0 +1,2 @@
+sunxi_flash.c:107:5:do_sunxi_flash_boot0	32	static
+sunxi_flash.c:196:5:do_sunxi_flash	168	static

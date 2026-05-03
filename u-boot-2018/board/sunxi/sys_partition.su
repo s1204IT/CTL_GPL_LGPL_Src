@@ -1,0 +1,11 @@
+sys_partition.c:155:12:size_parse	8	static
+sys_partition.c:177:5:sunxi_partition_parse	40	static
+sys_partition.c:235:5:sunxi_partition_init	16	static
+sys_partition.c:264:5:sunxi_probe_partition_map	8	static
+sys_partition.c:281:5:sunxi_replace_android_ab_system	32	static
+sys_partition.c:313:5:sunxi_partition_get_partno_byname	168	static
+sys_partition.c:378:5:sunxi_flash_try_partition	40	static
+sys_partition.c:428:5:sunxi_partition_get_info	16	static
+sys_partition.c:356:5:sunxi_partition_get_info_byname	136	static
+sys_partition.c:368:6:sunxi_partition_get_offset_byname	128	static
+sys_partition.c:474:10:sunxi_partition_get_offset	16	static

@@ -1,0 +1,5 @@
+asn1_new_free.c:28:6:ASN1_primitive_free.part.0	8	static
+asn1_new_free.c:16:6:ASN1_TYPE_set	24	static
+asn1_new_free.c:28:6:ASN1_primitive_free	4	static
+asn1_new_free.c:87:6:asn1_item_combine_free	32	static
+asn1_new_free.c:10:6:ASN1_item_free	16	static

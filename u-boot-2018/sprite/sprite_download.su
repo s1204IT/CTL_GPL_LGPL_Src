@@ -1,0 +1,16 @@
+sprite_download.c:65:13:prepare_backup_gpt_header	24	static
+sprite_download.c:56:6:dump_dram_para	24	static
+sprite_download.c:169:5:sunxi_sprite_download_uboot	16	static
+sprite_download.c:198:5:sunxi_sprite_upload_uboot	0	static
+sprite_download.c:226:5:download_secure_boot0	24	static
+sprite_download.c:337:5:download_normal_boot0	16	static
+sprite_download.c:421:5:sunxi_sprite_get_boot0_cheksum	16	static
+sprite_download.c:447:5:sunxi_sprite_download_boot0	8	static
+sprite_download.c:460:6:sunxi_get_logical_offset_param	16	static
+sprite_download.c:488:5:gpt_convert_to_sunxi_mbr	112	static
+sprite_download.c:606:5:sunxi_mbr_convert_to_gpt_4k	152	static
+sprite_download.c:753:5:sunxi_mbr_convert_to_gpt	144	static
+sprite_download.c:894:5:download_standard_gpt	24	static
+sprite_download.c:119:5:sunxi_sprite_download_mbr	16	static
+sprite_download.c:1077:5:sunxi_update_gpt4k	112	static
+sprite_download.c:1201:5:sunxi_update_gpt	120	static

@@ -1,0 +1,7 @@
+sunxi_mmc_host_tm1.c:58:12:mmc_init_default_timing_para	8	static
+sunxi_mmc_host_tm1.c:110:13:sunxi_mmc_clk_io_onoff	8	static
+sunxi_mmc_host_tm1.c:399:13:sunxi_mmc_core_init	16	static
+sunxi_mmc_host_tm1.c:389:13:sunxi_mmc_set_speed_mode	0	static
+sunxi_mmc_host_tm1.c:279:5:mmc_config_delay_tm1	8	static
+sunxi_mmc_host_tm1.c:319:12:mmc_set_mod_clk	32	static
+sunxi_mmc_host_tm1.c:420:6:sunxi_mmc_host_tm1_init	16	static

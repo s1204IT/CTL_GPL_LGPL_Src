@@ -1,0 +1,9 @@
+strto.c:18:20:_parse_integer_fixup_radix	4	static
+strto.c:34:15:simple_strtoul	32	static
+strto.c:54:5:strict_strtoul	32	static
+strto.c:78:6:simple_strtol	8	static
+strto.c:86:15:ustrtoul	8	static
+strto.c:133:20:simple_strtoull	40	static
+strto.c:109:20:ustrtoull	8	static
+strto.c:152:6:trailing_strtoln	16	static
+strto.c:168:6:trailing_strtol	0	static

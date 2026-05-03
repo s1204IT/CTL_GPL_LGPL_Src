@@ -1,0 +1,7 @@
+sunxi_drm_bridge.c:20:6:sunxi_drm_bridge_init	0	static
+sunxi_drm_bridge.c:34:6:sunxi_drm_bridge_pre_enable	8	static
+sunxi_drm_bridge.c:46:6:sunxi_drm_bridge_post_disable	8	static
+sunxi_drm_bridge.c:58:6:sunxi_drm_bridge_enable	8	static
+sunxi_drm_bridge.c:70:6:sunxi_drm_bridge_disable	8	static
+sunxi_drm_bridge.c:82:6:sunxi_drm_bridge_mode_set	16	static
+sunxi_drm_bridge.c:95:6:sunxi_drm_bridge_detect	8	static

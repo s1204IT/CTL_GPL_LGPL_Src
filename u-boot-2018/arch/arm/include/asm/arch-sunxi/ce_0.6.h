@@ -1,0 +1,119 @@
+/*
+ * (C) Copyright 2013-2016
+ * Allwinner Technology Co., Ltd. <www.allwinnertech.com>
+ *
+ * SPDX-License-Identifier:     GPL-2.0+
+ */
+
+#ifndef _SS_H_
+#define _SS_H_
+
+#include <config.h>
+#include <asm/arch/cpu.h>
+#include <memalign.h>
+
+#define SS_N_BASE       SUNXI_CE_BASE              /* non security */
+
+#define SS_REG_CTL		(SS_N_BASE + 0x00)
+#define SS_REG_KEY_BASE		(SS_N_BASE + 0x04)
+#define SS_REG_KEY(n)		(SS_REG_KEY_BASE + 4*n)
+#define SS_REG_KEY_NUM		8
+#define SS_REG_IV_BASE		(SS_N_BASE + 0x24)
+#define SS_REG_IV(n)		(SS_REG_IV_BASE + 4*n)
+#define SS_REG_IV_NUM		4
+#define SS_REG_FCSR		(SS_N_BASE + 0x44)
+#define SS_REG_ICSR		(SS_N_BASE + 0x48)
+#define SS_REG_MD_BASE		(SS_N_BASE + 0x4C)
+#define SS_REG_MD(n)		((n < 5) ? (SS_REG_MD_BASE + 4*n) : (SS_REG_MD_BASE + 0x40 + 4*n))
+#define SS_REG_MD_NUM		8
+#define SS_REG_CNT_BASE		(SS_N_BASE + 0x34)
+#define SS_REG_CNT(n)		(SS_REG_CNT_BASE + 4*n)
+#define SS_REG_CNT_NUM		4
+#define SS_REG_CTS_LEN		(SS_N_BASE + 0x60)
+#define SS_REG_RXFIFO		(SS_N_BASE + 0x200)
+#define SS_REG_TXFIFO		(SS_N_BASE + 0x204)
+
+#define SS_KEY_SELECT_INPUT			0
+#define SS_KEY_SELECT_SID_R			1
+#define SS_KEY_SELECT_SID_B			2
+#define SS_KEY_SELECT_INTER			3
+#define SS_REG_CTL_KEY_SELECT_SHIFT	24
+#define SS_REG_CTL_KEY_SELECT_MASK	(0x4 << SS_REG_CTL_KEY_SELECT_SHIFT)
+
+#define SS_RNG_MODE_ONESHOT			0
+#define SS_RNG_MODE_CONTINUE		1
+#define SS_REG_CTL_PRNG_MODE_SHIFT	15
+#define SS_REG_CTL_PRNG_MODE_MASK	(1 << SS_REG_CTL_PRNG_MODE_SHIFT)
+
+#define SS_IV_MODE_CONSTANT			0
+#define SS_IV_MODE_ARBITRARY		1
+#define SS_REG_CTL_IV_MODE_SHIFT	14
+#define SS_REG_CTL_IV_MODE_MASK		(1 << SS_REG_CTL_IV_MODE_SHIFT)
+
+#define SS_AES_MODE_ECB				0
+#define SS_AES_MODE_CBC				1
+#define SS_AES_MODE_CTR				2
+#define SS_AES_MODE_CTS				3
+#define SS_REG_CTL_OP_MODE_SHIFT	12
+#define SS_REG_CTL_OP_MODE_MASK		(0x3 << SS_REG_CTL_OP_MODE_SHIFT)
+
+#define SS_CTR_SIZE_16				0
+#define SS_CTR_SIZE_32				1
+#define SS_CTR_SIZE_64				2
+#define SS_REG_CTL_CTR_SIZE_SHIFT	10
+#define SS_REG_CTL_CTR_SIZE_MASK	(0x3 << SS_REG_CTL_CTR_SIZE_SHIFT)
+
+#define SS_AES_KEY_SIZE_128			0
+#define SS_AES_KEY_SIZE_192			1
+#define SS_AES_KEY_SIZE_256			2
+#define SS_REG_CTL_KEY_SIZE_SHIFT	8
+#define SS_REG_CTL_KEY_SIZE_MASK	(0x3 << SS_REG_CTL_KEY_SIZE_SHIFT)
+
+#define SS_DIR_ENCRYPT				0
+#define SS_DIR_DECRYPT				1
+#define SS_REG_CTL_OP_DIR_SHIFT		7
+#define SS_REG_CTL_OP_DIR_MASK		(0x1 << SS_REG_CTL_OP_DIR_SHIFT)
+
+#define SS_METHOD_AES				0
+#define SS_METHOD_DES				1
+#define SS_METHOD_3DES				2
+#define SS_METHOD_SHA1				3
+#define SS_METHOD_MD5				4
+#define SS_METHOD_PRNG				5
+#define SS_METHOD_SAH256			6
+#define SS_REG_CTL_METHOD_SHIFT		4
+#define SS_REG_CTL_METHOD_MASK		(0x7 << SS_REG_CTL_METHOD_SHIFT)
+
+#define SS_METHOD_IS_HASH(type) ((type == SS_METHOD_MD5) \
+		|| (type == SS_METHOD_SHA1) || (type == SS_METHOD_SHA256))
+
+#define SS_REG_CTL_SHA_END_SHIFT	2
+#define SS_REG_CTL_SHA_END_MASK		(0x1 << SS_REG_CTL_SHA_END_SHIFT)
+
+#define SS_CTL_START				1
+#define SS_REG_CTL_START_MASK		0x1
+
+#define SS_REG_FCSR_RXFIFO_STATUS	 BIT(30)
+#define SS_REG_FCSR_RXFIFO_EMP_CNT_SHIFT 24
+#define SS_REG_FCSR_RXFIFO_EMP_CNT_MASK \
+		(0x3F << SS_REG_FCSR_RXFIFO_EMP_CNT_SHIFT)
+#define SS_REG_FCSR_TXFIFO_STATUS        BIT(22)
+#define SS_REG_FCSR_TXFIFO_AVA_CNT_SHIFT 16
+#define SS_REG_FCSR_TXFIFO_AVA_CNT_MASK \
+		(0x3F << SS_REG_FCSR_TXFIFO_AVA_CNT_SHIFT)
+#define SS_REG_FCSR_RXFIFO_TRIG_LEVEL_SHIFT 8
+#define SS_REG_FCSR_RXFIFO_TRIG_LEVEL_MASK \
+		(0x1F << SS_REG_FCSR_RXFIFO_TRIG_LEVEL_SHIFT)
+#define SS_REG_FCSR_TXFIFO_TRIG_LEVEL_SHIFT 0
+#define SS_REG_FCSR_TXFIFO_TRIG_LEVEL_MASK \
+		(0x1F << SS_REG_FCSR_TXFIFO_TRIG_LEVEL_SHIFT)
+
+#define SS_REG_ICSR_RXFIFO_EMP_PENDING    BIT(10)
+#define SS_REG_ICSR_TXFIFO_AVA_PENDING    BIT(8)
+#define SS_REG_ICSR_DRA_ENABLE		  BIT(4)
+#define SS_REG_ICSR_RXFIFO_EMP_INT_ENABLE BIT(2)
+#define SS_REG_ICSR_TXFIFO_AVA_INT_ENABLE BIT(0)
+
+#define SS_SEED_SIZE 24
+
+#endif    /*  #ifndef _SS_H_  */

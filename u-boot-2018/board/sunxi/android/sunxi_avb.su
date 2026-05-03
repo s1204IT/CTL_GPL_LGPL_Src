@@ -1,0 +1,15 @@
+sunxi_avb.c:13:5:sunxi_avb_check_magic	8	static
+sunxi_avb.c:18:5:sunxi_avb_read_vbmeta_head	16	static
+sunxi_avb.c:32:6:sunxi_avb_dump_vbmeta	24	static
+sunxi_avb.c:51:5:sunxi_avb_vbmeta_size	16	static
+sunxi_avb.c:87:6:sunxi_avb_slot_vbmeta_head	20	static
+sunxi_avb.c:118:5:sunxi_avb_verify_all_vbmeta	112	static
+sunxi_avb.c:222:5:sunxi_avb_verify_vbmeta	96	static
+sunxi_avb.c:262:5:sunxi_walk_avb_descriptor	24	static
+sunxi_avb.c:304:5:sunxi_avb_get_descriptor_by_name	176	static
+sunxi_avb.c:373:5:sunxi_avb_get_hash_descriptor_by_name	24	static
+sunxi_avb.c:396:5:sunxi_vbmeta_self_verify	352	static
+sunxi_avb.c:516:5:sunxi_avb_get_vbmeta_flags	528	static
+sunxi_avb.c:58:6:sunxi_avb_setup_env	1176	static
+sunxi_avb.c:539:5:sunxi_avb_read_vbmeta_data	32	static
+sunxi_avb.c:580:5:sunxi_avb_read_vbmeta_in_partition	616	static

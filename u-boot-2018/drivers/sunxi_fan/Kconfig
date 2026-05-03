@@ -1,0 +1,5 @@
+menuconfig SUNXI_FAN
+	bool "sunxi fan"
+	default n
+
+

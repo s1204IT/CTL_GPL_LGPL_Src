@@ -1,0 +1,13 @@
+de_frontend.c:94:9:de_frontend_data_size	0	static
+de_frontend.c:101:5:de_frontend_parse_snr_en	0	static
+de_frontend.c:118:6:de_frontend_process_late	8	static
+de_frontend.c:127:5:de_frontend_apply_csc	72	static
+de_frontend.c:178:5:de_frontend_apply_dci	8	static
+de_frontend.c:186:5:de_frontend_apply_snr	8	static
+de_frontend.c:200:5:de_frontend_enable	16	static
+de_frontend.c:363:5:de_frontend_apply_size_and_bypass	64	static
+de_frontend.c:458:5:de_frontend_apply_lut	8	static
+de_frontend.c:473:5:de_frontend_dump_state	16	static
+de_frontend.c:497:5:de_frontend_apply	16	static
+de_frontend.c:527:6:de_frontend_update_regs	8	static
+de_frontend.c:544:28:de_frontend_create	64	static

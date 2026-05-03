@@ -1,0 +1,1 @@
+cmd_drivers/video/drm/phys/built-in.o :=  ./../tools/toolchain/gcc-linaro-7.2.1-2017.11-x86_64_arm-linux-gnueabi/bin/arm-linux-gnueabi-ld.bfd     -r -o drivers/video/drm/phys/built-in.o drivers/video/drm/phys/sunxi_dsi_combophy.o drivers/video/drm/phys/sunxi_dsi_combophy_reg.o 

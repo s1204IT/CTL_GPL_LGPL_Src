@@ -1,0 +1,1 @@
+cmd_drivers/mmc/built-in.o :=  ./../tools/toolchain/gcc-linaro-7.2.1-2017.11-x86_64_arm-linux-gnueabi/bin/arm-linux-gnueabi-ld.bfd     -r -o drivers/mmc/built-in.o drivers/mmc/mmc.o drivers/mmc/mmc_write.o drivers/mmc/mmc_legacy.o drivers/mmc/sunxi_mmc.o drivers/mmc/sunxi_mmc_tuning.o drivers/mmc/sunxi_mmc_interface.o drivers/mmc/sunxi_mmc_ffu.o drivers/mmc/host/built-in.o 

@@ -1,0 +1,11 @@
+phy_inno.c:428:11:_inno_phy_get_rxsense_lock	0	static
+phy_inno.c:445:11:_inno_phy_get_pll_lock	0	static
+phy_inno.c:203:13:_inno_phy_digital_reset	16	static
+phy_inno.c:234:13:_inno_turn_ldo_ctrl	16	static
+phy_inno.c:307:6:_inno_phy_config_4k60	8	static
+phy_inno.c:336:6:_inno_phy_config_4k30	8	static
+phy_inno.c:612:5:inno_phy_write	8	static
+phy_inno.c:625:5:inno_phy_read	8	static
+phy_inno.c:636:5:inno_phy_init	16	static
+phy_inno.c:692:5:inno_phy_config	40	static
+phy_inno.c:710:9:inno_phy_dump	48	static

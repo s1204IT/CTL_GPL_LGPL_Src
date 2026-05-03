@@ -1,0 +1,4 @@
+de_fbd_atw.c:247:13:fbd_atw_set_block_dirty.part.2	0	static
+de_fbd_atw.c:258:6:de_afbc_format_mod_supported	0	static
+de_fbd_atw.c:466:5:de_afbd_apply_lay	128	static
+de_fbd_atw.c:605:24:de_afbd_create	32	static

@@ -1,0 +1,1 @@
+cmd_drivers/video/drm/panels/built-in.o :=  ./../tools/toolchain/gcc-linaro-7.2.1-2017.11-x86_64_arm-linux-gnueabi/bin/arm-linux-gnueabi-ld.bfd     -r -o drivers/video/drm/panels/built-in.o drivers/video/drm/panels/panel-dsi.o drivers/video/drm/panels/panel-lvds.o drivers/video/drm/panels/edp_general_panel.o 

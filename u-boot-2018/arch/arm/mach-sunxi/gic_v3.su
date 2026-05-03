@@ -1,0 +1,16 @@
+gic_v3.c:67:13:default_isr	8	static
+gic_v3.c:263:13:gic_distributor_init	0	static
+gic_v3.c:55:5:get_cpu_id	0	static
+gic_v3.c:61:5:get_cluster_id	0	static
+gic_v3.c:82:5:irq_enable	8	static
+gic_v3.c:110:5:irq_disable	8	static
+gic_v3.c:166:6:irq_install_handler	24	static
+gic_v3.c:186:6:irq_free_handler	8	static
+gic_v3.c:200:6:do_irq	8	static
+gic_v3.c:245:5:do_irqinfo	32	static
+gic_v3.c:326:13:clock_set_gic	0	static
+gic_v3.c:332:5:arch_interrupt_init	8	static
+gic_v3.c:352:5:arch_interrupt_exit	8	static
+gic_v3.c:362:5:sunxi_gic_cpu_interface_init	0	static
+gic_v3.c:423:6:gic_type	0	static
+gic_v3.c:439:5:set_irq_prio	8	static

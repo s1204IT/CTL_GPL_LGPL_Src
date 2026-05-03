@@ -1,0 +1,1 @@
+cmd_drivers/phy_key/built-in.o :=  ./../tools/toolchain/gcc-linaro-7.2.1-2017.11-x86_64_arm-linux-gnueabi/bin/arm-linux-gnueabi-ld.bfd     -r -o drivers/phy_key/built-in.o drivers/phy_key/sunxi_phykey.o drivers/phy_key/sunxi_lrkey.o drivers/phy_key/sunxi_gpiokey.o 

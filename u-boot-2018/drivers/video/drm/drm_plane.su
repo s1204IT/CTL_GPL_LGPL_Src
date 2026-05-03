@@ -1,0 +1,8 @@
+drm_plane.c:140:5:drm_universal_plane_init	40	static
+drm_plane.c:167:6:drm_plane_cleanup	16	static
+drm_plane.c:197:19:drm_plane_from_index	8	static
+drm_plane.c:209:5:drm_plane_check_pixel_format	24	static
+drm_plane.c:248:6:drm_any_plane_has_format	24	static
+drm_plane.c:261:5:drm_framebuffer_check_src_coords	56	static
+drm_plane.c:288:5:drm_get_primary_plane_id	8	static
+drm_plane.c:307:5:drm_mode_setplane	56	static

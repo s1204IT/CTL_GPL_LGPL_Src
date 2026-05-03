@@ -1,0 +1,6 @@
+charset.c:15:8:utf16_strlen	0	static
+charset.c:22:8:utf16_strnlen	0	static
+charset.c:29:11:utf16_strcpy	0	static
+charset.c:39:11:utf16_strdup	8	static
+charset.c:49:10:utf16_to_utf8	16	static
+charset.c:101:11:utf8_to_utf16	16	static

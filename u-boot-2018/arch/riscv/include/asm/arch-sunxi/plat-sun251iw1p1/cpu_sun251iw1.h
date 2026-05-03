@@ -1,0 +1,46 @@
+/* SPDX-License-Identifier: GPL-2.0+ */
+
+#include <asm/arch/plat-sun251iw1p1/cpu_autogen.h>
+
+#ifndef _SUNXI_CPU_SUN251IW1_H
+#define _SUNXI_CPU_SUN251IW1_H
+
+#define SUNXI_SS_BASE			SUNXI_CE_NS_BASE
+
+#define SUNXI_PIO_BASE			SUNXI_GPIO_BASE
+#define SUNXI_CCM_BASE			SUNXI_CCMU_BASE
+#define SUNXI_DMA_BASE			SUNXI_DMAC_BASE
+#define SUNXI_SRAMC_BASE		SUNXI_SYSCTRL_BASE
+
+/* SID address space starts at 0x03006000, but e-fuse is at offset 0x200 */
+#define SUNXI_SID_SRAM_BASE		0x03006200
+#define SUNXI_WDT_BASE 			(SUNXI_TIMER_BASE + 0xA0)
+
+#define SUNXI_PLIC_BASE			SUNXI_RISCV_PLIC_BASE
+
+#define SUNXI_MMC0_BASE			SUNXI_SMHC0_BASE
+#define SUNXI_MMC1_BASE			SUNXI_SMHC1_BASE
+#define SUNXI_MMC2_BASE			SUNXI_SMHC2_BASE
+
+/*#define SUNXI_RSB_BASE*/
+
+#define SUNXI_GMAC_BASE			SUNXI_GMAC0_BASE
+
+/*USB DRD AS ehci0*/
+#define SUNXI_USBOTG_BASE		SUNXI_USB0_BASE
+#define SUNXI_EHCI0_BASE		0x04101000
+#define SUNXI_EHCI1_BASE		0x04200000
+
+#define SUNXI_PRCM_BASE			SUNXI_R_PRCM_BASE
+#define SUNXI_R_IR_RX_BASE		SUNXI_IR_RX_BASE
+#define SUNXI_R_PIO_BASE		0x07022000
+#define SUNXI_R_TWI_BASE		0x07020800
+#define SUNXI_RTWI_BRG_REG		(SUNXI_PRCM_BASE + 0x019c)
+
+#define SUNXI_RTC_DATA_BASE     (SUNXI_RTC_BASE + 0x100)
+
+#ifndef __ASSEMBLY__
+int sunxi_get_sid(unsigned int *sid);
+#endif
+
+#endif /* _SUNXI_CPU_SUN251IW1_H */

@@ -1,0 +1,16 @@
+tcon_top.c:26:5:tcon_lcd_rgb_src_sel	0	static
+tcon_top.c:34:6:tcon_lcd_dsc_src_sel	0	static
+tcon_top.c:48:5:tcon_lcd_dsi_src_sel	0	static
+tcon_top.c:59:5:tcon_lcd_dsi_clk_source	0	static
+tcon_top.c:76:5:tcon0_out_to_gpio	0	static
+tcon_top.c:90:5:tcon1_out_to_gpio	0	static
+tcon_top.c:106:5:tcon1_tv_clk_enable	0	static
+tcon_top.c:125:5:tcon1_edp_clk_enable	0	static
+tcon_top.c:154:5:tcon1_hdmi_clk_enable	0	static
+tcon_top.c:178:5:tcon_hdmi_clk_src_sel	0	static
+tcon_top.c:199:5:tcon_lcd_dsi_clk_enable	0	static
+tcon_top.c:217:5:tcon_de_attach	0	static
+tcon_top.c:256:5:edp_de_attach	0	static
+tcon_top.c:273:5:tcon_get_attach_by_de_index	0	static
+tcon_top.c:285:5:tcon_top_set_reg_base	0	static
+tcon_top.c:291:11:tcon_top_get_reg_base	0	static

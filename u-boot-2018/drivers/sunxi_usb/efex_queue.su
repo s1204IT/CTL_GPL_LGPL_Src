@@ -1,0 +1,5 @@
+efex_queue.c:33:5:efex_queue_init	16	static
+efex_queue.c:63:5:efex_queue_exit	8	static
+efex_queue.c:74:5:efex_queue_write_one_page	8	static
+efex_queue.c:93:5:efex_queue_write_all_page	16	static
+efex_queue.c:115:5:efex_save_buff_to_queue	56	static

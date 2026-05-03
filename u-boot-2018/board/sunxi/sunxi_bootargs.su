@@ -1,0 +1,6 @@
+sunxi_bootargs.c:31:6:check_user_data	96	static
+sunxi_bootargs.c:170:5:sunxi_bootargs_load_key	328	static
+sunxi_bootargs.c:246:5:update_user_data	544	static
+sunxi_bootargs.c:271:6:update_bootargs	2336	static
+sunxi_bootargs.c:553:5:android_image_cmdline_to_vendorbootconfig	4272	static
+sunxi_bootargs.c:520:6:update_vendorbootconfig_and_bootgargs	24	static

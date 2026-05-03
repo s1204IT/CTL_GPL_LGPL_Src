@@ -1,0 +1,7 @@
+de_channel.c:109:5:drm_to_de_format	8	static
+de_channel.c:544:6:channel_update_regs	0	static
+de_channel.c:551:6:channel_process_late	0	static
+de_channel.c:556:6:channel_format_mod_supported	0	static
+de_channel.c:565:5:channel_apply	784	static
+de_channel.c:764:6:dump_channel_state	184	static
+de_channel.c:818:27:de_channel_create	56	static

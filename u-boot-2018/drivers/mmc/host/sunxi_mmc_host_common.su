@@ -1,0 +1,4 @@
+sunxi_mmc_host_common.c:53:5:sunxi_auto_pow_mode	8	static
+sunxi_mmc_host_common.c:1293:5:sunxi_host_mmc_config	280	static
+sunxi_mmc_host_common.c:1322:27:sunxi_mmc_get_src_clk_no	8	static
+sunxi_mmc_host_common.c:1353:27:sunxi_host_src_clk	8	static

@@ -1,0 +1,9 @@
+phy_aw.c:589:12:_aw_phy_enable	16	static
+phy_aw.c:713:5:aw_phy_config	64	static
+phy_aw.c:766:6:aw_phy_set_reg_base	0	static
+phy_aw.c:771:11:aw_phy_get_reg_base	0	static
+phy_aw.c:776:5:aw_phy_write	8	static
+phy_aw.c:787:5:aw_phy_read	8	static
+phy_aw.c:798:5:aw_phy_init	8	static
+phy_aw.c:806:5:aw_phy_reset	0	static
+phy_aw.c:812:5:aw_phy_resume	16	static

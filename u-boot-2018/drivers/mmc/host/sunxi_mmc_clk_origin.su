@@ -1,0 +1,6 @@
+sunxi_mmc_clk_origin.c:75:5:sunxi_mmc_set_clk_origin_tm1	24	static
+sunxi_mmc_clk_origin.c:339:5:sunxi_mmc_set_clk_origin_tm4	24	static
+sunxi_mmc_clk_origin.c:586:12:sunxi_mmc_set_clk_common	0	static
+sunxi_mmc_clk_origin.c:591:12:sunxi_mmc_set_clk_type1	0	static
+sunxi_mmc_clk_origin.c:596:12:sunxi_mmc_set_clk_fpga_tm1	0	static
+sunxi_mmc_clk_origin.c:601:12:sunxi_mmc_set_clk_fpga_tm4	0	static

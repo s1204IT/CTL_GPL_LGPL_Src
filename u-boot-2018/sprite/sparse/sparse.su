@@ -1,0 +1,3 @@
+sparse.c:44:5:unsparse_probe	24	static
+sparse.c:87:5:unsparse_direct_write	4136	static
+sparse.c:328:6:unsparse_checksum	0	static

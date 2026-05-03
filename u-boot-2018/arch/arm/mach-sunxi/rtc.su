@@ -1,0 +1,8 @@
+rtc.c:22:6:rtc_write_data	0	static
+rtc.c:27:5:rtc_read_data	0	static
+rtc.c:32:6:rtc_set_fel_flag	0	static
+rtc.c:41:5:rtc_probe_fel_flag	0	static
+rtc.c:46:6:rtc_clear_fel_flag	0	static
+rtc.c:55:5:rtc_set_bootmode_flag	0	static
+rtc.c:66:5:rtc_get_bootmode_flag	0	static
+rtc.c:111:5:rtc_set_dcxo_off	0	static

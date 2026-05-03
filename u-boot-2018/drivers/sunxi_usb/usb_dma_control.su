@@ -1,0 +1,10 @@
+usb_dma_control.c:47:12:__usb_index_check	8	static
+usb_dma_control.c:78:5:usb_dma_init	0	static
+usb_dma_control.c:100:6:usb_dma_request	0	static
+usb_dma_control.c:131:5:usb_dma_release	8	static
+usb_dma_control.c:165:5:usb_dma_setting	16	static
+usb_dma_control.c:193:5:usb_dma_set_pktlen	16	static
+usb_dma_control.c:221:5:usb_dma_start	16	static
+usb_dma_control.c:249:5:usb_dma_stop	8	static
+usb_dma_control.c:277:5:usb_dma_int_query	0	static
+usb_dma_control.c:297:5:usb_dma_int_clear	0	static

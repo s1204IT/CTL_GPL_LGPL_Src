@@ -1,0 +1,4 @@
+sunxi_verify_boot_info.c:38:1:sunxi_set_verify_boot_info	0	static
+sunxi_verify_boot_info.c:73:6:sunxi_set_verify_boot_blob	0	static
+sunxi_verify_boot_info.c:79:6:sunxi_set_verify_boot_number	16	static
+sunxi_verify_boot_info.c:86:5:sunxi_keymaster_verify_boot_params_install	4112	static

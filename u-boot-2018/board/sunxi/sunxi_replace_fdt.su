@@ -1,0 +1,4 @@
+sunxi_replace_fdt.c:315:5:do_set_working_fdt	16	static
+sunxi_replace_fdt.c:274:5:sunxi_get_dtb.part.0	152	static
+sunxi_replace_fdt.c:274:5:sunxi_get_dtb	16	static
+sunxi_replace_fdt.c:306:5:sunxi_replace_fdt_v2	32	static

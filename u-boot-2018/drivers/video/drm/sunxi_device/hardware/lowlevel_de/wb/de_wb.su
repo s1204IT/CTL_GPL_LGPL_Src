@@ -1,0 +1,16 @@
+de_wb.c:75:13:wb_set_block_dirty.part.0	0	static
+de_wb.c:386:5:de_wb_stop	16	static
+de_wb.c:399:6:force_update	24	static
+de_wb.c:418:5:de_wb_apply	216	static
+de_wb.c:439:5:de_wb_eink_disable	16	static
+de_wb.c:456:5:de_wb_eink_enable	16	static
+de_wb.c:468:5:de_wb_eink_get_status	0	static
+de_wb.c:489:5:de_wb_eink_interrupt_clear	0	static
+de_wb.c:501:5:de_wb_enable_irq	4	static
+de_wb.c:513:5:de_wb_set_a2_mode	0	static
+de_wb.c:540:5:de_wb_set_panel_bit	0	static
+de_wb.c:552:5:de_wb_set_gray_level	0	static
+de_wb.c:561:5:de_wb_set_last_img	0	static
+de_wb.c:570:5:de_wb_eink_get_upd_win	8	static
+de_wb.c:583:5:de_wb_eink_set_para	40	static
+de_wb.c:672:22:de_wb_create	24	static

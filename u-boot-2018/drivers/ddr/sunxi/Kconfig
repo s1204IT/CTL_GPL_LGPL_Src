@@ -1,0 +1,5 @@
+config SUNXI_DRAM_SELECT_RECORD
+	bool "record dram para select to cmdline"
+	depends on SUNXI_GPADC
+	help
+		when enable, record dram para select to cmdline.

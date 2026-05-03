@@ -1,0 +1,10 @@
+sunxi-cadence-combophy.c:2190:12:sunxi_cadence_phy_power_off	8	static
+sunxi-cadence-combophy.c:2172:12:sunxi_cadence_phy_xlate	8	static
+sunxi-cadence-combophy.c:2200:12:sunxi_cadence_phy_power_on	16	static
+sunxi-cadence-combophy.c:2220:12:sunxi_cadence_phy_exit	8	static
+sunxi-cadence-combophy.c:2210:12:sunxi_cadence_phy_init	16	static
+sunxi-cadence-combophy.c:1916:19:new_fdtdec_get_addr_size_fixed.constprop	32	static
+sunxi-cadence-combophy.c:871:6:combo0_dp_phy_reset	16	static
+sunxi-cadence-combophy.c:2230:12:sunxi_cadence_phy_configure	32	static
+sunxi-cadence-combophy.c:1961:5:sunxi_cadence_phy_create	48	static
+sunxi-cadence-combophy.c:2128:12:sunxi_cadence_phy_probe	32	static

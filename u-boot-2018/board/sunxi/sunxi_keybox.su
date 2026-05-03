@@ -1,0 +1,7 @@
+sunxi_keybox.c:101:12:search_key_in_linklist	24	static
+sunxi_keybox.c:149:12:default_keybox_installation	12320	static
+sunxi_keybox.c:292:5:android_trust_chain_load_cb	16	static
+sunxi_keybox.c:334:5:android_drmkey_load_cb	8	static
+sunxi_keybox.c:225:5:sunxi_keybox_has_key	24	static
+sunxi_keybox.c:239:5:sunxi_keybox_init	32	static
+sunxi_keybox.c:261:5:sunxi_keybox_burn_key	32	static

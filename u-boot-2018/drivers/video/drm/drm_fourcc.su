@@ -1,0 +1,7 @@
+drm_fourcc.c:31:10:drm_mode_legacy_fb_format	0	static
+drm_fourcc.c:101:31:__drm_format_info	4	static
+drm_fourcc.c:290:31:drm_format_info	4	static
+drm_fourcc.c:307:14:drm_format_info_block_width	0	static
+drm_fourcc.c:326:14:drm_format_info_block_height	0	static
+drm_fourcc.c:345:14:drm_format_info_bpp	8	static
+drm_fourcc.c:365:10:drm_format_info_min_pitch	32	static

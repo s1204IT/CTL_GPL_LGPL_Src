@@ -1,0 +1,8 @@
+scsi.c:48:13:scsi_print_error.constprop	16	static
+scsi.c:164:7:scsi_read	40	static
+scsi.c:232:7:scsi_write	56	static
+scsi.c:323:5:scsi_format_unit	24	static
+scsi.c:351:5:scsi_unmap	48	static
+scsi.c:383:5:scsi_sync_cache	24	static
+scsi.c:431:5:scsi_read_capacity	32	static
+scsi.c:756:5:scsi_scan_dev	48	static

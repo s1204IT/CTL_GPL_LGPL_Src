@@ -1,0 +1,8 @@
+sunxi_drm_lvds.c:208:12:sunxi_lvds_connector_init	16	static
+sunxi_drm_lvds.c:178:12:sunxi_lvds_connector_disable	16	static
+sunxi_drm_lvds.c:105:12:sunxi_lvds_connector_enable	752	static
+sunxi_drm_lvds.c:221:12:sunxi_lvds_connector_prepare	16	static
+sunxi_drm_lvds.c:202:13:sunxi_lvds_fifo_check	0	static
+sunxi_drm_lvds.c:171:13:sunxi_lvds_enable_vblank	0	static
+sunxi_drm_lvds.c:266:5:sunxi_lvds_parse_dt	24	static
+sunxi_drm_lvds.c:302:12:sunxi_drm_lvds_probe	24	static

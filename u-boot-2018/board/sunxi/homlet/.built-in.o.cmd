@@ -1,0 +1,1 @@
+cmd_board/sunxi/homlet/built-in.o :=  ./../tools/toolchain/gcc-linaro-7.2.1-2017.11-x86_64_arm-linux-gnueabi/bin/arm-linux-gnueabi-ld.bfd     -r -o board/sunxi/homlet/built-in.o board/sunxi/homlet/sunxi_hdcp_key.o 

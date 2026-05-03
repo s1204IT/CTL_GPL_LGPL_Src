@@ -1,0 +1,8 @@
+de_snr.c:130:5:de35x_snr_enable	0	static
+de_snr.c:146:5:de35x_snr_set_para	56	static
+de_snr.c:56:5:de_snr_enable	0	static
+de_snr.c:65:5:de_snr_set_para	0	static
+de_snr.c:73:5:de_snr_dump_state	0	static
+de_snr.c:97:6:de_snr_update_regs	8	static
+de_snr.c:229:23:de35x_snr_create	24	static
+de_snr.c:48:23:de_snr_create	0	static

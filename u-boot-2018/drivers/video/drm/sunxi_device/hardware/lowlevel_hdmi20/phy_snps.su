@@ -1,0 +1,6 @@
+phy_snps.c:733:5:snps_phy_disconfig	8	static
+phy_snps.c:746:5:snps_phy_config	40	static
+phy_snps.c:774:5:snps_phy_write	8	static
+phy_snps.c:786:5:snps_phy_read	8	static
+phy_snps.c:798:9:snps_phy_dump	40	static
+phy_snps.c:834:5:snps_phy_init	40	static

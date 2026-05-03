@@ -1,0 +1,1 @@
+cmd_env/built-in.o :=  ./../tools/toolchain/gcc-linaro-7.2.1-2017.11-x86_64_arm-linux-gnueabi/bin/arm-linux-gnueabi-ld.bfd     -r -o env/built-in.o env/common.o env/env.o env/attr.o env/callback.o env/flags.o env/sunxi_flash.o 

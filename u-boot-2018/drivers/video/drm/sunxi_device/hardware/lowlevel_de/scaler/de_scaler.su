@@ -1,0 +1,11 @@
+de_scaler.c:174:12:de_scaler_calc_fir_coef	0	static
+de_scaler.c:138:13:scaler_set_block_dirty.part.0	0	static
+de_scaler.c:204:5:de_scaler_calc_lay_scale_para	80	static
+de_scaler.c:421:5:de_scaler_calc_ovl_coord	4	static
+de_scaler.c:432:5:de_scaler_calc_ovl_scale_para	24	static
+de_scaler.c:491:5:de_scaler_calc_scale_para	64	static
+de_scaler.c:548:5:de_scaler_fix_tiny_size	40	static
+de_scaler.c:636:5:de_scaler_fix_big_size	20	static
+de_scaler.c:1224:6:dump_scaler_state	24	static
+de_scaler.c:1237:5:de_scaler_apply	48	static
+de_scaler.c:1270:26:de_scaler_create	32	static

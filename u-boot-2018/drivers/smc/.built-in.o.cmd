@@ -1,0 +1,1 @@
+cmd_drivers/smc/built-in.o :=  ./../tools/toolchain/gcc-linaro-7.2.1-2017.11-x86_64_arm-linux-gnueabi/bin/arm-linux-gnueabi-ld.bfd     -r -o drivers/smc/built-in.o drivers/smc/sunxi_smc_v2.o drivers/smc/smc_helps.o 

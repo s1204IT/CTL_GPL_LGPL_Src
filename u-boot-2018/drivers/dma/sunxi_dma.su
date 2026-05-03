@@ -1,0 +1,14 @@
+sunxi_dma.c:54:13:sunxi_dma_reg_func	24	static
+sunxi_dma.c:94:6:sunxi_dma_init	32	static
+sunxi_dma.c:248:7:sunxi_dma_request_from_last	4	static
+sunxi_dma.c:263:7:sunxi_dma_request	4	static
+sunxi_dma.c:294:5:sunxi_dma_setting	0	static
+sunxi_dma.c:323:5:sunxi_dma_start	16	static
+sunxi_dma.c:390:5:sunxi_dma_stop	0	static
+sunxi_dma.c:404:5:sunxi_dma_querystatus	0	static
+sunxi_dma.c:418:5:sunxi_dma_install_int	16	static
+sunxi_dma.c:454:5:sunxi_dma_enable_int	8	static
+sunxi_dma.c:503:5:sunxi_dma_disable_int	8	static
+sunxi_dma.c:554:5:sunxi_dma_free_int	0	static
+sunxi_dma.c:187:6:sunxi_dma_exit	24	static
+sunxi_dma.c:278:5:sunxi_dma_release	8	static

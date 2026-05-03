@@ -1,0 +1,10 @@
+de_cdc.c:341:5:de35x_cdc_enable	0	static
+de_cdc.c:569:5:de35x_cdc_update_local_param	16	static
+de_cdc.c:359:5:de35x_cdc_apply_csc	104	static
+de_cdc.c:80:5:de_cdc_apply_csc	0	static
+de_cdc.c:89:5:de_cdc_enable	0	static
+de_cdc.c:98:5:de_cdc_dump_state	0	static
+de_cdc.c:106:5:de_cdc_update_local_param	0	static
+de_cdc.c:130:6:de_cdc_update_regs	24	static
+de_cdc.c:610:23:de35x_cdc_create	32	static
+de_cdc.c:71:23:de_cdc_create	0	static

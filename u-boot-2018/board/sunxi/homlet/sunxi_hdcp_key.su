@@ -1,0 +1,3 @@
+sunxi_hdcp_key.c:58:5:sunxi_deal_hdcp_key	944	static
+sunxi_hdcp_key.c:128:5:sunxi_hdcp_hash	224	static
+sunxi_hdcp_key.c:115:5:sunxi_hdcp_key_post_install	8	static

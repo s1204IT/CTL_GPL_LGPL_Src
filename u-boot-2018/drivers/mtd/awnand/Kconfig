@@ -1,0 +1,90 @@
+
+config AW_MTD_SPINAND
+	tristate "Allwinner MTD SPINAND Device Support"
+	depends on ARCH_SUNXI
+	select AW_SPINAND_PHYSICAL_LAYER
+	select AW_SPINAND_NONSTANDARD_SPI_DRIVER
+	select MTD_UBI
+	select MTD_DEVICE
+	select MTD_PARTITIONS
+	select MTD_CMD_MTDPARTS
+	select MTD_CMD_UBIFS
+	select CMD_UBI
+	select RBTREE
+	select LZO
+	help
+	  Enables support for SPINAND Flash chips on Allwinner SoCs.
+	  It's different with Allwinner's privately nand driver that it use
+	  ubi system rather than Allwinner's NFTL.
+
+config AW_MTD_RAWNAND
+	tristate "Allwinner MTD RAWNAND(SLC) Device Support"
+	depends on ARCH_SUNXI
+	select SUNXI_UBIFS
+	select SUNXI_NAND
+	select SUNXI_COMM_NAND_V1
+	select MTD_DEVICE
+	select CMD_MTDPARTS
+	select CMD_UBIFS
+	select CMD_UBI
+	select RBTREE
+	select LZO
+	help
+	  Enables support for RAWNAND Flash chips on Allwinner SoCs.
+	  It's different with Allwinner's privately nand driver that it use
+	  ubi system rather than Allwinner's NFTL.
+
+config RAW_KERNEL
+	bool "Kernel images are stored on physical partitions"
+	help
+	  Enables support kernel images are stored on physical partitions.
+
+config KERNEL_SIZE_BYTE
+	int "Kernel image size(Byte)"
+	depends on RAW_KERNEL
+	default 0
+	help
+	  To accurately read the complete kernel image, you need to set
+	  the kernel image size (in bytes) when using the RAW-boot function.
+
+config SUNXI_PRIVATE_UBIDEV
+	bool "Open private ubidev"
+	help
+	  Open the private ubidev partition, the customer can write through
+	  the card to write the partition data.
+
+config SUNXI_PRIVATE_UBIDEV_BLKS
+	int "Private ubidev partition size (number of blocks)"
+	depends on SUNXI_PRIVATE_UBIDEV
+	default 0
+	help
+	  The size of the private partition, aligned by block.
+
+config SIMULATE_MULTIPLANE
+	bool "enable simulate multiplane"
+	default n
+	help
+	  spinand do not support multiplane. In order to adapt to aw nand
+	  we simulate multiplane. If set, the common physical layer should
+	  merge two continuous physical block to 'super block' for logical
+	  layer.
+
+	  Merge pages in two adjacent blocks with the same page num to super
+	  page. Merge adjacent blocks to super block.
+
+	  *   phy-block0   phy-block1    = super block 0
+	  * |------------|------------|
+	  * | phy-page 0 | phy-page 0 |  = super page 0 on super block 0
+	  * | phy-page 1 | phy-page 1 |  = super page 1 on super block 0
+	  * |     ...    |     ...    |
+	  * |------------|------------|
+
+	  If unsure, say Y.
+
+if AW_MTD_SPINAND
+source "drivers/mtd/awnand/spinand/Kconfig"
+endif
+
+if AW_MTD_RAWNAND
+source "drivers/mtd/awnand/rawnand/Kconfig"
+endif

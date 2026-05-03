@@ -1,0 +1,1 @@
+cmd_drivers/ddr/sunxi/built-in.o :=  ./../tools/toolchain/gcc-linaro-7.2.1-2017.11-x86_64_arm-linux-gnueabi/bin/arm-linux-gnueabi-ld.bfd     -r -o drivers/ddr/sunxi/built-in.o drivers/ddr/sunxi/sunxi_dram_select.o 

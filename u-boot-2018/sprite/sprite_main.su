@@ -1,0 +1,2 @@
+sprite_main.c:36:6:__dump_mbr	56	static
+sprite_main.c:80:5:sunxi_card_sprite_main	40	static

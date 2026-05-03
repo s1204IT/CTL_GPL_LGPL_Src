@@ -1,0 +1,4 @@
+sunxi_dsi_combophy_reg.c:402:5:sunxi_dsi_combo_phy_set_reg_base	0	static
+sunxi_dsi_combophy_reg.c:408:5:sunxi_dsi_combophy_set_dsi_mode	16	static
+sunxi_dsi_combophy_reg.c:417:5:sunxi_dsi_combophy_configure_dsi	40	static
+sunxi_dsi_combophy_reg.c:428:5:sunxi_dsi_combophy_set_lvds_mode	8	static

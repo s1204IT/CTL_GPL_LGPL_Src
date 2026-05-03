@@ -1,0 +1,13 @@
+video-uclass.c:51:14:alloc_fb	16	static
+video-uclass.c:195:12:video_pre_remove	8	static
+video-uclass.c:184:12:video_pre_probe	8	static
+video-uclass.c:268:12:video_post_bind	16	static
+video-uclass.c:44:6:video_set_flush_dcache	8	static
+video-uclass.c:69:5:video_reserve	16	static
+video-uclass.c:89:6:video_clear	8	static
+video-uclass.c:116:6:video_set_default_colors	8	static
+video-uclass.c:205:12:video_post_probe	88	static
+video-uclass.c:131:6:video_sync	8	static
+video-uclass.c:157:6:video_sync_all	16	static
+video-uclass.c:169:5:video_get_xsize	8	static
+video-uclass.c:176:5:video_get_ysize	8	static

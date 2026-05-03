@@ -1,0 +1,2 @@
+backlight-uclass.c:11:5:backlight_enable	0	static
+backlight-uclass.c:20:5:backlight_disable	0	static

@@ -1,0 +1,4 @@
+sunxi_timer.c:36:5:do_timer_test	16	static
+sunxi_timer.c:84:5:do_timer_test1	16	static
+sunxi_timer.c:22:15:timer0_test_func	8	static
+sunxi_timer.c:69:15:timer1_test_func	8	static

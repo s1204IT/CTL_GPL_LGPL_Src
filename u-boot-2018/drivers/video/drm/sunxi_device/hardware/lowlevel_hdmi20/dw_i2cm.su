@@ -1,0 +1,7 @@
+dw_i2cm.c:75:11:_dw_i2cm_state	8	static
+dw_i2cm.c:34:19:dw_get_i2cm	8	static
+dw_i2cm.c:80:5:_dw_i2cm_read	40	static
+dw_i2cm.c:148:5:_dw_i2cm_write	32	static
+dw_i2cm.c:190:5:dw_i2cm_xfer	24	static
+dw_i2cm.c:236:5:dw_i2cm_re_init	24	static
+dw_i2cm.c:249:5:dw_i2cm_init	8	static

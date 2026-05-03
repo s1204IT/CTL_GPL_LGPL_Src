@@ -1,0 +1,7 @@
+pinmux.c:73:6:sunxi_gpio_set_cfgbank	8	static
+pinmux.c:85:6:sunxi_gpio_set_cfgpin	4	static
+pinmux.c:103:5:sunxi_gpio_get_cfgbank	0	static
+pinmux.c:119:5:sunxi_gpio_get_cfgpin	4	static
+pinmux.c:136:5:sunxi_gpio_set_drv	8	static
+pinmux.c:157:5:sunxi_gpio_set_pull	8	static
+pinmux.c:178:20:io_get_volt_val	8	static

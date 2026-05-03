@@ -1,0 +1,10 @@
+menu "HW SPINLOCK  Support"
+config HWSPINLOCK
+    bool "enable sunxi hwspinlock driver"
+        default n
+
+config CMD_SUNXI_HWSPINLOCK
+    bool "enable sunxi hwspinlock cmd"
+        default n
+
+endmenu

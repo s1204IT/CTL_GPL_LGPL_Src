@@ -1,0 +1,16 @@
+de_fcm.c:174:5:de35x_fcm_set_size	16	static
+de_fcm.c:188:5:de35x_fcm_set_window	16	static
+de_fcm.c:213:5:de35x_fcm_enable	8	static
+de_fcm.c:436:5:de35x_fcm_apply_lut	88	static
+de_fcm.c:311:5:de35x_fcm_set_csc	80	static
+de_fcm.c:74:5:de_fcm_set_size	0	static
+de_fcm.c:82:5:de_fcm_set_window	4	static
+de_fcm.c:91:5:de_fcm_enable	0	static
+de_fcm.c:100:5:de_fcm_dump_state	0	static
+de_fcm.c:108:5:de_fcm_apply_lut	0	static
+de_fcm.c:116:5:de_fcm_set_csc	0	static
+de_fcm.c:140:6:de_fcm_update_regs	24	static
+de_fcm.c:226:5:de35x_fcm_init	0	static
+de_fcm.c:472:5:de_fcm_get_lut	16	static
+de_fcm.c:496:23:de35x_fcm_create	32	static
+de_fcm.c:66:23:de_fcm_create	0	static

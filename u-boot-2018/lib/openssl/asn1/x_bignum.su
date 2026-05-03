@@ -1,0 +1,5 @@
+x_bignum.c:36:13:bn_free	0	static
+x_bignum.c:43:12:bn_i2c	16	static
+x_bignum.c:25:13:bn_new	8	static
+x_bignum.c:67:12:bn_c2i	24	static
+x_bignum.c:20:1:BIGNUM_it	0	static

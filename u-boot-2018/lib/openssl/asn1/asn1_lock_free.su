@@ -1,0 +1,2 @@
+asn1_lock_free.c:23:6:asn1_enc_free	16	static
+asn1_lock_free.c:39:5:asn1_enc_restore	24	static

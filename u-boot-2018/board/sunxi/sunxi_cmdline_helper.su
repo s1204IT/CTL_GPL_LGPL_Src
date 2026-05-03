@@ -1,0 +1,2 @@
+sunxi_cmdline_helper.c:17:5:sunxi_cmdline_parse	16	static
+sunxi_cmdline_helper.c:88:12:do_test	576	static

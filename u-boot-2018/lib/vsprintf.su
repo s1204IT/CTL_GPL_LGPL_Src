@@ -1,0 +1,17 @@
+vsprintf.c:131:23:put_dec	56	static
+vsprintf.c:160:14:number	128	static
+vsprintf.c:259:14:string	24	static
+vsprintf.c:505:12:vsnprintf_internal	112	dynamic
+vsprintf.c:706:5:vsnprintf	0	static
+vsprintf.c:712:5:vscnprintf	8	static
+vsprintf.c:725:5:snprintf	16	static
+vsprintf.c:737:5:scnprintf	24	static
+vsprintf.c:762:5:vsprintf	0	static
+vsprintf.c:767:5:sprintf	20	static
+vsprintf.c:779:5:tick_printf	2080	static
+vsprintf.c:810:5:printf	1040	static
+vsprintf.c:836:5:vprintf	1032	static
+vsprintf.c:859:7:simple_itoa	12	static
+vsprintf.c:874:6:print_grouped_ull	56	static
+vsprintf.c:889:6:str2off	24	static
+vsprintf.c:897:6:str2long	24	static

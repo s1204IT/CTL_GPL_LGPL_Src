@@ -1,0 +1,17 @@
+sunxi_cert_interface.c:390:5:aw_certif_verify_subcert_pubkey	48	static
+sunxi_cert_interface.c:35:12:sunxi_ecc_sign_check	8	static
+sunxi_cert_interface.c:240:12:aw_certif_ecc_verify_sign	32	static
+sunxi_cert_interface.c:76:12:sunxi_rsa_sign_check	8	static
+sunxi_cert_interface.c:210:12:aw_certif_rsa_verify_sign	72	static
+sunxi_cert_interface.c:84:5:aw_certif_probe_sunxi_certif	16	static
+sunxi_cert_interface.c:103:5:aw_certif_probe_extern	40	static
+sunxi_cert_interface.c:265:5:aw_certif_verify_itself	152	dynamic
+sunxi_cert_interface.c:174:5:aw_certif_probe_signature	8	static
+sunxi_cert_interface.c:315:5:aw_certif_rsa_pubkey_hash_cal	32	dynamic
+sunxi_cert_interface.c:339:5:aw_certif_rsa_pubkey_hash_cal_from_sunxi_cert	0	static
+sunxi_cert_interface.c:348:5:aw_certif_ecc_pubkey_hash_cal	280	static
+sunxi_cert_interface.c:368:5:aw_certif_ecc_pubkey_hash_cal_from_sunxi_cert	0	static
+sunxi_cert_interface.c:380:5:sunxi_certif_pubkey_hash_cal	4	static
+sunxi_cert_interface.c:410:5:sunxi_certif_verify_subcert_pubkey	24	static
+sunxi_cert_interface.c:436:5:sunxi_certif_desc_register	8	static
+sunxi_cert_interface.c:305:5:sunxi_certif_verify_itself	16	static

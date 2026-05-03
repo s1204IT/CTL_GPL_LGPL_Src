@@ -1,0 +1,12 @@
+panel-dsi.c:805:12:panel_dsi_probe	16	static
+panel-dsi.c:197:12:panel_dsi_parse_dt	120	static
+panel-dsi.c:499:13:panel_dsi_power_disable	24	static
+panel-dsi.c:490:12:panel_dsi_disable	8	static
+panel-dsi.c:666:12:panel_dsi_enable	8	static
+panel-dsi.c:566:12:panel_dsi_power_enable	24	static
+panel-dsi.c:235:12:panel_simple_parse_cmd_seq.isra.1	24	static
+panel-dsi.c:438:12:panel_dsi_cmd_seq.isra.4	24	static
+panel-dsi.c:536:12:panel_dsi_unprepare	16	static
+panel-dsi.c:651:12:panel_dsi_prepare	144	static
+panel-dsi.c:135:21:sunxi_of_get_panel_node	8	static
+panel-dsi.c:710:12:panel_dsi_get_modes	136	static

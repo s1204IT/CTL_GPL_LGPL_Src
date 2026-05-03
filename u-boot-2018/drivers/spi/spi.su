@@ -1,0 +1,2 @@
+spi.c:11:5:spi_set_wordlen	8	static
+spi.c:23:7:spi_do_alloc_slave	24	static

@@ -1,0 +1,7 @@
+asn1_item_ex_new.c:198:5:ASN1_primitive_new	8	static
+asn1_item_ex_new.c:284:6:asn1_primitive_clear	4	static
+asn1_item_ex_new.c:249:13:asn1_item_clear	16	static
+asn1_item_ex_new.c:150:5:ASN1_template_new	24	static
+asn1_item_ex_new.c:32:12:asn1_item_ex_combine_new	32	static
+asn1_item_ex_new.c:15:5:ASN1_item_ex_new	0	static
+asn1_item_ex_new.c:22:13:ASN1_item_new	16	static

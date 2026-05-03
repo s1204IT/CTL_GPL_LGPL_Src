@@ -1,0 +1,9 @@
+sprite_draw.c:38:5:sprite_cartoon_ui_draw_hollowrectangle	32	static
+sprite_draw.c:110:5:sprite_cartoon_ui_draw_solidrectangle	40	static
+sprite_draw.c:177:5:sprite_cartoon_ui_draw_line	56	static
+sprite_draw.c:303:5:sprite_cartoon_ui_draw_lineto	16	static
+sprite_draw.c:332:5:sprite_cartoon_ui_draw_point	12	static
+sprite_draw.c:365:5:sprite_cartoon_ui_set_color	0	static
+sprite_draw.c:387:5:sprite_cartoon_ui_get_color	0	static
+sprite_draw.c:407:5:sprite_cartoon_ui_moveto	0	static
+sprite_draw.c:435:5:sprite_cartoon_ui_clear	8	static

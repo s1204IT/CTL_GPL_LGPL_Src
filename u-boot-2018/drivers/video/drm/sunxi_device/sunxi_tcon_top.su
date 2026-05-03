@@ -1,0 +1,4 @@
+sunxi_tcon_top.c:41:12:sunxi_tcon_top_probe	16	static
+sunxi_tcon_top.c:123:5:sunxi_tcon_top_get_id	24	static
+sunxi_tcon_top.c:140:5:sunxi_tcon_top_clk_enable	40	static
+sunxi_tcon_top.c:153:5:sunxi_tcon_top_clk_disable	40	static

@@ -1,0 +1,1 @@
+cmd_drivers/serial/built-in.o :=  ./../tools/toolchain/gcc-linaro-7.2.1-2017.11-x86_64_arm-linux-gnueabi/bin/arm-linux-gnueabi-ld.bfd     -r -o drivers/serial/built-in.o drivers/serial/serial.o drivers/serial/serial_ns16550.o drivers/serial/serial_sunxi.o drivers/serial/ns16550.o 

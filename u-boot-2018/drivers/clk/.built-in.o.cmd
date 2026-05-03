@@ -1,0 +1,1 @@
+cmd_drivers/clk/built-in.o :=  ./../tools/toolchain/gcc-linaro-7.2.1-2017.11-x86_64_arm-linux-gnueabi/bin/arm-linux-gnueabi-ld.bfd     -r -o drivers/clk/built-in.o drivers/clk/clk-uclass.o drivers/clk/clk_fixed_rate.o drivers/clk/tegra/built-in.o drivers/clk/sunxi/built-in.o 

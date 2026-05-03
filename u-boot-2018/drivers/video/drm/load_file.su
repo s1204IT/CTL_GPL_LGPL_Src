@@ -1,0 +1,4 @@
+load_file.c:44:12:__print_file_info	8	static
+load_file.c:32:12:__unload_file	8	static
+load_file.c:53:21:load_file	136	static
+load_file.c:132:5:write_file	144	static

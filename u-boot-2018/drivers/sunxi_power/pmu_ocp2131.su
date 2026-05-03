@@ -1,0 +1,5 @@
+pmu_ocp2131.c:24:33:get_ctrl_info_from_tbl	8	static
+pmu_ocp2131.c:159:12:pmu_ocp2131_get_voltage	48	static
+pmu_ocp2131.c:93:12:pmu_ocp2131_set_voltage	56	static
+pmu_ocp2131.c:44:5:pmu_ocp2131_get_reg_from_dts	16	static
+pmu_ocp2131.c:60:5:pmu_ocp2131_probe	24	static

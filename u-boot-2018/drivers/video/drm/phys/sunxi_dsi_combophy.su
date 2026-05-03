@@ -1,0 +1,5 @@
+sunxi_dsi_combophy.c:114:12:sunxi_dsi_combophy_init	16	static
+sunxi_dsi_combophy.c:96:12:sunxi_dsi_combophy_configure	16	static
+sunxi_dsi_combophy.c:79:12:sunxi_dsi_combophy_power_off	16	static
+sunxi_dsi_combophy.c:61:12:sunxi_dsi_combophy_power_on	16	static
+sunxi_dsi_combophy.c:130:12:sunxi_dsi_combophy_probe	16	static

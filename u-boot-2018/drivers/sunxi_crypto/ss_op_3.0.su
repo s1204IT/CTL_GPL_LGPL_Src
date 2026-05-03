@@ -1,0 +1,12 @@
+ss_op_3.0.c:16:13:ss_get_soc_status	0	static
+ss_op_3.0.c:29:12:ss_get_ver	0	static
+ss_op_3.0.c:35:13:ss_set_drq	0	static
+ss_op_3.0.c:40:13:ss_ctrl_start	4	static
+ss_op_3.0.c:50:13:ss_ctrl_stop	0	static
+ss_op_3.0.c:55:12:ss_check_err	0	static
+ss_op_3.0.c:60:12:ss_wait_finish	56	static
+ss_op_3.0.c:88:12:ss_pending_clear	16	static
+ss_op_3.0.c:106:13:ss_irq_enable	4	static
+ss_op_3.0.c:114:13:ss_irq_disable	4	static
+ss_op_3.0.c:122:13:ss_open	16	static
+ss_op_3.0.c:187:13:ss_close	0	static

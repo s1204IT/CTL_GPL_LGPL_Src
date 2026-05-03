@@ -1,0 +1,9 @@
+menu "Sunxi sbi ecall driver support"
+
+config SUNXI_SBI_ECALL
+	bool "use sbi ecall api"
+	depends on RISCV
+	---help---
+	Select this to use opensbi ecall api.
+
+endmenu

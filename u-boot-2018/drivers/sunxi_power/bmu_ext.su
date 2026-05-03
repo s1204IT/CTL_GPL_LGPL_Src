@@ -1,0 +1,13 @@
+bmu_ext.c:51:5:bmu_ext_probe	24	static
+bmu_ext.c:60:6:bmu_ext_get_exist	8	static
+bmu_ext.c:69:5:bmu_ext_get_vbus_status	0	static
+bmu_ext.c:78:5:bmu_ext_get_poweron_source	0	static
+bmu_ext.c:88:5:bmu_ext_get_battery_probe	0	static
+bmu_ext.c:97:5:bmu_ext_set_discharge	0	static
+bmu_ext.c:106:5:bmu_ext_set_charge	0	static
+bmu_ext.c:115:5:bmu_ext_get_type	8	static
+bmu_ext.c:131:5:bmu_ext_get_ntc_temp	0	static
+bmu_ext.c:140:5:bmu_ext_set_ntc_onoff	0	static
+bmu_ext.c:149:5:bmu_ext_get_battery_vol	0	static
+bmu_ext.c:158:5:bmu_ext_get_battery_capacity	0	static
+bmu_ext.c:167:5:bmu_ext_reset_capacity	0	static

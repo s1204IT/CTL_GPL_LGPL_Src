@@ -1,0 +1,1 @@
+cmd_drivers/usb/host/built-in.o :=  ./../tools/toolchain/gcc-linaro-7.2.1-2017.11-x86_64_arm-linux-gnueabi/bin/arm-linux-gnueabi-ld.bfd     -r -o drivers/usb/host/built-in.o drivers/usb/host/ehci-hcd.o drivers/usb/host/ehci-sunxi.o 

@@ -1,0 +1,5 @@
+de_dither.c:46:5:de_dither_set_size	16	static
+de_dither.c:58:5:de_dither_config	24	static
+de_dither.c:72:5:de_dither_enable	8	static
+de_dither.c:83:6:de_dither_dump_state	0	static
+de_dither.c:88:26:de_dither_create	40	static

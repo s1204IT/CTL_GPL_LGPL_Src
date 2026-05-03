@@ -1,0 +1,12 @@
+sprite_secstorage.c:54:12:__probe_name_in_map.constprop	296	static
+sprite_secstorage.c:269:5:check_secure_storage_map	16	static
+sprite_secstorage.c:300:5:sunxi_secure_storage_init	16	static
+sprite_secstorage.c:348:5:sunxi_secure_storage_exit	16	static
+sprite_secstorage.c:392:5:sunxi_secure_storage_list	4296	static
+sprite_secstorage.c:471:5:sunxi_secure_storage_probe	16	static
+sprite_secstorage.c:508:5:sunxi_secure_storage_read	4200	static
+sprite_secstorage.c:636:5:sunxi_secure_storage_erase_data_only	4184	static
+sprite_secstorage.c:562:5:sunxi_secure_storage_write	8312	static
+sprite_secstorage.c:685:5:sunxi_secure_storage_erase	8288	static
+sprite_secstorage.c:728:5:sunxi_secure_storage_erase_all	8	static
+sprite_secstorage.c:748:5:sunxi_secure_storage_write_or_read	32	static

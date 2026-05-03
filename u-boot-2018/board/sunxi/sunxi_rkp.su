@@ -1,0 +1,4 @@
+sunxi_rkp.c:53:12:__get_finger_print	16	static
+sunxi_rkp.c:19:12:__finger_print_searcher	24	static
+sunxi_rkp.c:76:5:key_extraction_output_generate	4256	static
+sunxi_rkp.c:127:5:key_widevine_output_generate	4256	static

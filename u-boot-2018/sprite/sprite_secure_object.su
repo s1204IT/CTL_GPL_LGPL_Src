@@ -1,0 +1,9 @@
+sprite_secure_object.c:273:12:clear_secure_store.part.1	24	static
+sprite_secure_object.c:128:5:sunxi_secure_object_read	4128	static
+sprite_secure_object.c:295:12:sunxi_secure_object_list	4240	static
+sprite_secure_object.c:382:12:cmd_secure_object	16	static
+sprite_secure_object.c:146:5:sunxi_secure_object_set	16	static
+sprite_secure_object.c:156:5:sunxi_secure_object_write	4120	static
+sprite_secure_object.c:429:5:sunxi_secure_object_build	104	static
+sprite_secure_object.c:467:5:sunxi_secure_object_down	4128	static
+sprite_secure_object.c:498:5:sunxi_secure_object_up	4128	static

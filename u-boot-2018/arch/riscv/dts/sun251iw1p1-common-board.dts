@@ -1,0 +1,114 @@
+/*
+ * Allwinner Technology CO., Ltd. sun20iw1p1 soc board.
+ *
+ * SPDX-License-Identifier: GPL-2.0+
+ * soc board support.
+ */
+
+&platform {
+	eraseflag   = <1>;
+	next_work   = <3>;
+	debug_mode  = <4>;
+};
+
+&target {
+	boot_clock = <1008>;	/*CPU boot frequency, Unit: MHz*/
+	storage_type = <0xffffffff>; /*boot medium, 0-nand, 1-card0, 2-card2, -1(defualt)auto scan*/
+	burn_key = <1>;		/*1:support burn key; 0:not support burn key*/
+	dragonboard_test = <0>;	/*1:support card boot dragonboard; 0:not support card boot dragonboard*/
+};
+
+
+&charger0 {
+	pmu_safe_vol = <3500>;
+};
+
+
+&twi6 {
+	clock-frequency = <200000>;
+	pinctrl-0 = <&s_twi0_pins_a>;
+	no_suspend = <1>;
+	twi_drv_used = <1>;
+	status = "okay";
+};
+
+&sdc0_pins_a {
+	allwinner,pins = "PF0", "PF1", "PF2",
+			 "PF3", "PF4", "PF5";
+	allwinner,function = "sdc0";
+	allwinner,muxsel = <2>;
+	allwinner,drive = <3>;
+	allwinner,pull = <1>;
+	pins = "PF0", "PF1", "PF2",
+	       "PF3", "PF4", "PF5";
+	function = "sdc0";
+	drive-strength = <30>;
+	bias-pull-up;
+	power-source = <3300>;
+};
+
+&sdc0_pins_b {
+	pins = "PF0", "PF1", "PF2",
+	       "PF3", "PF4", "PF5";
+	function = "sdc0";
+	drive-strength = <30>;
+	bias-pull-up;
+	power-source = <1800>;
+};
+
+&sdc0_pins_c {
+		pins = "PF0", "PF1", "PF2",
+			"PF3", "PF4", "PF5";
+		function = "gpio_in";
+
+};
+
+
+&sdc2_pins_a {
+	allwinner,pins = "PC2", "PC3", "PC4",
+			 "PC5", "PC6", "PC7";
+	allwinner,function = "sdc2";
+	allwinner,muxsel = <3>;
+	allwinner,drive = <3>;
+	allwinner,pull = <1>;
+	pins = "PC2", "PC3", "PC4",
+		"PC5", "PC6", "PC7";
+	function = "sdc2";
+	drive-strength = <30>;
+	bias-pull-up;
+
+};
+
+&sdc2_pins_b {
+	pins = "PC2", "PC3", "PC4",
+	       "PC5", "PC6", "PC7";
+	function = "gpio_in";
+};
+
+&card0_boot_para {  /* Avoid dtc compiling warnings. @TODO: Developer should modify this to the actual value */
+	/* reg = <0x0 0x2 0x0 0x0>;  [> Avoid dtc compiling warnings. @TODO: Developer should modify this to the actual value <] */
+	device_type = "card0_boot_para";
+	card_ctrl = <0x0>;
+	card_high_speed = <0x1>;
+	card_line = <0x4>;
+	pinctrl-0 = <&sdc0_pins_a>;
+};
+
+&card2_boot_para {  /* Avoid dtc compiling warnings. @TODO: Developer should modify this to the actual value */
+	/* reg = <0x0 0x3 0x0 0x0>;  [> Avoid dtc compiling warnings. @TODO: Developer should modify this to the actual value <] */
+	device_type = "card2_boot_para";
+	card_ctrl = <0x2>;
+	card_high_speed = <0x1>;
+	card_line = <0x4>;
+	pinctrl-0 = <&sdc2_pins_a>;
+	sdc_ex_dly_used = <0x2>;
+	sdc_tm4_hs200_max_freq = <150>;
+	sdc_tm4_hs400_max_freq = <100>;
+};
+&gpio_bias {  /* Avoid dtc compiling warnings. @TODO: Developer should modify this to the actual value */
+	device_type = "gpio_bias";
+};
+
+&aliases {
+	twi6 = &twi6;
+};

@@ -1,0 +1,12 @@
+sunxi_flash_ufs.c:90:22:sunxi_block_read	4	static
+sunxi_flash_ufs.c:97:22:sunxi_block_write	4	static
+sunxi_flash_ufs.c:123:12:sunxi_flash_ufs_blk_get_dev	16	static
+sunxi_flash_ufs.c:30:5:sunxi_flash_ufs_blk_read	0	static
+sunxi_flash_ufs.c:35:5:sunxi_flash_ufs_blk_write	0	static
+sunxi_flash_ufs.c:40:5:sunxi_flash_ufs_blk_flush	0	static
+sunxi_flash_ufs.c:45:5:sunxi_flash_ufs_blk_phyread	0	static
+sunxi_flash_ufs.c:50:5:sunxi_flash_ufs_blk_phywrite	0	static
+sunxi_flash_ufs.c:55:6:sunxi_flash_ufs_blk_size	0	static
+sunxi_flash_ufs.c:61:5:sunxi_flash_ufs_blk_exit	0	static
+sunxi_flash_ufs.c:66:5:sunxi_flash_ufs_blk_write_end	0	static
+sunxi_flash_ufs.c:77:5:sunxi_flash_ufs_blk_init_ext	16	static

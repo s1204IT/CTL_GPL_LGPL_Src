@@ -1,0 +1,11 @@
+obj_dat.c:109:12:obj_cmp	0	static
+obj_dat.c:61:13:OBJ_bsearch_ex.part.0	40	static
+obj_dat.c:21:6:reset_OBJ_nid2ln_reset	0	static
+obj_dat.c:27:13:OBJ_nid2ln	40	static
+obj_dat.c:53:13:OBJ_bsearch	24	static
+obj_dat.c:61:13:OBJ_bsearch_ex	4	static
+obj_dat.c:122:5:OBJ_obj2nid	32	static
+obj_dat.c:149:14:OBJ_nid2obj	40	static
+obj_dat.c:174:13:OBJ_nid2sn	48	static
+obj_dat.c:200:5:OBJ_obj2txt	0	static
+obj_dat.c:360:5:OBJ_obj2name	8	static

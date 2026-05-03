@@ -1,0 +1,5 @@
+edp_general_panel.c:114:12:general_panel_disable	8	static
+edp_general_panel.c:124:12:general_panel_enable	8	static
+edp_general_panel.c:52:12:general_panel_unprepare	16	static
+edp_general_panel.c:221:12:general_panel_probe	96	static
+edp_general_panel.c:80:12:general_panel_prepare	24	static

@@ -1,0 +1,6 @@
+board.c:40:6:s_init	8	static
+board.c:63:10:sunxi_get_boot_device	8	static
+board.c:102:13:sunxi_board_reset_cpu	0	static
+board.c:165:6:reset_cpu	0	static
+board.c:170:8:board_fdt_blob_setup	8	static
+board.c:182:6:enable_caches	0	static

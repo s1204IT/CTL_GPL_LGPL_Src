@@ -1,0 +1,6 @@
+de_ovl.c:291:12:de_ovl_convert_fmt	0	static
+de_ovl.c:127:13:ovl_set_block_dirty.part.0	0	static
+de_ovl.c:387:12:de_ovl_disable_lay.isra.1	16	static
+de_ovl.c:634:6:de_dump_ovl_state	32	static
+de_ovl.c:652:5:de_ovl_apply_lay	120	static
+de_ovl.c:662:23:de_ovl_create	24	static

@@ -1,0 +1,56 @@
+// SPDX-License-Identifier: GPL-2.0+
+/*
+ * (C) Copyright 2023-2025
+ * Allwinner Technology Co., Ltd. <www.allwinnertech.com>
+ */
+
+/*
+**********************************************************************************************************************
+*											        eGon
+*						           the Embedded GO-ON Bootloader System
+*									       eGON arm boot sub-system
+*
+*						  Copyright(C), 2006-2014, Allwinner Technology Co., Ltd.
+*                                           All Rights Reserved
+*
+* File    :
+*
+* By      : Jerry
+*
+* Version : V2.00
+*
+* Date	  :
+*
+* Descript:
+**********************************************************************************************************************
+*/
+#ifndef _SUNXI_OPENSSL_EXT_H__
+#define _SUNXI_OPENSSL_EXT_H__
+#include "x509.h"
+#include "bn.h"
+#include <sunxi_cert_interface.h>
+typedef struct {
+	int head;
+	int head_len;
+	u8 *data;
+	int data_len;
+}
+sunxi_asn1_t;
+int sunxi_certif_create(X509 **certif, u8 *buf, int len);
+int sunxi_certif_free(X509 *certif);
+int sunxi_certif_probe_serial_num(X509 *x);
+int sunxi_certif_probe_version(X509 *x);
+int sunxi_certif_probe_extension(X509 *x, sunxi_certif_info_t *sunxi_certif);
+int sunxi_certif_probe_pubkey(X509 *x, sunxi_key_t *pubkey);
+int sunxi_bytes_merge(u8 *dst, u32 dst_len, u8 *src, uint src_len);
+int sunxi_certif_probe_ext(sunxi_certif_info_t *sunxi_certif, u8 *buf, u32 len);
+int sunxi_X509_certif_verify_itself(sunxi_certif_info_t *sunxi_certif, u8 *buf,
+				u32 len);
+int OBJ_obj2name(char *dst_buf, int buf_len, const ASN1_OBJECT *a);
+int ASN1_STRING_mem(char *bp, const ASN1_STRING *v);
+void sunxi_certif_mem_reset(void);
+void reset_BIO_reset(void);
+void reset_OBJ_nid2ln_reset(void);
+void reset_CRYPTO_reset(void);
+void reset_D2I_reset(void);
+#endif

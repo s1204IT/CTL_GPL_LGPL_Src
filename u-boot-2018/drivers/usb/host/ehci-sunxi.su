@@ -1,0 +1,12 @@
+ehci-sunxi.c:135:7:config_usb_pin	8	static
+ehci-sunxi.c:163:6:sunxi_set_vbus	0	static
+ehci-sunxi.c:172:27:axp_usb_vbus_output	0	static
+ehci-sunxi.c:174:5:alloc_pin	8	static
+ehci-sunxi.c:182:6:free_pin	0	static
+ehci-sunxi.c:187:5:open_usb_clock	16	static
+ehci-sunxi.c:367:5:close_usb_clock	16	static
+ehci-sunxi.c:504:6:usb_passby	4	static
+ehci-sunxi.c:550:5:sunxi_start_ehci	24	static
+ehci-sunxi.c:593:6:sunxi_stop_ehci	8	static
+ehci-sunxi.c:606:5:ehci_hcd_init	32	static
+ehci-sunxi.c:632:5:ehci_hcd_stop	8	static

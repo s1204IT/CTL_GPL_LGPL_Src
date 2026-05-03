@@ -1,0 +1,4 @@
+RSAPublicKey_it.c:11:12:rsa_cb	8	static
+RSAPublicKey_it.c:31:4:RSAPublicKey_it	0	static
+RSAPublicKey_it.c:33:3:d2i_RSAPublicKey	0	static
+RSAPublicKey_it.c:33:3:i2d_RSAPublicKey	0	static

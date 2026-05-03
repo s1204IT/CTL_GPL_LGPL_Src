@@ -1,0 +1,126 @@
+
+menuconfig SUNXI_SPRITE
+	bool "Sunxi Sprite support"
+	select SUNXI_FLASH
+	help
+	  Enable support for sunxi efex devices. 
+
+if SUNXI_SPRITE
+
+config SUNXI_SECURE_STORAGE
+	bool "Sunxi Sprite Secure Storage"
+	help
+	  Enable supprot for sunxi secure storage
+
+config SECURE_STORAGE_KEY_HUK
+	bool "Sunxi Secure Storage select huk to crypto"
+	depends on SUNXI_SECURE_STORAGE
+	default n
+	help
+	  sunxi secure storage select huk to crypto
+
+config SUNXI_SPRITE_CARTOON
+	bool "Sunxi Sprite cartoon support"
+	select SUNXI_FLASH
+	default n
+	help
+	  Enable support for sunxi Sprite cartoon(display)
+
+config SUNXI_SPRITE_CARTOON_CHAR
+	bool "Sunxi Sprite cartoon char support"
+	select SUNXI_FLASH
+	depends on SUNXI_SPRITE_CARTOON
+	help
+	  Enable support for sunxi Sprite cartoon char(display)
+
+config SUNXI_SPRITE_LED
+	bool "Sunxi Sprite LED support"
+	default n
+	help
+	  Enable support for sunxi Sprite LED(display)
+
+config SUNXI_SPRITE_RECOVERY
+	bool "Sunxi Sprite recovery support"
+	depends on SUNXI_SDMMC
+	default y
+	help
+	  Enable support for sunxi Sprite recovery
+
+config SUNXI_AUTO_UPDATE
+	bool "Sunxi auto update support"
+	depends on MMC || USB
+	default n
+	help
+	  Enable support for sunxi auto update
+
+config SUNXI_MELIS_AUTO_UPDATE
+	bool "Sunxi melis auto update support"
+	depends on MMC || USB
+	default n
+	help
+	  Enable support for sunxi melis auto update
+
+choice
+	depends on SUNXI_AUTO_UPDATE
+	prompt "select update form sdcard or usb disk"
+	default UPDATE_FROM_SDCARD
+
+config UPDATE_FROM_SDCARD
+	bool "img from sdcard"
+
+config UPDATE_FROM_USB
+	bool "img from usb disk"
+
+endchoice
+
+config SUNXI_DIGEST_TEST
+	bool "Sunxi digest test support"
+	default n
+	help
+	  Enable support for sunxi digest test
+
+config SUNXI_UPDATE_GPT
+
+	bool "Sunxi auto gpt support"
+	default n
+	help
+	  Enable support for sunxi gpt update
+
+config FW_BURN_UDISK_MIN_SIZE
+	hex "UDISK min data length default is 0x800"
+	depends on SUNXI_SPRITE || SUNXI_AUTO_UPDATE
+	default 0x800
+	help
+	  set UDISK min data length
+
+config SUNXI_PART_UPDATE
+	bool "Sunxi part update support"
+	depends on MMC
+	default n
+	help
+	  Enable support for sunxi auto update
+
+config SUNXI_BOOT_PARAM
+	bool "enable sunxi boot param"
+	help
+		store startup related parameters
+
+config SUNXI_TURNNING_DRAM
+	bool "SUNXI TURNNING DRAM SVAE"
+	default n if SUNXI_BOOT_PARAM
+	default y
+	help
+	  This is the SUNXI TURNNING DRAM
+
+config SUNXI_OTA_TURNNING
+	bool "SUNXI OTA TURNNING SVAE"
+	depends on (SUNXI_TURNNING_FLASH || SUNXI_TURNNING_DRAM)
+	# if we use this on mmc, copy0 recover must be enabled
+	depends on (!SUNXI_SDMMC || (SUNXI_SDMMC && SUNXI_RECOVERY_BOOT0_COPY0))
+	help
+	  This is the SUNXI OTA TURNNING SAVE
+
+endif
+
+
+

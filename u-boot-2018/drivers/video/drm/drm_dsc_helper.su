@@ -1,0 +1,10 @@
+drm_dsc_helper.c:38:6:drm_dsc_dp_pps_header_init	8	static
+drm_dsc_helper.c:54:5:drm_dsc_dp_rc_buffer_size	0	static
+drm_dsc_helper.c:89:6:drm_dsc_pps_payload_pack	32	static
+drm_dsc_helper.c:271:6:drm_dsc_set_const_params	0	static
+drm_dsc_helper.c:297:6:drm_dsc_set_rc_buf_thresh	4	static
+drm_dsc_helper.c:1231:5:drm_dsc_setup_rc_params	16	static
+drm_dsc_helper.c:1299:5:drm_dsc_compute_rc_parameters	48	static
+drm_dsc_helper.c:1432:5:drm_dsc_get_bpp_int	16	static
+drm_dsc_helper.c:1444:4:drm_dsc_initial_scale_value	8	static
+drm_dsc_helper.c:1455:5:drm_dsc_flatness_det_thresh	0	static

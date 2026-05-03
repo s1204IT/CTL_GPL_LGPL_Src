@@ -1,0 +1,47 @@
+/*
+ * (C) Copyright 2013-2016
+ * Allwinner Technology Co., Ltd. <www.allwinnertech.com>
+ *
+ * wangwei <wangwei@allwinnertech.com>
+ * SPDX-License-Identifier:     GPL-2.0+
+ */
+
+#ifndef __SID_H__
+#define __SID_H__
+
+#include <linux/types.h>
+#include <asm/arch/cpu.h>
+
+#define SID_PRCTL               (SUNXI_SID_BASE + 0x40)
+#define SID_PRKEY               (SUNXI_SID_BASE + 0x50)
+#define SID_RDKEY               (SUNXI_SID_BASE + 0x60)
+#define SJTAG_AT0               (SUNXI_SID_BASE + 0x80)
+#define SJTAG_AT1               (SUNXI_SID_BASE + 0x84)
+#define SJTAG_S                 (SUNXI_SID_BASE + 0x88)
+
+#define SID_ROTPK_VALUE(n)      (SUNXI_SID_BASE + 0x120 + (n * 4))
+#define SID_ROTPK_CTRL          (SUNXI_SID_BASE + 0x140)
+#define SID_ROTPK_CMP_RET_BIT   (0)
+#define SID_ROTPK_EFUSED_BIT    (1)
+#define SID_EFUSE               (SUNXI_SID_BASE + 0x200)
+#define SID_SECURE_MODE         (SUNXI_SID_BASE + 0xA0)
+#define SID_OP_LOCK  (0xAC)
+
+/* write protect */
+#define EFUSE_WRITE_PROTECT     (0x7C) /* 0x40-0x43, 32bits */
+/* read  protect */
+#define EFUSE_READ_PROTECT      (0x80) /* 0x44-0x47, 32bits */
+/* jtag security */
+#define EFUSE_LCJS              (0x84)
+#define EFUSE_NPU_STATUS_NAME	"npu_status"
+#define EFUSE_NPU_0T_LMT_VALUE	(1 << 2)
+
+/*efuse power ctl*/
+#define EFUSE_HV_SWITCH		(SUNXI_RTC_BASE + 0x204)
+#define EFUSE_ROTPK            (0xB8)
+#define EFUSE_CHIPID           (0x0)
+
+#define EFUSE_CONFIG			(0x10)
+#define EFUSE_CHECK_SUM_OFFSET 	(18)
+#define FEL_VERIFY_OFFSET		(11)
+#endif    /*  #ifndef __SID_H__  */

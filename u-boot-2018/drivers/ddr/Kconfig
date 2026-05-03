@@ -1,0 +1,6 @@
+menu "DDR Support"
+
+source "drivers/ddr/altera/Kconfig"
+source "drivers/ddr/sunxi/Kconfig"
+
+endmenu

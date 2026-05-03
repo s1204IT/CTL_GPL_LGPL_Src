@@ -1,0 +1,5 @@
+sunxi_gpiokey.c:99:5:sunxi_gpiokey_exit	0	static
+sunxi_gpiokey.c:32:5:sunxi_gpiokey_init	24	static
+sunxi_gpiokey.c:83:5:sunxi_gpiokey_read	16	static
+sunxi_gpiokey.c:27:12:axp_probe_key	0	static
+sunxi_gpiokey.c:105:5:do_gpiokey_test	8	static

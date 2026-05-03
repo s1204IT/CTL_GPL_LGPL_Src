@@ -1,0 +1,2 @@
+scsi-uclass.c:21:5:scsi_exec	0	static
+scsi-uclass.c:31:5:scsi_bus_reset	0	static

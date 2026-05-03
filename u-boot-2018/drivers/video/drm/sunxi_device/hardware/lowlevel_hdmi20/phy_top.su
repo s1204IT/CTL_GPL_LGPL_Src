@@ -1,0 +1,12 @@
+phy_top.c:151:4:top_phy_pll_get_lock	0	static
+phy_top.c:106:6:top_phy_write	0	static
+phy_top.c:111:5:top_phy_read	0	static
+phy_top.c:116:4:top_phy_get_clock_select	0	static
+phy_top.c:125:6:top_phy_set_clock_select	8	static
+phy_top.c:133:4:top_phy_get_pad_select	8	static
+phy_top.c:143:6:top_phy_set_pad_select	8	static
+phy_top.c:159:6:top_phy_pll_set_output	8	static
+phy_top.c:167:5:top_phy_config	32	static
+phy_top.c:265:6:top_phy_power	32	static
+phy_top.c:319:5:top_phy_init	24	static
+phy_top.c:344:9:top_phy_dump	32	static

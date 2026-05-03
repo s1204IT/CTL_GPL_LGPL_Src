@@ -1,0 +1,14 @@
+clk-sun60iw2.c:362:6:set_disp_priv_ops	0	static
+clk-sun60iw2.c:334:12:clk_video_set_rate	16	static
+clk-sun60iw2.c:132:22:calc_rate_video0	32	static
+clk-sun60iw2.c:141:12:get_factors_pll_video	64	static
+clk-sun60iw2.c:113:22:calc_rate_pll_periph	40	static
+clk-sun60iw2.c:75:12:get_factors_pll_periph1_2x	32	static
+clk-sun60iw2.c:94:12:get_factors_pll_periph1_800m	32	static
+clk-sun60iw2.c:56:12:get_factors_pll_periph0_2x	32	static
+clk-sun60iw2_tbl.c:417:6:sunxi_clk_factor_initlimits	8	static
+clk-sun60iw2.c:292:26:sunxi_clk_get_factor_by_name	24	static
+clk-sun60iw2.c:311:26:sunxi_clk_get_periph_by_name	24	static
+clk-sun60iw2.c:329:26:sunxi_clk_get_periph_cpus_by_name	0	static
+clk-sun60iw2.c:368:6:sunxi_set_clk_priv_ops	24	static
+clk-sun60iw2.c:392:6:init_clocks	40	static

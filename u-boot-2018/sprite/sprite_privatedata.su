@@ -1,0 +1,4 @@
+sprite_privatedata.c:32:5:sunxi_sprite_store_part_data	88	static
+sprite_privatedata.c:116:5:sunxi_sprite_restore_part_data	88	static
+sprite_privatedata.c:189:5:sunxi_sprite_probe_prvt	24	static
+sprite_privatedata.c:207:5:sunxi_sprite_erase_private_key	80	static

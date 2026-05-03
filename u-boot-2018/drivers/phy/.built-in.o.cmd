@@ -1,0 +1,1 @@
+cmd_drivers/phy/built-in.o :=  ./../tools/toolchain/gcc-linaro-7.2.1-2017.11-x86_64_arm-linux-gnueabi/bin/arm-linux-gnueabi-ld.bfd     -r -o drivers/phy/built-in.o drivers/phy/phy-uclass.o drivers/phy/phy-core-mipi-dphy.o 

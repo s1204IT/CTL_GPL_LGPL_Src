@@ -1,0 +1,4 @@
+sunxi_phykey.c:38:5:sunxi_phykey_probe	32	static
+sunxi_phykey.c:47:5:sunxi_phykey_init	0	static
+sunxi_phykey.c:54:5:sunxi_phykey_read	0	static
+sunxi_phykey.c:61:5:sunxi_phykey_exit	0	static

@@ -1,0 +1,14 @@
+dw_mc.c:49:6:_dw_mc_set_csc_bypass	0	static
+dw_mc.c:54:6:dw_mc_reset_audio_i2s	0	static
+dw_mc.c:59:6:dw_mc_reset_tmds_clock	0	static
+dw_mc.c:64:6:dw_mc_reset_phy	0	static
+dw_mc.c:69:5:dw_mc_set_clk	16	static
+dw_mc.c:84:4:dw_mc_get_clk	8	static
+dw_mc.c:99:6:dw_mc_clk_all_enable	8	static
+dw_mc.c:119:6:dw_mc_clk_all_disable	8	static
+dw_mc.c:131:4:dw_mc_irq_get_state	8	static
+dw_mc.c:145:5:dw_mc_irq_clear_state	16	static
+dw_mc.c:158:5:dw_mc_irq_mute_source	8	static
+dw_mc.c:172:5:dw_mc_irq_unmute_source	16	static
+dw_mc.c:188:6:dw_mc_set_main_irq	8	static
+dw_mc.c:194:6:dw_mc_irq_mask_all	8	static

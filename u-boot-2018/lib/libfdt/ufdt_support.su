@@ -1,0 +1,4 @@
+ufdt_support.c:24:5:check_dtbo_idx	0	static
+ufdt_support.c:33:5:check_dtbo	16	static
+ufdt_support.c:78:5:load_dtboimg	80	static
+ufdt_support.c:100:7:sunxi_support_ufdt	64	static

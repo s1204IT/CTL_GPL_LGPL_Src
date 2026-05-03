@@ -1,0 +1,13 @@
+pmu_axp8191.c:484:15:pmu_axp8191_get_reg_value	16	static
+pmu_axp8191.c:431:12:pmu_axp8191_get_key_irq	16	static
+pmu_axp8191.c:401:12:pmu_axp8191_set_sys_mode	8	static
+pmu_axp8191.c:388:12:pmu_axp8191_set_power_off	16	static
+pmu_axp8191.c:505:5:pmu_axp8191_reg_debug	24	static
+pmu_axp8191.c:412:12:pmu_axp8191_get_sys_mode	16	static
+pmu_axp8191.c:526:5:pmu_axp8191_get_poweron_source	16	static
+pmu_axp8191.c:447:12:pmu_axp8191_set_dcdc_mode	24	static
+pmu_axp8191.c:135:25:get_ctrl_info_from_tbl	16	static
+pmu_axp8191.c:307:12:pmu_axp8191_get_voltage	56	static
+pmu_axp8191.c:206:12:pmu_axp8191_set_voltage	56	static
+pmu_axp8191.c:169:12:pmu_axp8191_probe	16	static
+pmu_axp8191.c:493:15:pmu_axp8191_set_reg_value	16	static

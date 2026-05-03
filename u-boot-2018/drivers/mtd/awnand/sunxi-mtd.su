@@ -1,0 +1,2 @@
+sunxi-mtd.c:17:5:mtd_nand_write	0	static
+sunxi-mtd.c:33:5:mtd_nand_read	0	static

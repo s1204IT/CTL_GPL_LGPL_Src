@@ -1,0 +1,15 @@
+de_dci.c:134:5:de35x_dci_set_color_range	0	static
+de_dci.c:190:5:de35x_dci_set_size	16	static
+de_dci.c:206:5:de35x_dci_set_window	32	static
+de_dci.c:238:5:de35x_dci_enable	8	static
+de_dci.c:353:5:de35x_dci_update_local_param	1064	static
+de_dci.c:92:5:de_dci_enable	0	static
+de_dci.c:101:5:de_dci_dump_state	0	static
+de_dci.c:109:5:de_dci_set_size	0	static
+de_dci.c:117:5:de_dci_set_window	4	static
+de_dci.c:126:5:de_dci_update_local_param	0	static
+de_dci.c:158:6:de_dci_update_regs	24	static
+de_dci.c:257:5:de_dci_set_color_range	4	static
+de_dci.c:270:5:de35x_dci_init	16	static
+de_dci.c:458:23:de35x_dci_create	32	static
+de_dci.c:84:23:de_dci_create	0	static

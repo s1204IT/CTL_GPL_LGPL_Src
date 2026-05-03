@@ -1,0 +1,7 @@
+usbc_phy.c:50:7:usbc_new_phyx_tp_read	12	static
+usbc_phy.c:76:5:usbc_new_phyx_tp_write	16	static
+usbc_phy.c:300:6:USBC_PHY_SetCommonConfig	0	static
+usbc_phy.c:323:6:USBC_PHY_SetPrivateConfig	0	static
+usbc_phy.c:359:7:USBC_PHY_GetCommonConfig	0	static
+usbc_phy.c:428:6:USBC_phy_Standby	16	static
+usbc_phy.c:460:6:USBC_Phy_Standby_Recover	0	static

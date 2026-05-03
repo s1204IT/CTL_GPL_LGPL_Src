@@ -1,0 +1,2 @@
+phy-core-mipi-dphy.c:19:5:phy_mipi_dphy_get_default_config	48	static
+phy-core-mipi-dphy.c:82:5:phy_mipi_dphy_config_validate	88	static

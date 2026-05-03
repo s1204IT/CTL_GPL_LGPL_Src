@@ -1,0 +1,14 @@
+sunxi_image_verifier.c:46:5:smc_tee_check_hash	8	static
+sunxi_image_verifier.c:233:12:check_public_in_rootcert	64	static
+sunxi_image_verifier.c:330:12:sunxi_verify_signature	48	static
+sunxi_image_verifier.c:54:5:sunxi_sha_calc_witch_software_verify	8	static
+sunxi_image_verifier.c:260:12:sunxi_verify_embed_signature	232	static
+sunxi_image_verifier.c:61:5:sunxi_verify_os	160	static
+sunxi_image_verifier.c:125:5:sunxi_rsa_pubkey_hash_cal	1112	static
+sunxi_image_verifier.c:364:5:sunxi_verify_preserve_toc1	16	static
+sunxi_image_verifier.c:389:5:sunxi_verify_get_rotpk_hash	176	static
+sunxi_image_verifier.c:420:5:sunxi_verify_toc1_root_cert	208	static
+sunxi_image_verifier.c:497:5:sunxi_verify_rotpk_hash	8	static
+sunxi_image_verifier.c:692:5:sunxi_verify_partion	176	static
+sunxi_image_verifier.c:798:5:sunxi_verify_mips	16	static
+sunxi_image_verifier.c:805:5:verify_image_by_vbmeta	376	static

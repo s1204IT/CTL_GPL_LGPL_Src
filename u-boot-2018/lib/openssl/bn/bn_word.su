@@ -1,0 +1,9 @@
+bn_word.c:45:18:bn_expand_internal	32	static
+bn_word.c:27:9:BN_new	16	static
+bn_word.c:102:9:bn_expand2	16	static
+bn_word.c:121:5:BN_num_bits_word	0	static
+bn_word.c:179:5:BN_num_bits	8	static
+bn_word.c:189:10:BN_div_word	32	static
+bn_word.c:224:5:BN_add_word	24	static
+bn_word.c:260:5:BN_sub_word.part.2	16	static
+bn_word.c:260:5:BN_sub_word	0	static

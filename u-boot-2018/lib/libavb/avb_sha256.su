@@ -1,0 +1,4 @@
+avb_sha256.c:109:13:SHA256_transform	360	static
+avb_sha256.c:88:6:avb_sha256_init	12	static
+avb_sha256.c:308:6:avb_sha256_update	32	static
+avb_sha256.c:339:10:avb_sha256_final	72	static

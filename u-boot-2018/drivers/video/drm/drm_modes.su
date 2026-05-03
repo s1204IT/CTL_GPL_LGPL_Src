@@ -1,0 +1,13 @@
+drm_modes.c:49:26:drm_mode_create	8	static
+drm_modes.c:69:6:drm_mode_copy	8	static
+drm_modes.c:84:26:drm_mode_duplicate	16	static
+drm_modes.c:101:6:drm_mode_destroy	0	static
+drm_modes.c:168:6:drm_mode_match	24	static
+drm_modes.c:211:6:drm_mode_equal	0	static
+drm_modes.c:229:6:drm_display_mode_from_videomode	24	static
+drm_modes.c:268:6:drm_display_mode_to_videomode	20	static
+drm_modes.c:309:5:drm_mode_vrefresh	8	static
+drm_modes.c:337:6:drm_mode_set_name	32	static
+drm_modes.c:368:1:drm_gtf_mode_complex	48	static
+drm_modes.c:571:1:drm_gtf_mode	40	static
+drm_modes.c:602:26:drm_cvt_mode	56	static

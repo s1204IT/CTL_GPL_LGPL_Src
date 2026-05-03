@@ -1,0 +1,13 @@
+bio_s_mem.c:196:13:mem_ctrl	0	static
+bio_s_mem.c:201:12:mem_gets	0	static
+bio_s_mem.c:206:12:mem_puts	0	static
+bio_s_mem.c:137:12:mem_read	16	static
+bio_s_mem.c:23:13:BIO_s_mem	0	static
+bio_s_mem.c:29:10:BUF_MEM_new	16	static
+bio_s_mem.c:104:12:mem_new	8	static
+bio_s_mem.c:46:6:BUF_MEM_free	8	static
+bio_s_mem.c:118:12:mem_free	8	static
+bio_s_mem.c:59:5:BUF_MEM_grow_clean	32	static
+bio_s_mem.c:169:12:mem_write	32	static
+bio_s_mem.c:92:6:BIO_clear_flags	0	static
+bio_s_mem.c:98:6:BIO_set_flags	0	static

@@ -1,0 +1,6 @@
+sunxi_android_boot.c:38:12:android_vbmeta_avb_verify	1624	static
+sunxi_android_boot.c:20:12:sunxi_bmp_display	0	static
+sunxi_android_boot.c:24:12:axp_probe_key	0	static
+sunxi_android_boot.c:28:12:sunxi_board_shutdown	0	static
+sunxi_android_boot.c:32:12:sunxi_board_shutdown_charge	0	static
+sunxi_android_boot.c:84:5:sunxi_android_boot	48	static

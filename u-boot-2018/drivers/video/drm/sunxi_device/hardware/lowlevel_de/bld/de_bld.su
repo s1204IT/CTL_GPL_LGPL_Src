@@ -1,0 +1,7 @@
+de_bld.c:142:12:de_bld_set_route.isra.0	24	static
+de_bld.c:101:5:de_bld_output_set_attr	16	static
+de_bld.c:155:5:de_bld_pipe_reset	24	static
+de_bld.c:173:5:de_bld_get_chn_mux_port	24	static
+de_bld.c:204:5:de_bld_pipe_set_attr	56	static
+de_bld.c:235:6:dump_bld_state	56	static
+de_bld.c:260:23:de_blender_create	32	static

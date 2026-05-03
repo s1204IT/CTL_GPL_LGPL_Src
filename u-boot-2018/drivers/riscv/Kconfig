@@ -1,0 +1,13 @@
+config BOOT_RISCV
+	bool "Support RISCV"
+	default n
+
+config RISCV_UPDATA_IRQ_TAB
+	bool "Support RISCV share irq table updata"
+	depends on BOOT_RISCV
+	default n
+
+config RISCV_UPDATA_IRQ_TAB_DEBUG
+	bool "Support RISCV share irq table updata debug log"
+	depends on RISCV_UPDATA_IRQ_TAB
+	default n

@@ -1,0 +1,5 @@
+panel-lvds.c:114:12:panel_lvds_disable	8	static
+panel-lvds.c:100:12:panel_lvds_enable	8	static
+panel-lvds.c:124:12:panel_lvds_unprepare	24	static
+panel-lvds.c:209:12:panel_lvds_probe	112	static
+panel-lvds.c:64:12:panel_lvds_prepare	24	static

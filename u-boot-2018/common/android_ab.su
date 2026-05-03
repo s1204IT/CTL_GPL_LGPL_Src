@@ -1,0 +1,6 @@
+android_ab.c:85:12:ab_control_create_from_disk	40	static
+android_ab.c:135:12:ab_control_store.isra.0	24	static
+android_ab.c:44:12:ab_control_default	24	static
+android_ab.c:369:12:do_enable_sunxi_ab_test	48	static
+android_ab.c:183:5:ab_select_slot	64	static
+android_ab.c:337:5:ab_select_slot_from_partname	32	static

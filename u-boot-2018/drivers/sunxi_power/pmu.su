@@ -1,0 +1,16 @@
+pmu.c:48:5:pmu_probe	24	static
+pmu.c:57:5:pmu_reg_debug	0	static
+pmu.c:66:5:pmu_get_info	4	static
+pmu.c:78:5:pmu_set_voltage	0	static
+pmu.c:87:5:pmu_get_voltage	0	static
+pmu.c:96:5:pmu_set_power_off	0	static
+pmu.c:105:5:pmu_set_reboot_flag	0	static
+pmu.c:115:5:pmu_set_sys_mode	0	static
+pmu.c:124:5:pmu_set_dcdc_mode	0	static
+pmu.c:134:5:pmu_get_sys_mode	0	static
+pmu.c:143:5:pmu_get_key_irq	0	static
+pmu.c:152:5:pmu_set_bus_vol_limit	0	static
+pmu.c:161:15:pmu_get_reg_value	0	static
+pmu.c:170:15:pmu_set_reg_value	0	static
+pmu.c:179:13:pmu_get_name	0	static
+pmu.c:188:5:pmu_get_poweron_source	0	static

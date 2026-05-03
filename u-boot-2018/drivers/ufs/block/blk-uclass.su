@@ -1,0 +1,2 @@
+blk-uclass.c:19:5:blk_create_device	4	static
+blk-uclass.c:49:5:blk_create_devicef	4	static

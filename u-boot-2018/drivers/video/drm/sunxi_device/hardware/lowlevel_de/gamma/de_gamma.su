@@ -1,0 +1,7 @@
+de_gamma.c:40:13:gamma_set_block_dirty.part.0	0	static
+de_gamma.c:92:5:de_gamma_apply_csc	88	static
+de_gamma.c:103:5:de_gamma_demo_mode_config	16	static
+de_gamma.c:158:5:de_gamma_ctc_config	16	static
+de_gamma.c:173:5:de_gamma_config	24	static
+de_gamma.c:180:6:de_gamma_dump_state	16	static
+de_gamma.c:192:25:de_gamma_create	72	static

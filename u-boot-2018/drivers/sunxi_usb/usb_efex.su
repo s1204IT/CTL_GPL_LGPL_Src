@@ -1,0 +1,15 @@
+usb_efex.c:584:13:sunxi_efex_reset	8	static
+usb_efex.c:607:14:sunxi_efex_usb_rx_dma_isr	0	static
+usb_efex.c:629:14:sunxi_efex_usb_tx_dma_isr	0	static
+usb_efex.c:772:13:__sunxi_usb_efex_fill_status	16	static
+usb_efex.c:1778:13:dram_data_recv_finish	40	static
+usb_efex.c:723:12:sunxi_efex_nonstandard_req_op	8	static
+usb_efex.c:653:12:sunxi_efex_standard_req_op	40	static
+usb_efex.c:548:12:sunxi_efex_exit	8	static
+usb_efex.c:488:12:sunxi_efex_init	16	static
+usb_efex.c:788:5:sunxi_print_usb_efex_cmd	16	static
+usb_efex.c:877:5:sunxi_print_usb_efex_next_status	16	static
+usb_efex.c:930:12:__sunxi_usb_efex_op_cmd	24	static
+usb_efex.c:1914:6:sunxi_print_efex_status	16	static
+usb_efex.c:1966:6:sunxi_print_efex_app_step	16	static
+usb_efex.c:2004:12:sunxi_efex_state_loop	24	static

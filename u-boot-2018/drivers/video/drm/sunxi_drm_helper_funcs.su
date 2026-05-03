@@ -1,0 +1,16 @@
+sunxi_drm_helper_funcs.c:24:21:sunxi_of_graph_get_port_by_id	24	static
+sunxi_drm_helper_funcs.c:49:1:sunxi_of_graph_get_endpoint_by_regs	24	static
+sunxi_drm_helper_funcs.c:73:1:sunxi_of_graph_get_remote_node	16	static
+sunxi_drm_helper_funcs.c:94:21:sunxi_of_graph_get_port_parent	8	static
+sunxi_drm_helper_funcs.c:109:21:sunxi_of_graph_get_remote_endpoint	24	static
+sunxi_drm_helper_funcs.c:131:5:sunxi_of_get_irq_number	24	static
+sunxi_drm_helper_funcs.c:166:5:sunxi_of_get_panel_orientation	16	static
+sunxi_drm_helper_funcs.c:196:5:sunxi_clk_enable	24	static
+sunxi_drm_helper_funcs.c:211:5:sunxi_clk_disable	24	static
+sunxi_drm_helper_funcs.c:236:7:sunxi_drm_gpio_request	128	static
+sunxi_drm_helper_funcs.c:260:7:sunxi_drm_gpio_node_request	128	static
+sunxi_drm_helper_funcs.c:283:5:sunxi_drm_gpio_set_value	0	static
+sunxi_drm_helper_funcs.c:288:5:sunxi_drm_power_enable	8	static
+sunxi_drm_helper_funcs.c:324:5:sunxi_drm_power_disable	8	static
+sunxi_drm_helper_funcs.c:357:5:sunxi_phy_get_by_index	104	static
+sunxi_drm_helper_funcs.c:417:5:sunxi_phy_get_by_name	16	static

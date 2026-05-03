@@ -1,0 +1,2 @@
+cpu_info.c:18:5:print_cpuinfo	8	static
+cpu_info.c:27:5:sunxi_get_sid	0	static

@@ -1,0 +1,33 @@
+/*
+ * drivers/video/sunxi/disp2/hdmi2/hdmi_type.h
+ *
+ * Copyright (c) 2007-2019 Allwinnertech Co., Ltd.
+ * Author: zhengxiaobin <zhengxiaobin@allwinnertech.com>
+ *
+ * This software is licensed under the terms of the GNU General Public
+ * License version 2, as published by the Free Software Foundation, and
+ * may be copied, distributed, and modified under those terms.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ */
+#ifndef _HDMI_TYPE_H_
+#define _HDMI_TYPE_H_
+
+#include <common.h>
+#include <malloc.h>
+#include <sys_config.h>
+#include <sunxi_display2.h>
+#include <linux/list.h>
+#include <linux/compat.h>
+#include "../disp/disp_sys_intf.h"
+
+#define pr_info printf
+#define pr_err  printf
+#define pr_warn printf
+#define BIT(x)			(1 << (x))
+
+#endif

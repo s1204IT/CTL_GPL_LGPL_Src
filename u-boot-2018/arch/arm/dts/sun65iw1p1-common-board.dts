@@ -1,0 +1,154 @@
+// SPDX-License-Identifier: (GPL-2.0+ or MIT)
+/*
+ * Allwinner Technology CO., Ltd. sun65iw1p1 platform
+ *
+ * modify base on juno.dts
+ */
+
+&target {
+	auto_fel = <0>;
+	dragonboard_test = <0>;	/*1:support card boot dragonboard; 0:not support card boot dragonboard*/
+};
+
+&pio {
+	spi0_pins_default: spi0@0 {
+		pins = "PC0", "PC2", "PC3"; /* clk, mosi, miso */
+		function = "spi0";
+		drive-strength = <10>;
+	};
+
+	spi0_pins_cs: spi0@1 {
+		pins = "PC1", "PC4", "PC5";
+		function = "spi0";
+		drive-strength = <10>;
+		bias-pull-up;   /* cs, hold, wp should be pulled up */
+	};
+};
+
+&mmc0 {
+	cd-gpios = <&pio 5 6 GPIO_ACTIVE_LOW>;	/* PF6 */
+	bus-width = <4>;
+	status = "okay";
+};
+
+&mmc2 {
+	bus-width = <4>;
+	cap-mmc-highspeed;
+	mmc-ddr-1_8v;
+	max-frequency = <50000000>;
+	sdc_ex_dly_used = <2>;
+    status = "disabled";
+};
+
+&spi0  {
+	pinctrl-0 = <&spi0_pins_default>, <&spi0_pins_cs>;
+	pinctrl-names = "default";
+	status = "disabled";
+
+	flash@0 {
+		#address-cells = <1>;
+		#size-cells = <1>;
+		compatible = "jedec,spi-nor";
+		reg = <0>;
+		spi-max-frequency = <10000000>;
+		spi-rx-bus-width = <4>;
+		spi-tx-bus-width = <4>;
+		status = "disabled";
+	};
+};
+
+&uart0 {
+	pinctrl-names = "default";
+	pinctrl-0 = <&uart0_ph_pins>;
+	status = "okay";
+};
+
+&platform {
+	debug_mode = <9>;
+};
+
+&power_sply {
+	dcdc1_vol = <1003300>;
+	dcdc2_vol = <1000920>;
+	dcdc3_vol = <3300>;
+	aldo1_vol = <1800>;
+	aldo2_vol = <3300>;
+	aldo3_vol = <1003300>;
+	bldo1_vol = <1001800>;
+	bldo2_vol = <1800>;
+	dcdc1_mode = <0>;
+};
+
+&twi0 {
+	clock-frequency = <100000>;
+	status = "okay";
+	pmu0: pmu@34 {
+		compatible = "x-powers,axp2101";
+		reg = <0x34>;
+		status = "okay";
+
+		regulator0: regulators@0 {
+			reg_dcdc1: dcdc1 {
+				regulator-name = "axp2101-dcdc1";
+			};
+			reg_dcdc2: dcdc2 {
+				regulator-name = "axp2101-dcdc2";
+			};
+			reg_dcdc3: dcdc3 {
+				regulator-name = "axp2101-dcdc3";
+			};
+			reg_dcdc4: dcdc4 {
+				regulator-name = "axp2101-dcdc4";
+			};
+			reg_dcdc5: dcdc5 {
+				regulator-name = "axp2101-dcdc5";
+			};
+			reg_dc4ldo2:dc4ldo2 {
+				regulator-name = "axp2101-dc4ldo2";
+			};
+			reg_dldo1: dldo1 {
+				regulator-name = "axp2101-dldo1";
+			};
+			reg_dldo2: dldo2 {
+				regulator-name = "axp2101-dldo2";
+			};
+			reg_aldo1: aldo1 {
+				regulator-name = "axp2101-aldo1";
+			};
+			reg_aldo2: aldo2 {
+				regulator-name = "axp2101-aldo2";
+			};
+			reg_aldo3: aldo3 {
+				regulator-name = "axp2101-aldo3";
+			};
+			reg_aldo4: aldo4 {
+				regulator-name = "axp2101-aldo4";
+			};
+			reg_bldo1: bldo1 {
+				regulator-name = "axp2101-bldo1";
+			};
+			reg_bldo2: bldo2 {
+				regulator-name = "axp2101-bldo2";
+			};
+		};
+	};
+};
+
+&sdc0_pins_a {
+		allwinner,pins = "PF0", "PF1", "PF2",
+							"PF3", "PF4", "PF5";
+		allwinner,function = "sdc0";
+		allwinner,muxsel = <2>;
+		allwinner,drive = <3>;
+		allwinner,pull = <1>;
+};
+
+&card0_boot_para {
+	/* Avoid dtc compiling warnings. @TODO: Developer should modify this to the actual value */
+	/* reg = <0x0 0x2 0x0 0x0>;  [> Avoid dtc compiling warnings. @TODO: Developer should modify this to the actual value <] */
+	device_type = "card0_boot_para";
+	card_ctrl = <0x0>;
+	card_high_speed = <0x1>;
+	card_line = <0x4>;
+	pinctrl-0 = <&sdc0_pins_a>;
+};

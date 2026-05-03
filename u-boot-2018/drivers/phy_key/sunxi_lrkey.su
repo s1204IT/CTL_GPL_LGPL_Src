@@ -1,0 +1,8 @@
+sunxi_lrkey.c:102:5:sunxi_lrkey_read	8	static
+sunxi_lrkey.c:26:12:sunxi_lrkey_clock_open	0	static
+sunxi_lrkey.c:41:5:sunxi_lrkey_init	16	static
+sunxi_lrkey.c:31:12:sunxi_lrkey_clock_close	0	static
+sunxi_lrkey.c:75:5:sunxi_lrkey_exit	8	static
+sunxi_lrkey.c:36:12:axp_probe_key	0	static
+sunxi_lrkey.c:158:5:do_lrkey_test	8	static
+sunxi_lrkey.c:89:5:sunxi_lrkey_read_vol	0	static

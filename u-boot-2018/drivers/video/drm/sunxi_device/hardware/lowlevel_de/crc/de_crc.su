@@ -1,0 +1,7 @@
+de_crc.c:46:13:de_crc_set_block_dirty.part.0	0	static
+de_crc.c:82:5:de_crc_check_status_with_clear	24	static
+de_crc.c:167:5:de_crc_set_polarity	8	static
+de_crc.c:243:5:de_crc_region_config	32	static
+de_crc.c:252:5:de_crc_global_config	8	static
+de_crc.c:257:6:de_crc_dump_state	0	static
+de_crc.c:262:23:de_crc_create	32	static

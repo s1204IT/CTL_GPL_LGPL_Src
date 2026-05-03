@@ -1,0 +1,7 @@
+board_sun60iw2.c:20:5:sunxi_platform_power_off	8	static
+board_sun60iw2.c:110:5:sunxi_set_sramc_mode	8	static
+board_sun60iw2.c:126:5:sunxi_get_active_boot0_id	0	static
+board_sun60iw2.c:136:6:otg_phy_config	0	static
+board_sun60iw2.c:147:6:sunxi_board_reset_cpu	0	static
+board_sun60iw2.c:160:5:update_bmu_info_to_kernel	24	static
+board_sun60iw2.c:188:6:sunxi_sid_enable_checksum	8	static

@@ -1,0 +1,89 @@
+/{
+clocks {
+	compatible = "allwinner,clk-init";
+	device_type = "clocks";
+	#address-cells = <2>;
+	#size-cells = <2>;
+	ranges;
+	reg = <0x0 0x42001000 0x0 0x100>,	/*app space*/
+	      <0x0 0x4a010000 0x0 0x600>;	/*aon space*/
+
+		clk_pll_periph: pll_periph {
+			#clock-cells = <0>;
+			compatible = "allwinner,pll-clock";
+			assigned-clock-rates = <3072000000>;
+			lock-mode = "new";
+			clock-output-names = "pll_periph";
+		 };
+
+		clk_pll_periph_307m: pll_periph_307m {
+			#clock-cells = <0>;
+			compatible = "allwinner,fixed-factor-clock";
+			clocks = <&clk_pll_periph>;
+			clock-mult = <1>;
+			clock-div = <10>;
+			clock-output-names = "pll_periph_307m";
+		};
+
+		clk_pll_videox4: pll_videox4 {
+			#clock-cells = <0>;
+			compatible = "allwinner,pll-clock";
+			lock-mode = "new";
+			clock-output-names = "pll_videox4";
+		};
+
+		clk_pll_videox1: pll_videox1 {
+			#clock-cells = <0>;
+			compatible = "allwinner,pll-clock";
+			lock-mode = "new";
+			clock-mult = <1>;
+			clock-div = <4>;
+			clock-output-names = "pll_videox1";
+		};
+
+		clk_de: de {
+			#clock-cells = <0>;
+			compatible = "allwinner,periph-clock";
+			clock-output-names = "de";
+			assigned-clocks = <&clk_de>;
+			assigned-clock-parents = <&clk_pll_videox1>;
+			assigned-clock-rates = <150000000>;
+		};
+
+		clk_de_hb: de_hb {
+			#clock-cells = <0>;
+			compatible = "allwinner,periph-clock";
+			clock-output-names = "de_hb";
+		};
+
+		clk_dpss_top0_bus: dpss_top0_bus {
+			#clock-cells = <0>;
+			compatible = "allwinner,periph-clock";
+			clock-output-names = "dpss_top0_bus";
+		};
+
+		clk_disp_ahb: disp_ahb {
+			#clock-cells = <0>;
+			compatible = "allwinner,periph-clock";
+			clock-output-names = "disp_ahb";
+		};
+
+		clk_disp_mbus: disp_mbus {
+			#clock-cells = <0>;
+			compatible = "allwinner,periph-clock";
+			clock-output-names = "disp_mbus";
+		};
+
+		clk_tcon_lcd: tcon_lcd {
+			#clock-cells = <0>;
+			compatible = "allwinner,periph-clock";
+			clock-output-names = "tcon_lcd";
+		};
+
+		clk_tcon: tcon {
+			#clock-cells = <0>;
+			compatible = "allwinner,periph-clock";
+			clock-output-names = "tcon";
+		};
+	};
+};

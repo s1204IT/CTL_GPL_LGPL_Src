@@ -1,0 +1,12 @@
+de_csc.c:785:12:IDE_SCAL_MATRIC_MUL	28	static
+de_csc.c:213:6:de35x_csc_dump_state	32	static
+de_csc.c:242:5:de35x_csc_apply	32	static
+de_csc.c:103:5:de35x_csc_enable	8	static
+de_csc.c:829:5:de_csc2_apply	256	static
+de_csc.c:60:5:de_csc_enable	0	static
+de_csc.c:66:6:de_csc_dump_state	0	static
+de_csc.c:72:5:de_csc_apply	4	static
+de_csc.c:93:6:de_csc_update_regs	0	static
+de_csc.c:307:23:de35x_csc_create	40	static
+de_csc.c:55:23:de_csc_create	0	static
+de_csc.c:1359:5:de_dcsc_apply	392	static

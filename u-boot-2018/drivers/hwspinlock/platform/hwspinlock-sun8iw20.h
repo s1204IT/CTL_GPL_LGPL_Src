@@ -1,0 +1,11 @@
+/* SPDX-License-Identifier: GPL-2.0+ */
+
+#ifndef __HWSPINLOCK_SUN8IW20_H
+#define __HWSPINLOCK_SUN8IW20_H
+
+#define SPIN_LOCK_BASE		(0x03005000)
+#define BIT_SPIN_LOCK_GATING	(0)
+#define BIT_SPIN_LOCK_RST		(16)
+#define SPIN_LOCK_BGR_REG		0x72c
+
+#endif /* __HWSPINLOCK_SUN8IW20_H */

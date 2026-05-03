@@ -1,0 +1,4 @@
+de_backend.c:48:5:de_backend_apply	88	static
+de_backend.c:90:5:de_backend_check_crc_status_with_clear	0	static
+de_backend.c:97:5:de_backend_dump_state	16	static
+de_backend.c:109:27:de_backend_create	56	static
