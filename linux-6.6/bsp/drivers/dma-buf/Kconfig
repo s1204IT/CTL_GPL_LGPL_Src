@@ -1,0 +1,7 @@
+config AW_DMABUF_HEAPS_CARVEOUT
+	bool "Carveout Heaps"
+	depends on DMABUF_HEAPS
+	help
+	  Choose this option to enable the carveout dmabuf heap. The carveout
+	  heap is backed by pages from reserved memory regions flagged as
+	  exportable. If in doubt, say Y.

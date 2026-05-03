@@ -1,0 +1,11 @@
+#
+# Touchscreen driver configuration
+#
+config TOUCHSCREEN_JDCHIPSET
+	tristate "Jadard touch chipset"
+	depends on I2C
+	help
+	  Say Y here if you have a Jadard chipset touchscreen.
+
+	  If unsure, say N.
+

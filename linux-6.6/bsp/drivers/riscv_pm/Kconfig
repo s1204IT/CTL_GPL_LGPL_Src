@@ -1,0 +1,24 @@
+# SPDX-License-Identifier: GPL-2.0-only
+#
+# Allwinner sunXi SoC drivers
+#
+
+menu "RISCV suspend Drivers"
+	depends on AW_BSP
+
+config AW_RISCV_SUSPEND
+	tristate "Allwinner sunxi riscv suspend support"
+	default n
+	select HARDIRQS_SW_RESEND
+	select ARCH_SUSPEND_POSSIBLE
+
+config AW_ANDES_STANDBY_DEBUG
+	tristate "Andes sunxi Standby Debugging Driver"
+	depends on AW_RISCV_SUSPEND && PM && RISCV && PLAT_AE350
+	default y
+	help
+	  Say y here if you want to support standby debug module.
+	  The standby debug module is used to debug system suspend.
+	  When in doubt, say "Y".
+
+endmenu

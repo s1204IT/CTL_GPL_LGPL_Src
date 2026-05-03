@@ -1,0 +1,18 @@
+# SPDX-License-Identifier: GPL-2.0-only
+
+menu "sunxi cpu ecc Drivers"
+	depends on AW_BSP
+
+config AW_CPU_ECC
+	tristate "CPU ECC  Support for Allwinner SoCs"
+	help
+	  To compile this driver as a module, choose M here: the
+	  module will be called sunxi_cpu_ecc.
+
+config AW_CPU_ECC_TEST
+       bool "CPU ECC testing"
+       depends on AW_CPU_ECC
+       default n
+       help
+	 Enables a suite of cpu ecc unit testing.
+endmenu

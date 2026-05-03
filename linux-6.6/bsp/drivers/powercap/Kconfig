@@ -1,0 +1,20 @@
+# SPDX-License-Identifier: GPL-2.0-only
+#
+# Devfreq device configuration
+#
+
+menu "DTPM Device Drivers"
+	depends on AW_BSP
+
+config AW_DTPM
+	tristate "SUNXI DTPM Driver"
+	select DTPM
+	select DTPM_CPU
+
+	help
+	  Describe the hierarchy for the Dynamic Thermal Power Management tree
+	  on this platform. That will create all the power capping capable
+	  devices.
+
+	  If in doubt, say N.
+endmenu

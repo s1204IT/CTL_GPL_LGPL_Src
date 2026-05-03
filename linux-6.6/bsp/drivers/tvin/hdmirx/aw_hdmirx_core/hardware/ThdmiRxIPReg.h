@@ -1,0 +1,1065 @@
+/* SPDX-License-Identifier: GPL-2.0-or-later */
+/* Copyright(c) 2024 - 2024 Allwinner Technology Co.,Ltd. All rights reserved. */
+/*
+ * Allwinner SoCs hdmirx driver.
+ *
+ * Copyright (C) 2024 Allwinner.
+ *
+ * This file is licensed under the terms of the GNU General Public
+ * License version 2.  This program is licensed "as is" without any
+ * warranty of any kind, whether express or implied.
+ */
+#ifndef __THDMIRX_REG_IP_H__
+#define __THDMIRX_REG_IP_H__
+
+// cpu freq of 255MHz
+#define CPU_FREQ_MHZ 200
+#define CPU_FREQ (CPU_FREQ_MHZ * 1000000)
+
+static uintptr_t vs_base; //  0x06100000
+static uintptr_t link_base; // 0x06140000
+static uintptr_t phy_base; //  0x06100800
+static uintptr_t audio_pll_base; //  0x06180000
+static uintptr_t edid_top_base; //  0x06210000
+static uintptr_t edid_base; //  0x06210800
+static uintptr_t hdmirx_top; //  0x06220000
+
+
+//EDID_TOP
+#define HDMIRX_5V_ON_INT_STATUS_REG  0
+#define HDMIRX_5V_ON_INT_EN_REG  0x004
+#define HDMIRX_5V_OFF_INT_STATUS_REG  0x008
+#define HDMIRX_5V_OFF_INT_EN_REG  0x00C
+#define HDMIRX_5V_ON_STATUS_REG  0x010
+#define HDMIRX_HPD_SET_REG  0x014
+#define HDMIRX_5V_DEBOUNCE_CTRL_REG  0X24
+#define HDMIRX_5V_Rising_DEBOUNCE_CNT_REG  0X28
+#define HDMIRX_5V_Falling_DEBOUNCE_CNT_REG  0X2C
+#define HDMIRX_ASSIST_CTR_REG 0x40
+#define HDMIRX_5V_DETECT_CTR_REG0 0x44
+#define HDMIRX_5V_DETECT_CTR_REG1 0x48
+
+//HDMIRX_TOP
+#define HDMIRX_CLOCK_GATING_CTR_REG 0X0
+#define HDMIRX_RESET_CTR_REG 0X4
+#define HDMIRX_INTERRUPT_ENABLE_CTR_REG 0X260
+
+//EDID_BASE
+#define I2C_ADDR_REG 0x300
+#define I2C_CTRL_REG 0x304
+#define I2C_CTRL_DEBUG_REG 0x308
+#define EDID_HDMI1_ADDRESS 0x0400
+#define EDID_HDMI2_ADDRESS 0x0500
+#define EDID_HDMI3_ADDRESS 0x0600
+
+
+// TV303 just one phy
+//#define HDMIRX_REG_BASE 0x06840000
+#define HDMIRX_PHY_BASE 0x800
+#define HDMIRX_PHY0_BASE 0x40000
+#define HDMIRX_ARC_CONTROL_PHY_BASE 0x06800000
+
+#define MV_TOP_BASE_ADDR 0x1000
+#define LIB_MV_TOP_BASE_ADDR 0x41000
+
+#define HDMIRX_LINK_P0_REG_BASE 0x06840000
+#define HDMIRX_LINK_P1_REG_BASE 0x06840000
+#define HDMIRX_LINK_P2_REG_BASE 0x06840000
+#define HDMIRX_LINK_P3_REG_BASE 0x06840000
+
+#define HDMIRX_ARC_TX_PATH_ADDR 0x06e00020
+#define SPDIF_MUX_SEL _BIT0_
+
+// System Control 1
+#define SYSTEM_CONTROL_1 (0x00)
+#define SYSTEM_PD_IDCLK _BIT7_
+#define SYSTEM_PD_TMDS _BIT6_
+#define TERMINATION_SEL _BIT5_
+#define RX_ENABLE _BIT4_
+#define HPD_ENABLE _BIT3_
+
+// System Control 2
+#define SYSTEM_CONTROL_2 (0x01)
+#define PHY_IDCLK_LOCKED _BIT7_
+#define PHY_CDR_LOCKED _BIT6_
+#define SIGNAL_VALID _BIT5_
+#define HDMI_5V_ON _BIT4_
+
+// System Control 3
+#define SYSTEM_CONTROL_3 (0x02)
+#define SYSTEM_PD_AUDIO_T _BIT6_
+#define SYSTEM_PD_AUDIO _BIT5_
+#define SYSTEM_PD_HKEY _BIT4_
+#define PM_MSK_IDCLK_LK _BIT3_
+#define PM_MSK_PHY_CDR_LK _BIT2_
+#define PM_MSK_SIGNAL _BIT1_
+#define PM_MSK_5V _BIT0_
+
+// Interrupt reason register
+#define INTERRUPT_REASON_REGISTER (0x05)
+#define HDMI_INT _BIT0_
+#define HDCP_INT _BIT1_
+#define PKT_RCVD_INT _BIT2_
+#define AUDIO_INT _BIT3_
+#define AUDIO_ERR_INT _BIT4_
+#define VIDEO_INT _BIT5_
+#define PM_INT _BIT6_
+#define PHY_INT _BIT7_
+
+// HDMI Interrupt Mask
+#define HDMI_INTERRUPT_MASK (0x06)
+#define HDMI_MSK_PHY_LOCKED _BIT7_
+#define HDMI_MSK_PHY_UNLOCKED _BIT6_
+#define HDMI_MSK_DVI_LOCKED _BIT5_
+#define HDMI_MSK_HDMI_LOCKED _BIT3_
+#define HDMI_MSK_VTOTAL_CHANGED _BIT2_
+#define HDMI_MSK_PKT_LOCKED _BIT1_
+#define HDMI_MSK_PKT_UNLOCKED _BIT0_
+
+// HDMI Interrupt Reason register
+#define HDMI_INTERRUPT_REASON (0x07)
+#define HDMI_REASON_PHY_LOCKED _BIT7_
+#define HDMI_REASON_PHY_UNLOCKED _BIT6_
+#define HDMI_REASON_DVI_LOCKED _BIT5_
+#define HDMI_REASON_HDMI_LOCKED _BIT3_
+#define HDMI_REASON_VTOTAL_CHANGED _BIT2_
+#define HDMI_REASON_PKT_LOCKED _BIT1_
+#define HDMI_REASON_PKT_UNLOCKED _BIT0_
+
+// HDCP Interrupt Mask register
+#define HDCP_INT_MASK (0x08)
+#define HDCP_MSK_RI_CNT _BIT5_
+#define HDCP_MSK_REP_AUTH _BIT4_
+#define HDCP_MSK_ENC_DIS _BIT3_
+#define HDCP_MSK_ENC_START _BIT2_
+#define HDCP_MSK_AUTH _BIT1_
+#define HDCP_MASK_AKSV_UPDATED _BIT0_
+
+// HDMI Interrupt Reason register
+#define HDCP_INTERRUPT_REASON (0x09)
+#define HDCP_INT_AKSV_UPDATED _BIT0_
+#define HDCP_INT_AUTH _BIT1_
+#define HDCP_INT_ENC_START _BIT2_
+#define HDCP_INT_ENC_DIS _BIT3_
+#define HDCP_INT_REP_AUTH _BIT4_
+#define HDCP_INT_RI_CNT _BIT5_
+
+// Packet arrived Interrupt Mask 1 register
+#define PACKET_ARRIVED_INTERRUPT_MASK_1 0x0A  //    R(Write 1 to clr)
+#define PKT_MSK_NULL _BIT0_
+#define PKT_MSK_GCP _BIT1_
+#define PKT_MSK_ACP _BIT2_
+#define PKT_MSK_ISRC1 _BIT3_
+#define PKT_MSK_ISRC2 _BIT4_
+#define PKT_MSK_GMT _BIT5_
+#define PKT_MSK_GP1 _BIT6_
+#define PKT_MSK_GP2 _BIT7_
+
+#define PACKET_ARV_INTERRUPT_MASK (0x0B)
+#define PKT_ARV_MSK_VSI _BIT0_
+#define PKT_MSK_AVI _BIT1_
+#define PKT_MSK_SPDI _BIT2_
+#define PKT_MSK_AI _BIT3_
+#define PKT_MSK_MPEG _BIT4_
+#define PKT_MSK_VSI_FORUM _BIT5_
+#define PKT_MSK_VSI_LLC _BIT6_
+#define PKT_MSK_ACR _BIT7_
+
+#define PACKET_DIFF_INTERRUPT_MASK_3 (0x0C)
+#define PKT_DIFF_MSK_VSI_LLC _BIT0_
+#define PKT_DIFF_MSK_GCP _BIT1_
+#define PKT_DIFF_MSK_ACP _BIT2_
+#define PKT_DIFF_MSK_ISRC1 _BIT3_
+#define PKT_DIFF_MSK_ISRC2 _BIT4_
+#define PKT_DIFF_MSK_GMT _BIT5_
+#define PKT_DIFF_MSK_GP1 _BIT6_
+#define PKT_DIFF_MSK_GP2 _BIT7_
+
+#define PACKET_DIFF_INTERRUPT_MASK_4 (0x0D)
+#define PKT_DIFF_MSK_VSI _BIT0_
+#define PKT_DIFF_MSK_AVI _BIT1_
+#define PKT_DIFF_MSK_SPDI _BIT2_
+#define PKT_DIFF_MSK_AI _BIT3_
+#define PKT_DIFF_MSK_MPEG _BIT4_
+#define PKT_DIFF_MSK_CHKSUM _BIT5_
+#define PKT_DIFF_MSK_VSI_FORUM _BIT6_
+#define PKT_DIFF_MSK_ACR _BIT7_
+
+// Packet diff. Interrupt Reason 1
+#define PACKET_DIFF_INTERRUPT_REASON_1 (0x0E)
+#define PKT_DIFF_INT_VSI_LLC _BIT0_
+#define PKT_DIFF_INT_GCP _BIT1_
+#define PKT_DIFF_INT_ACP _BIT2_
+#define PKT_DIFF_INT_ISRC1 _BIT3_
+#define PKT_DIFF_INT_ISRC2 _BIT4_
+#define PKT_DIFF_INT_GMT _BIT5_
+#define PKT_DIFF_INT_GP1 _BIT6_
+#define PKT_DIFF_INT_GP2 _BIT7_
+
+// Packet diff. Interrupt Reason 2
+#define PACKET_DIFF_INTERRUPT_REASON_2 (0x0F)
+#define PKT_DIFF_INT_VSI _BIT0_
+#define PKT_DIFF_INT_AVI _BIT1_
+#define PKT_DIFF_INT_SPDI _BIT2_
+#define PKT_DIFF_INT_AI _BIT3_
+#define PKT_DIFF_INT_MPEG _BIT4_
+#define PKT_DIFF_INT_CHKSUM _BIT5_
+#define PKT_DIFF_INT_ACR _BIT7_
+
+// Audio Interrupt Mask
+#define AUDIO_INTERRUPT_MASK (0x10)
+#define AD_MSK_PLL_LOCKED _BIT0_
+#define AD_MSK_PLL_UNLOCKED _BIT1_
+#define AD_MSK_FIFO_UNDERRUN _BIT2_
+#define AD_MSK_FIFO_OVERRUN _BIT3_
+#define AD_MSK_LAYOUT_CHANGE _BIT4_
+#define AD_MSK_REFCLK_START _BIT5_
+#define AD_MSK_CS_DIFF _BIT6_
+#define AD_MSK_REC_DIFF _BIT7_
+
+// Audio Interrupt Reason
+#define AUDIO_INTERRUPT_REASON (0x11)
+#define AD_INT_PLL_LOCKED _BIT0_
+#define AD_INT_PLL_UNLOCKED _BIT1_
+#define AD_INT_FIFO_UNDERRUN _BIT2_
+#define AD_INT_FIFO_OVERRUN _BIT3_
+#define AD_INT_LAYOUT_CHANGE _BIT4_
+#define AD_INT_REFCLK_START _BIT5_
+#define AD_INT_CS_DIFF _BIT6_
+#define AD_INT_REC_DIFF _BIT7_
+
+// Audio Error Interrupt Mask
+#define AUDIO_ERROR_INTERRUPT_MASK (0x12)
+#define ADERR_MSK_BCH _BIT0_
+#define ADERR_MSK_CHECK_SUM _BIT1_
+#define ADERR_MSK_STATUS_BIT _BIT2_
+#define ADERR_MSK_NO_ACR _BIT3_
+#define ADERR_MSK_NO_ASP _BIT4_
+#define ADERR_MSK_BCH_HDCP22 _BIT5_
+#define ADERR_MSK_PKT_REC _BIT7_
+
+// Audio Error Interrupt Reason
+#define AUDIO_ERROR_INTERRUPT_REASON (0x13)
+#define ADERR_INT_BCH _BIT0_
+#define ADERR_INT_CHECK_SUM _BIT1_
+#define ADERR_INT_STATUS_BIT _BIT2_
+#define ADERR_INT_NO_ACR _BIT3_
+#define ADERR_INT_NO_ASP _BIT4_
+#define ADERR_INT_BCH_HDCP22 _BIT5_
+#define ADERR_INT_PKT_REC _BIT7_
+
+// Video Interrupt Mask register
+#define VIDEO_INTERRUPT_MASK (0x14)
+#define VD_MSK_VSYNC _BIT0_
+#define VD_MSK_NO_GMT _BIT1_
+#define VD_MSK_DE_POS _BIT2_
+#define VD_MSK_DE_NEG _BIT3_
+#define VD_MSK_DE_PRESENT _BIT4_
+#define VD_MSK_1ST_DE _BIT5_
+#define VD_MSK_SET_AVMUTE _BIT6_
+#define VD_MSK_CLR_AVMUTE _BIT7_
+
+// Video Interrupt Reason register
+#define VIDEO_INTERRUPT_REASON (0x15)
+#define VD_INT_VSYNC _BIT0_
+#define VD_INT_NO_GMT _BIT1_
+#define VD_INT_DE_POS _BIT2_
+#define VD_INT_DE_NEG _BIT3_
+#define VD_INT_DE_PRESENT _BIT4_
+#define VD_INT_1ST_DE _BIT5_
+#define VD_INT_SET_AVMUTE _BIT6_
+#define VD_INT_CLR_AVMUTE _BIT7_
+
+#define PHY_INTERRUPT_MASK (0x16)
+#define PHY_MSK_FREQ_DET _BIT0_
+
+#define PHY_INTERRUPT_REASON (0x17)
+#define PHY_INT_FREQ_DET _BIT0_
+
+// Packet arrived Interrupt Reason 1
+#define PACKET_ARRIVED_INTERRUPT_REASON_1 (0x18)
+#define PKT_INT_NULL _BIT0_
+#define PKT_INT_GCP _BIT1_
+#define PKT_INT_ACP _BIT2_
+#define PKT_INT_ISRC1 _BIT3_
+#define PKT_INT_ISRC2 _BIT4_
+#define PKT_INT_GMT _BIT5_
+#define PKT_INT_GP1 _BIT6_
+#define PKT_INT_GP2 _BIT7_
+
+// Packet arrived Interrupt Reason 2
+#define PACKET_ARRIVED_INTERRUPT_REASON_2 (0x19)
+#define PKT_INT_VSI _BIT0_
+#define PKT_INT_AVI _BIT1_
+#define PKT_INT_SPDI _BIT2_
+#define PKT_INT_AI _BIT3_
+#define PKT_INT_MPEG _BIT4_
+#define PKT_INT_VSI_FORUM _BIT5_
+#define PKT_INT_VSI_LLC _BIT6_
+#define PKT_INT_ACR _BIT7_
+
+// Video CSC Control register
+#define VIDEO_CSC_CONTROL (0x1A)
+#define AUTO_CSC_ON _BIT0_
+#define COLOR_CONV_ON _BIT1_
+#define MAN_CSC_FROM_YCC _BIT2_
+#define MAN_VGA_COEFF _BIT3_
+#define MAN_SDTV_COEFF _BIT4_
+#define MAN_HDTV_COEFF _BIT5_
+#define MAN_HDTV50_COEFF _BIT6_
+
+// Video Pixel Conversion Control register
+#define VIDEO_PIXEL_CONVERSION_CONTROL (0x1B)
+#define SYSTEM_PD_HDCP _BIT4_
+#define UP_CONV_ON _BIT3_
+#define SYSTEM_PD_DDC _BIT2_
+#define AUTO_PC_ON _BIT0_
+
+// Video Output Control register
+#define VIDEO_OUTPUT_CONTROL_REGISTER (0x1C)
+#define CUTOFF_VALID_RANGE _BIT6_
+
+#define VIDEO_OUTPUT_PIN_CONTROL_1 (0x1D)
+#define DIV4_IDCLK _BIT2_
+#define DIV2_IDCLK _BIT1_
+
+#define VIDEO_OUTPUT_EN _BIT0_
+//#define RI_RST_CTL _BIT2_
+//#define CLEAR_AVMUTE _BIT3_
+#define BLOCK_AVMUTE _BIT4_
+#define DET_BOTH_EDGE _BIT5_
+#define SYNC_OUTPUT_EN _BIT6_
+#define AUTO_PR_EN _BIT7_
+
+// Video Output Pin Control 2 register
+#define VIDEO_OUTPUT_PIN_CONTROL_2 (0x1E)
+#define EN_2ND_PM_INT _BIT1_
+#define EN_2ND_VIDEO_INT _BIT2_
+#define EN_2ND_AUDIO_ERR_INT _BIT3_
+#define EN_2ND_AUDIO_INT _BIT4_
+#define EN_2ND_PACKET_RCVD_INT _BIT5_
+#define EN_2ND_HDCP_INT _BIT6_
+#define EN_2ND_HDMI_INT _BIT7_
+
+// Video output format
+#define VIDEO_OUTPUT_FORMAT (0x1F)
+#define COLOR_SPACE _BIT0_
+#define PIXEL_ENC _BIT1_
+#define EN_2ND_PM5V_INT _BIT2_
+#define EN_2ND_SCDCS2_INT _BIT3_
+#define EN_2ND_HDCP22_INT _BIT4_
+#define EN_2ND_SCDCS_INT _BIT5_
+#define EN_2ND_SCRAM_INT _BIT6_
+#define EN_2ND_PHY_INT _BIT7_
+
+// Deep Color Control register
+#define DEEP_COLOR_CONTROL_REGISTER (0x20)
+#define AUTO_DPC _BIT0_
+#define MAN_DPC (_BIT1_ | _BIT2_)
+#define AUTO_PP _BIT3_
+#define MAN_PP (_BIT4_ | _BIT5_ | _BIT6_ | _BIT7_)
+
+#define ITU656_CONTROL (0x21)
+#define SEL_FID_B _BIT1_
+#define EN_ROUNDING _BIT2_
+#define EN_420_422_CONV _BIT3_
+#define MAN_PR (_BIT4_ | _BIT5_ | _BIT6_ | _BIT7_)
+
+#define MISC_VIDEO_CONTROL (0x22)
+#define DE_PRESENT _BIT0_
+#define USE_IDCLK2X_PR _BIT1_
+#define SW_IDCLK2X _BIT3_
+#define INV_IDCLK_OUT _BIT2_
+#define NUM_FIELD_DE (_BIT4_ | _BIT5_ | _BIT6_ | _BIT7_)
+
+// Video Debug register
+#define VIDEO_DEBUG_REGISTER (0x23)
+#define INTL_VEDGE_SEL_R0 _BIT3_
+#define VSYNC_R0 _BIT4_
+#define HSYNC_R0 _BIT5_
+#define DE_R0 _BIT6_
+
+// Audio Mute register
+#define AUDIO_MUTE_REGISTER (0x24)
+#define AVMUTE_SET _BIT1_
+#define SIGNAL_VALID_CLR _BIT2_
+#define HDMI_DVI_LOCKED_CLR _BIT3_
+#define PHY_CDR_LOCKED_CLR _BIT4_
+#define AUDIO_MUTE_ANYTIME _BIT5_
+
+// Video Interlace Detect
+#define VIDEO_INTERLACE_DETECT (0x25)
+#define SEL_INT_A _BIT0_
+#define INT_DET_WIDTH (_BIT1_ | _BIT2_ | _BIT3_ | _BIT4_ | _BIT5_ | _BIT6_ | _BIT7_)
+
+// System PD auto Clear enable
+#define SYSTEM_PD_AUTO_CLEAR_ENABLE (0x26)
+#define SPD_AUTO_CLEAR_TMDS _BIT0_
+#define SPD_AUTO_CLEAR_IDCLK _BIT1_
+#define EN_2ND_GEN34_INT _BIT2_
+#define EN_2ND_DDCRE_INT _BIT3_
+#define EN_2ND_DDCWE_INT _BIT4_
+#define EN_2ND_SCDCS4_INT _BIT5_
+#define EN_2ND_SCDCS3_INT _BIT6_
+#define EN_2ND_RR_INT _BIT7_
+
+#define IN_CONTROL_PARAMS_FOR_MV (0x27)
+#define EN_AUTO_POLARITY_DET _BIT7_
+#define H_POLARITY_INC _BIT6_
+#define V_POLAIRTY_INC _BIT5_
+#define SAFE_WINDOW (_BIT4_ | _BIT5_ | _BIT6_ | _BIT7_)
+
+// SX8B video timing registers
+#define HTOTAL_NEWFD_HI (0x28)
+#define HTOTAL_NEWFD_HI_MASK 0xFF
+#define HTOTAL_NEWFD_HI_SHIFT 8
+#define HTOTAL_NEWFD_LO (0x29)
+
+#define HACTIVE_NEWFD_HI (0x2a)
+#define HACTIVE_NEWFD_HI_MASK 0xFF
+#define HACTIVE_NEWFD_HI_SHIFT 8
+#define HACTIVE_NEWFD_LO (0x2b)
+
+#define HBLANK_NEWFD_HI (0x2C)
+#define HBLANK_NEWFD_HI_MASK 0xFF
+#define HBLANK_NEWFD_HI_SHIFT 8
+#define HBLANK_NEWFD_LO (0x2D)
+
+#define HFRONT_NEWFD_HI (0x2e)
+#define HFRONT_NEWFD_HI_MASK 0xFF
+#define HFRONT_NEWFD_HI_SHIFT 8
+#define HFRONT_NEWFD_LO (0x2f)
+
+#define HSYNC_NEWFD_HI (0x30)
+#define HSYNC_NEWFD_HI_MASK 0xFF
+#define HSYNC_NEWFD_HI_SHIFT 8
+#define HSYNC_NEWFD_LO (0x31)
+
+#define VTOTAL_NEWFD_HI (0x34)
+#define VTOTAL_NEWFD_HI_MASK 0xFF
+#define VTOTAL_NEWFD_HI_SHIFT 8
+#define VTOTAL_NEWFD_LO (0x35)
+
+#define VACTIVE_NEWFD_HI (0x36)
+#define VACTIVE_NEWFD_HI_MASK 0xFF
+#define VACTIVE_NEWFD_HI_SHIFT 8
+#define VACTIVE_NEWFD_LO (0x37)
+
+#define VBLANK_NEWFD_HI (0x38)
+#define VBLANK_NEWFD_HI_MASK 0xFF
+#define VBLANK_NEWFD_HI_SHIFT 8
+#define VBLANK_NEWFD_LO (0x39)
+
+#define VSYNC_NEWFD_HI (0x3c)
+#define VSYNC_NEWFD_HI_MASK 0xFF
+#define VSYNC_NEWFD_HI_SHIFT 8
+#define VSYNC_NEWFD_LO (0x3d)
+
+#define VBACK_NEWFD_HI (0x3e)
+#define VBACK_NEWFD_HI_MASK 0xFF
+#define VBACK_NEWFD_HI_SHIFT 8
+#define VBACK_NEWFD_LO (0x3f)
+
+// Audio Format control register
+#define AUDIO_FORMAT_CONTROL (0x40)
+#define REC_HBR _BIT7_
+#define REC_DST _BIT6_
+#define REC_DSD _BIT5_
+#define REC_LPCM _BIT4_
+#define REC_TYPES (REC_HBR | REC_DST | REC_DSD | REC_LPCM)
+#define AUDIO_ENABLE_MASK (I2S_EN | SPDIF_EN | AUDIO_OUTPUT_EN)
+#define I2S_EN _BIT2_
+#define SPDIF_EN _BIT1_
+#define AUDIO_OUTPUT_EN _BIT0_
+
+// Audio option register
+#define AUDIO_OPTION_REGISTER (0x41)
+#define CS_UBIT_R _BIT7_
+#define CS_UBIT_L _BIT6_
+#define CS_VBIT_R _BIT5_
+#define CS_VBIT_L _BIT4_
+#define LAYOUT _BIT3_
+#define PKT_LD_BCH_ERR _BIT2_
+#define AUDIO_MUTE_EN _BIT1_
+#define NO_PARITY_LD _BIT0_
+
+// Audio I2S Control register
+#define Audio_I2S_Control_register (0x42)
+#define I2S_MODE (_BIT6_ | _BIT5_)
+#define I2S_BIT_WIDTH (_BIT4_ | _BIT3_ | _BIT2_ | _BIT1_ | _BIT0_)
+
+// Audio FIFO Control
+#define AUDIO_FIFO_CONTROL (0x43)
+#define NO_CHECK_ASP _BIT2_
+#define AUTO_FIFO_RST_LAYOUT _BIT1_
+#define FIFO_FLUSH _BIT0_
+
+// Audio Channel Status1 register
+#define AUDIO_CHANNEL_STATUS1_REGISTER (0x44)
+#define CS_MODE (_BIT6_ | _BIT7_)
+#define CS_PREEMPHASIS (_BIT5_ | _BIT4_ | _BIT3_)
+#define CS_COPYRIGHT _BIT2_
+#define CS_LINEAR_PCM _BIT1_
+#define CS_CONSUMER_USE _BIT0_
+
+#define N_REGISTER_0 (0x45)
+#define N_REGISTER_1 (0x46)
+#define N_REGISTER_2 (0x47)
+#define CTS_REGISTER_0 (0x48)
+#define CTS_REGISTER_1 (0x49)
+#define CTS_REGISTER_2 (0x4A)
+
+#define AUDIO_PLL_CONTROL_1 (0x4B)
+#define APLL_STABLE_MON _BIT5_
+#define REFCLK_START_MON _BIT4_
+#define APLL_STABLE_OVERRIDE _BIT1_
+
+#define NEW_N_REGISTER_0 (0x4D)
+#define NEW_N_REGISTER_1 (0x4E)
+#define NEW_N_REGISTER_2 (0x4F)
+#define NEW_CTS_REGISTER_0 (0x50)
+#define NEW_CTS_REGISTER_1 (0x51)
+#define NEW_CTS_REGISTER_2 (0x52)
+
+// VSI IEEE registration 1
+#define VSI_IEEE_REGISTRATION_1 (0x53)
+#define SUPPORT_NOREG_VSI _BIT3_
+#define SELECT_VSI (_BIT2_ | _BIT1_)
+#define CHECK_4BYTE _BIT0_
+
+#define AUDIO_CHANNEL_STATUS2 (0x54)
+#define AUDIO_CHANNEL_STATUS3 (0x55)
+
+#define AUDIO_CHANNEL_STATUS4 (0x56)
+#define CS_SAMPLE_FREQ (_BIT3_ | _BIT2_ | _BIT1_ | _BIT0_)
+#define CS_CLOCK_ACC (_BIT7_ | _BIT6_ | _BIT5_ | _BIT4_)
+
+#define AUDIO_CHANNEL_STATUS5 (0x57)
+
+// MCLK control Register
+#define MCLK_CONTROL_REGISTER (0x58)
+#define SEL_MCLK_RATIO_FROM_REG _BIT3_
+#define MCLK_RATIO (_BIT2_ | _BIT1_ | _BIT0_)
+
+// Lock count for hsync/vsync
+#define LOCK_SYNC_NUM_HSYNC (0x64)
+#define LOCK_SYNC_NUM_VSYNC (0x65)
+
+#define HDCP_CONTROL (0x6A)
+#define RESET_KSV_PTR _BIT3_
+#define RESET_RETRY_CNT _BIT2_
+#define HDCP_ADDR_SEL _BIT1_
+#define FORCE_RI_ERR _BIT0_
+
+#define HDCP_STATUS (0x6B)
+#define ENC_ON _BIT1_
+#define AUTHENTICATED _BIT0_
+#define HDCP_AUTH (_BIT1_ | _BIT0_)
+
+// HDCP BKSV Register
+#define BKSV0 (0x70)
+#define BKSV1 (0x71)
+#define BKSV2 (0x72)
+#define BKSV3 (0x73)
+#define BKSV4 (0x74)
+#define AKSV0 (0x80)
+#define AKSV1 (0x81)
+#define AKSV2 (0x82)
+#define AKSV3 (0x83)
+#define AKSV4 (0x84)
+
+#define HDCP_MEMORY_CONTROL_1 (0x93)
+#define LOAD_HDCP_KEY _BIT7_
+#define USE_KSV1 _BIT6_
+#define KEY_READY _BIT0_
+
+#define DDC_BUS_CONTROL (0x95)
+#define DDCSCL_OUT_OVERRIDE _BIT0_
+#define DDCSDA_OUT_OVERRIDE _BIT1_
+#define DDCSCL_IN_MOM _BIT4_
+#define DDCSDA_IN_MON _BIT5_
+#define CLR_HDCP22_PKT_LEN _BIT6_
+
+#define SCDCS_INTERRUPT_MASK_2 (0x9f)
+#define SCDCS2_MSK_STATUS_UPDATED _BIT3_
+#define SCDCS2_MSK_TMDS_BIT_CLK_RATIO _BIT2_
+#define SCDCS2_MSK_EN_SCRAMBLER _BIT1_
+#define SCDCS2_MSK_RR_TEST _BIT0_
+
+#define NEW_FORMAT_DET_25 (0xA1)
+#define VPOLAR_NEWFD _BIT3_
+#define HPOLAR_NEWFD _BIT2_
+#define INTERLACED_NEWFD _BIT0_
+
+#define PRODUCT_ID (0xA2)
+
+#define ARC_CONTROL (0XA7)
+#define SEL_ARC_2ND_SOURCE _BIT2_
+#define ARC_SR _BIT1_
+#define ARC_EN _BIT0_
+
+#define IP_VERSION (0xA8)
+
+#define NEW_FORMAT_DET_30 0xA9
+#define ALLOW_VRR_MODE _BIT2_
+
+#define PHY_CONTROL_11 (0xB9)
+#define BOTH_EDGE_5V _BIT6_
+#define BOTH_EDGE_SV _BIT5_
+#define BOTH_EDGE_LOL _BIT4_
+#define BYPASS_5V_FILTER _BIT3_
+#define BYPASS_SV_FILTER _BIT2_
+#define BYPASS_LOL_FILTER _BIT1_
+#define PLL_RESET _BIT0_
+
+#define PHY_CONTROL_19 (0xC1)
+#define SLP_N_RXC _BIT4_
+#define SLP_N_AUPLL _BIT7_
+
+#define PHY_CONTROL_27 (0xC9)
+#define EN_FREQ_DET _BIT5_
+#define DIV_NUM_MASK (_BIT4_ | _BIT3_ | _BIT2_ | _BIT1_ | _BIT0_)
+#define DEFAULT_DIV_NUM (_BIT4_ | _BIT2_)
+
+#define PHY_CONTROL_28 (0xCA)
+
+#define PHY_CONTROL_32 (0xCE)
+#define I_FREQ_MASK (_BIT1_ | _BIT0_)
+#define I_FREQ_ABOVE_200 (_BIT1_ | _BIT0_)
+#define I_FREQ_100_200 (_BIT1_)
+#define I_FREQ_50_100 (_BIT0_)
+#define I_FREQ_BELOW_50 (0)
+
+#define PHY_CONTROL_34 (0xD0)
+#define SEL_EXT_A _BIT6_
+
+// video timing registers
+#define H_TOTAL_HI (0xE0)
+#define H_TOTAL_HI_MASK 0xFF
+#define H_TOTAL_HI_SHIFT 8
+#define H_TOTAL_LO (0xE1)
+
+#define V_TOTAL_HI (0xE2)
+#define V_TOTAL_HI_MASK 0xFF
+#define V_TOTAL_HI_SHIFT 8
+#define V_TOTAL_LO (0xE3)
+
+#define H_ACTIVE_HI (0xE4)
+#define H_ACTIVE_HI_MASK 0xFF
+#define H_ACTIVE_HI_SHIFT 8
+#define H_ACTIVE_LO (0xE5)
+
+#define V_ACTIVE_HI (0xE6)
+#define V_ACTIVE_HI_MASK 0xFF
+#define V_ACTIVE_HI_SHIFT 8
+#define V_ACTIVE_LO (0xE7)
+
+#define H_DURATION_HI (0xE8)
+#define H_DURATION_HI_MASK 0xFF
+#define H_DURATION_HI_SHIFT 8
+#define H_DURATION_LO (0xE9)
+
+#define V_DURATION_HI (0xEA)
+#define V_DURATION_HI_MASK 0xFF
+#define V_DURATION_HI_SHIFT 8
+#define V_DURATION_LO (0xEB)
+
+#define H_BLANK_HI (0xEC)
+#define H_BLANK_HI_MASK 0xFF
+#define H_BLANK_HI_SHIFT 8
+#define H_BLANK_LO (0xED)
+
+#define VIDEO_FORMAT_GENERIC_0 (0xEE)
+#define V_POLAR _BIT7_
+#define H_POLAR _BIT6_
+
+#define VIDEO_FORMAT_GENERIC_1 (0xF0)
+#define INTERLACED _BIT7_
+
+/*************HDMI PHY Register************************************/
+#define CTRLA_PHY_RF1 (0xF1)
+#define BI_STANDBY _BIT0_
+#define PORTSEL_MASK (_BIT7_ | _BIT6_)
+#define PORTSEL_SHIFT 6
+
+#define CTRLA_PHY_RF2 (0xF2)
+#define RT_RESQ _BIT0_
+#define RT_BYP _BIT2_
+#define RT_RCTL (_BIT5_ | _BIT4_ | _BIT3_)
+#define TERMINATION_RESISTOR_47 (_BIT5_)
+
+#define CTRLA_PHY_RF3 (0xF3)
+#define RX_MODE (_BIT7_ | _BIT6_)
+
+#define CTRLA_PHY_RF4 (0xF4)
+#define PLL_DIV25_EN (_BIT7_)
+
+#define PHY_CONFIG_1 (0xFC)
+#define ACLK_EN _BIT2_
+#define SEL_PHY_AUDIO_CLK _BIT3_
+#define RESQ_RESET _BIT4_
+#define CPURST_N_RESET _BIT5_
+
+#define PHY_PLL_STATE (0x1AB)
+#define PLL_LOCK _BIT2_
+
+/*************HDMI PHY Register************************************/
+
+#define GENERAL_CONTROL_PACKET_1 (0x110)
+#define SET_AVMUTE _BIT1_
+#define CLEAR_AVMUTE _BIT0_
+
+#define GENERAL_CONTROL_PACKET_2 (0x111)
+#define GCP_CD_MASK 0xF0
+#define GCP_CD_SHIFT 4
+#define GCP_CD_8BIT 4
+#define GCP_CD_10BIT 5
+#define GCP_CD_12BIT 6
+#define GCP_CD_16BIT 7
+
+#define GENERAL_PACKET_READOUT_SELECT (0x112)
+#define GEN0_PACKET_SELECT 0xFF
+
+#define GENERAL_PACKET_READOUT_HB0 (0x113)
+#define GENERAL_PACKET_READOUT_PB0 (0x116)
+
+#define SCDCS_INTERRUPT_2_OUTPUT_ENABLE (0x134)
+#define SCDCS2_STATUS_UPDATED _BIT3_
+#define SCDCS2_INT_TMDS_BIT_CLK_RATIO _BIT2_
+#define SCDCS2_INT_EN_SCRAMBLER _BIT1_
+#define SCDCS2_INT_RR_TEST _BIT0_
+
+#define LFSR_CONTROL_1 (0x137)
+#define EN_SCRAMBLER _BIT0_
+#define _RR_ENABLE_ _BIT3_
+
+#define RAM_POWER_DOWN (0x139)
+#define DBG_CE_ON_FOR_420 _BIT7_
+#define CE_OFF_UP_CONV _BIT1_
+#define RAM_PD_UP_CONV _BIT0_
+
+#define AUDIO_FREQ_DET_CONTROL (0x15E)
+#define SEL_APLL_LOL (_BIT6_ | _BIT5_ | _BIT4_)
+
+#define AUDIO_FREQ_DET_STATUS (0x15F)
+#define APLL_FS_MASK 0x70
+#define APLL_FS_SHIFT 4
+#define APLL_FS_INVALID 0
+#define APLL_FS_32K 1
+#define APLL_FS_44K 2
+#define APLL_FS_48K 3
+#define APLL_FS_88K 4
+#define APLL_FS_96K 5
+#define APLL_FS_176K 6
+#define APLL_FS_192K 7
+
+#define AUDIO_PLL_DEBUG (0x160)
+
+#define EDID_ACCESS_CONTROL (0x161)
+#define SEL_HDCP22_DEFAULT_OFFSET _BIT7_
+#define ACK_SEG_POINTER1 _BIT2_
+#define SEG_POINTER_INT _BIT1_
+#define EN_EDID_MODE _BIT0_
+
+#define EDID_WR_PTR (0x162)
+#define EDID_RD_PTR (0x163)
+#define EDID_DATA (0x164)
+
+#define LLED_COUNTER_CONTROL (0x176)
+#define LLED_LOAD_PTR_RESET _BIT7_
+#define SEL_REVERT_ECO_1728 _BIT6_
+#define READ_CTR_CPU _BIT5_
+#define LLED_AUTO_CLEAR_CNT _BIT4_
+#define LLED_MAN_CLEAR_CNT_DDC _BIT3_
+#define LLED_MAN_CLEAR_CNT_REG _BIT2_
+#define LLED_SET_UPDATE_FLAGRESERVED _BIT1_
+#define LLED_ENABLE _BIT0_
+
+#define LLED_DATA_POS_VALID (0x17a)
+
+#define V_BLANK_HI (0x17D)
+#define V_BLANK_HI_MASK 0xFF
+#define V_BLANK_HI_SHIFT 8
+#define V_BLANK_LO (0x17E)
+
+#define V_DELAY_HI (0x17f)
+#define V_DELAY_HI_MASK 0xFF
+#define V_DELAY_HI_SHIFT 8
+#define V_DELAY_LO (0x180)
+
+#define H_DELAY_HI (0x181)
+#define H_DELAY_HI_MASK 0xFF
+#define H_DELAY_HI_SHIFT 8
+#define H_DELAY_LO (0x182)
+
+#define lol_fil_depth_1 (0x187)  // bit0~7
+#define lol_fil_depth_2 (0x186)  // bit8~15
+
+#define HDMI_20_IN_CTRL 0x19B
+#define CH2_MASK (_BIT7_ | _BIT6_)
+#define CH1_MASK (_BIT5_ | _BIT4_)
+#define CH0_MASK (_BIT3_ | _BIT2_)
+#define HDMI_CHANNEL_MODE_DEF (_BIT7_ | _BIT4_)     // ch2-ch2, ch1-ch1, ch0-ch0
+#define HDMI_CHANNEL_MODE_EDR_LL (_BIT5_ | _BIT2_)  // ch0-ch2, ch2-ch1, ch1-ch0
+
+/*************HDMI PHY Register************************************/
+
+// EQ related
+#define CTRLD_PHY_RB1 (0x1B1)
+#define AEC_CHSEL (_BIT5_ | _BIT6_)
+#define DEFAULT_AEC_CHSEL (_BIT5_ | _BIT6_)
+#define AEC_CTRL (_BIT1_ | _BIT0_)
+#define AEC_CMD (_BIT4_ | _BIT3_ | _BIT2_)
+#define AEC_CMD_WR_REG (_BIT3_ | _BIT2_)
+#define AEC_CMD_LD_CH_SET (_BIT3_)
+#define AEC_CMD_TRIG_AEC (_BIT2_)
+#define AEC_CMD_NOP 0
+
+#define CTRLD_PHY_RB2 (0x1B2)
+#define AEC_REGADR (_BIT6_ | _BIT5_ | _BIT4_ | _BIT3_)
+#define AEC_REGADR_SHIFT 3
+
+#define CTRLD_PHY_RB3 (0x1B3)
+
+#define CTRLD_PHY_RB4 (0x1B4)
+#define AEC_USE_AVRGPH _BIT7_
+#define AEC_EDGE_ZERO_REQ _BIT5_
+#define AEC_INSYNC_REQ _BIT4_
+#define AEC_SETTING_SHORT _BIT2_
+#define AEC_DATA (_BIT1_ | _BIT0_)
+
+#define CTRLD_PHY_RB5 (0x1B5)
+#define AEC_EN _BIT4_
+#define AEC_MODE (_BIT6_ | _BIT5_)
+#define AEC_CYCLE_LENGTH (_BIT1_ | _BIT0_)
+
+#define CTRLD_PHY_RBB (0x1BB)
+#define INSYNC_TIMEOUT 0xFF
+
+#define CTRLD_PHY_RBD (0x1BD)
+#define SHP_OFF (_BIT3_ | _BIT2_ | _BIT1_ | _BIT0_)
+
+/*************HDMI PHY Register************************************/
+
+#define GENERAL_PACKET1_SELECT 0x1c0
+#define GEN1_PACKET_SELECT 0xFF
+
+#define GENERAL_PACKET1_READOUT_HB0 (0x1c1)
+#define GENERAL_PACKET1_READOUT_PB0 (0x1c4)
+
+#define GENERAL_PACKET2_SELECT 0x1e0
+#define GEN2_PACKET_SELECT 0xFF
+
+#define GENERAL_PACKET2_READOUT_HB0 (0x1e1)
+#define GENERAL_PACKET2_READOUT_PB0 (0x1e4)
+
+// SCDC related.
+#define SCDC_SOURCE_VERSION (0x202)
+
+#define SCDC_UPDATE_0 (0x210)
+#define STATUS_UPDATE _BIT0_
+#define CED_UPDATE _BIT1_
+#define RR_TEST _BIT2_
+
+#define SCDC_UPDATE_0 (0x210)
+#define STATUS_UPDATE _BIT0_
+#define CED_UPDATE _BIT1_
+#define RR_TEST _BIT2_
+
+#define SCDC_TMDS_CONFIG (0x220)
+#define TMDS_BIT_CLOCK_RATIO _BIT1_
+#define TMDS_BIT_CLOCK_RATIO_SHIFT (1)
+#define SCRAMBLINE_ENABLE _BIT0_
+
+#define SCDC_SCRAMBLE_STATUS (0x221)
+#define SCRAMBLING_STATUS _BIT0_
+
+#define SCDC_CONFIG_0 (0x230)
+#define RR_ENABLE _BIT0_
+
+#define SCDC_STATUS_0 (0x240)
+#define CLOCK_DETECTED _BIT0_
+#define CH0_LOCKED _BIT1_
+#define CH1_LOCKED _BIT2_
+#define CH2_LOCKED _BIT3_
+
+#define SCDCS_9 (0x250)
+
+#define SCDC_TEST_CONFIG_0 (0x2C0)
+#define TEST_READ_REQUEST _BIT6_
+
+#define EDR_VDE_HDE_CONFIG_0 (0x310)
+#define EDR_SYNC_OUTPUT_EN _BIT5_
+#define EDR_VIDEO_OUTPUT_EN _BIT6_
+
+#define VIDEO_OUTPUT_POWER (0x35e)
+#define SYSTEM_PD_NORMAL_PATH _BIT0_
+#define SYSTEM_PD_420_PATH _BIT1_
+#define SYSTEM_PD_EDR_PATH _BIT2_
+#define SYSTEM_PD_FULL_REP_PATH _BIT3_
+#define SYSTEM_PD_PHY_REP_PATH _BIT4_
+
+#define DDC_PORT_SELECT (0x376)
+#define DDC_PORTSEL_MASK (_BIT1_ | _BIT0_)
+
+#define HDMI_5V_STATUS_REG (0x37A)
+#define SCDCS_XMS_TIMER_VAL_0 (0x3d7)
+
+#define HDMIAPLL_PERI_RST_REG (0x3A9)
+#define HDMIAPLL_POWERUP _BIT0_
+
+#define HDCP22_SELECT (0x3C0)
+#define SYSTEM_PD_HDCP22 _BIT0_
+#define MASK_DATA_INPUT_TO_HDCP22 _BIT1_
+#define AUTO_SEL_HDCP22 _BIT2_
+#define MAN_SEL_HDCP22 _BIT3_
+
+#define SCDCS_TIMER_ENABLE (0x3dd)
+#define EN_10MS_CNT_CHLOCK _BIT0_
+#define EN_1S_CNT_LLED _BIT1_
+#define EN_TEST_RR_TIMER _BIT2_
+
+#define SCDCS4_LLED_CED_INTERRUPT_MASK (0x3e4)
+#define CED_INT_MSK_TEST_TIMER _BIT6_
+#define CED_INT_MSK_CH2_MAX_REACHED _BIT5_
+#define CED_INT_MSK_CH1_MAX_REACHED _BIT4_
+#define CED_INT_MSK_CH0_MAX_REACHED _BIT3_
+#define CED_INT_MSK_CH2_4ERR_IN_1SEC _BIT2_
+#define CED_INT_MSK_CH1_4ERR_IN_1SEC _BIT1_
+#define CED_INT_MSK_CH0_4ERR_IN_1SEC _BIT0_
+
+#define SCDCS4_LLED_CED_INTERRUPT_REASON (0x3e5)
+#define CED_INT_REASON_TEST_TIMER _BIT6_
+
+#define READ_REQUEST_CONTROL (0x3e8)
+#define START_RR _BIT0_
+
+#define RR_INTERRUPT_MASK (0x3ea)
+#define RR_INT_MSK_RR_ERR_CANCEL _BIT4_
+#define RR_INT_MSK_RR_ERR_TO_W4_ACK _BIT3_
+#define RR_INT_MSK_RR_ERR_DDC_OTHER _BIT2_
+#define RR_INT_MSK_RR_DONE_ACK_ONLY _BIT1_
+#define RR_INT_MSK_RR_DONE_READ_UPDATE _BIT0_
+
+// HDCP22 related.
+#define HDCP_22_RX_Message_Control_1 (0x410)
+
+#define HDCP_22_RX_Message_Control_2 (0x411)
+#define HDCP22_I2CRX_LENGTH_8_9 (_BIT0_ | _BIT1_)
+
+#define HDCP_22_RX_Message_Control_3 (0x412)
+#define HDCP22_I2CRX_RESET_WPTR _BIT0_
+#define HDCP22_I2CRX_RESET_RPTR _BIT1_
+#define HDCP22_I2CRX_SEL_DEBUG_PORT _BIT6_
+#define HDCP22_I2CRX_TRIG _BIT7_
+
+#define HDCP_22_MESSAGE_LOAD_WINDOW (0x415)
+#define HDCP_22_MESSAGE_UNLOAD_WINDOW (0x416)
+
+#define HDCP_22_INTERRUPT_REASON (0x417)
+#define HDCP22_I2CRX_INT_MESSAGE_RCVED _BIT0_
+#define HDCP22_I2CRX_INT_MESSAGE_SENT _BIT1_
+#define HDCP22_I2CRX_INT_MESSAGE_ERROR _BIT2_
+
+#define HDCP_22_INTERRUPT_MASK (0x418)
+#define HDCP22_I2CRX_INT_MASK_MESSAGE_RCVED _BIT0_
+#define HDCP22_I2CRX_INT_MASK_MESSAGE_SENT _BIT1_
+#define HDCP22_I2CRX_INT_MASK_MESSAGE_ERROR _BIT2_
+#define I2C_SEND_MESSAGE_BYTE_COUNT_READY _BIT7_
+
+#define HDCP2VERSION (0x41A)
+#define HDCP22_ENABLE _BIT2_
+#define HDCP2RXSTATUS_1 (0x41B)
+
+#define HDCP2RXSTATUS_2 (0x41C)
+#define HDCP22_MESSAGE_SIZE (_BIT0_ | _BIT1_)
+#define HDCP22_READY _BIT2_
+#define HDCP22_REAUTH_REQ _BIT3_
+#define RSVD (_BIT4_ | _BIT5_ | _BIT6_ | _BIT7_)
+
+#define HDCP_22_Power (0x420)
+#define HDCP22_RAM_PD_RX_SEND_MSG _BIT2_
+#define HDCP22_RAM_PD_RX_RCV_MSG _BIT3_
+#define HDCP22_RAM_PD_AES _BIT4_
+#define HDCP22_CONTROL_RE_SEND _BIT5_
+#define HDCP22_CONTROL_RE_RCV _BIT6_
+#define HDCP22_SYNC_RESET_HDCP22 _BIT7_
+
+#define HDCP22_UPDATE_KEY (0x422)
+#define HDCP22_AUTHENTICATED _BIT0_
+#define HDCP22_UPDATE_AES_KEY _BIT1_
+#define HDCP22_UPDATE_RIV _BIT2_
+#define HDCP22_SWAP_AES_P_INPUT _BIT3_
+#define HDCP22_SWAP_AES_OUTPUT _BIT4_
+
+#define HDCP22_BCH_ERROR_TOLERANCE (0x424)
+#define BCH_ERR_CNT_RST _BIT6_
+#define BCH_ERR_TOL (_BIT0_ | _BIT1_ | _BIT2_ | _BIT3_ | _BIT4_ | _BIT5_)
+
+#define HDCP_22_SESSION_KEY_0 (0x430)
+#define HDCP_22_RANDOM_IV_0 (0x440)
+
+/********** Audio PLL registers, locate in HDMI_AUDIO_PLL*********/
+#define HDMIRX_APLL_REG_BASE 0x06880000
+
+#define PLL_HDMI_AUDIO_CON1_CTL_0 (0x00)
+#define PLL_HDMI_AUDIO_CON2_CTL_0 (0x04)
+#define PLL_HDMI_AUDIO_PD _BIT0_
+#define PLL_HDMI_AUDIO_BLOCK_EN _BIT1_
+#define PLL_HDMI_AUDIO_DIRECTI _BIT4_
+#define PLL_HDMI_AUDIO_PREQ _BIT7_
+#define PLL_HDMI_AUDIO_SRC_EN _BIT28_
+#define PLL_HDMI_AUDIO_SRC_SEL_MASK (_BIT30_ | _BIT29_)
+#define HDMI_CTS_CLK _BIT30_
+#define HDMI_CTS_CLK_DIV32 _BIT29_
+#define XTAL_CLK (~(_BIT30_ | _BIT29_))
+
+#define PLL_HDMI_AUDIO_STA_CTL_0 (0x08)
+#define PLL_HDMI_AUDIO_BLOCKED _BIT1_
+
+#define HDMI_AUDIO_PLLFRAC_CTL_0 (0x0C)
+#define HDMI_AUDIO_PLLFRAC_REQ _BIT29_
+#define HDMI_AUDIO_PLLFRAC_PD _BIT31_
+
+#define CLK_HDMI_AUDIO_CTL_0 (0x10)
+#define EN_CLK_HDMI_AUDIO _BIT0_
+#define SEL_CLK_HDMI_AUDIO (_BIT2_ | _BIT1_)
+#define SEL_SECOND_CLK _BIT2_
+#define SEL_PLL _BIT1_
+#define SEL_XTAL_CLK 0
+
+#define CGU_MISC_CTL_0 (0x18)
+#define SEL_HDMI_NDIV _BIT3_
+#define HDMI_X_DIVIDE_MASK (_BIT2_ | _BIT1_)
+
+/********** Audio PLL registers, locate in HDMI_AUDIO_PLL*********/
+
+/********** OTP programming register *********/
+#define HDCP22_RX_OTP_BASE_ADDR 0x15111000
+#define HDCP22_RX_DEBUG_ADDR 0x1954000C
+#define HDCP22_RX_KEY_STATUS_MASK 0x8000
+#define HDCP22_RX_OTPCRYPTO_STATUS_MASK 0x4000
+
+#define HDCPRX22_FC_READ_ADDR_REG (HDCP22_RX_OTP_BASE_ADDR + 0x020)
+#define HDCPRX22_FC_READ_STATUS_REG (HDCP22_RX_OTP_BASE_ADDR + 0x024)
+#define HDCPRX22_FC_READ_DATA0_REG (HDCP22_RX_OTP_BASE_ADDR + 0x028)
+#define HDCPRX22_FC_READ_DATA1_REG (HDCP22_RX_OTP_BASE_ADDR + 0x02C)
+#define HDCPRX22_FC_READ_DATA2_REG (HDCP22_RX_OTP_BASE_ADDR + 0x030)
+#define HDCPRX22_FC_READ_DATA3_REG (HDCP22_RX_OTP_BASE_ADDR + 0x034)
+#define HDCPRX22_FC_READ_PROT_REG (HDCP22_RX_OTP_BASE_ADDR + 0x038)
+#define HDCPRX22_FC_DEBUG_LOCK_REG (HDCP22_RX_OTP_BASE_ADDR + 0x03C)
+#define HDCPRX22_FC_DEBUG_CONTROL_0_REG (HDCP22_RX_OTP_BASE_ADDR + 0x040)
+#define HDCPRX22_FC_DEBUG_CONTROL_1_REG (HDCP22_RX_OTP_BASE_ADDR + 0x044)
+#define HDCPRX22_FC_DEBUG_STATUS_REG (HDCP22_RX_OTP_BASE_ADDR + 0x048)
+#define HDCPRX22_FC_DEBUG_TEST_STATUS_REG (HDCP22_RX_OTP_BASE_ADDR + 0x04C)
+#define HDCPRX22_FC_DEBUG_TIMING0_REG (HDCP22_RX_OTP_BASE_ADDR + 0x050)
+#define HDCPRX22_FC_DEBUG_TIMING1_REG (HDCP22_RX_OTP_BASE_ADDR + 0x054)
+
+#define HDCP22_KEY_FUSE_DATA_START_ADDR 0xA0
+#define HDCP22_KEY_FUSE_DATA_SIZE 752
+#define QWLENGTH 16
+/********** OTP programming register *********/
+
+#define HDCP22_PKF_EFUSE_ADDR (0x3006200 + 0xe4)
+
+#endif /* __THDMIRX_REG_UNION2_H__ */

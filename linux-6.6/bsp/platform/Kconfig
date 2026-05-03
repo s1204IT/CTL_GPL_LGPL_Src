@@ -1,0 +1,358 @@
+# SPDX-License-Identifier: GPL-2.0-only
+
+source "$(BSP_TOP)platform/Kconfig.common"
+
+menu "Platform Information"
+
+config AW_BSP
+	bool "Allwinner Platform"
+	select ARCH_SUNXI
+	select ARCH_HAS_RESET_CONTROLLER
+	select GENERIC_IRQ_CHIP
+	select PINCTRL
+	select RESET_CONTROLLER
+	help
+	  This enables support for Allwinner sunxi based SoCs like the A64.
+
+choice
+	prompt "Kernel Type"
+	depends on AW_BSP
+	default AW_KERNEL_AOSP
+	help
+	  Select the type/source of kernel you are using.
+
+config AW_KERNEL_AOSP
+	bool "AOSP"
+	depends on AW_BSP
+	help
+	  AOSP linux kernel from Google
+
+config AW_KERNEL_ORIGIN
+	bool "Origin"
+	depends on AW_BSP
+	help
+	  Origin linux kernel from mainline/LTS.
+endchoice  # Kernel Type
+
+choice
+	prompt "SoC Family"
+	default ARCH_SUN8I  if ARM
+	default ARCH_SUN50I if ARM64
+	default ARCH_SUN300I if RISCV
+	depends on AW_BSP
+	help
+	  Select the Family for SoC
+
+config ARCH_SUN8I
+	bool "SUN8I"
+	depends on AW_BSP && ARM
+	help
+	  Allwinner SUN8I SoC Family
+
+config ARCH_SUN20I
+	bool "SUN20I"
+	depends on AW_BSP && RISCV
+	help
+	  Allwinner SUN20I SoC Family
+
+config ARCH_SUN50I
+	bool "SUN50I"
+	depends on AW_BSP
+	#select xxx if ARM
+	#select xxx64 if ARM64
+	help
+	  Allwinner SUN50I SoC Family
+
+config ARCH_SUN55I
+	bool "SUN55I"
+	depends on AW_BSP
+	help
+	  Allwinner SUN55I SoC Family
+
+config ARCH_SUN60I
+	bool "SUN60I"
+	depends on AW_BSP && ARM64
+	help
+	  Allwinner SUN60I SoC Family
+
+config ARCH_SUN65I
+	bool "SUN65I"
+	depends on AW_BSP && ARM64
+	help
+	  Allwinner SUN65I SoC Family
+
+config ARCH_SUN251I
+	bool "SUN251I"
+	depends on AW_BSP && RISCV
+	help
+	  Allwinner SUN251I SoC Family
+
+config ARCH_SUN300I
+	bool "SUN300I"
+	depends on AW_BSP && RISCV
+	help
+	  Allwinner SUN300I SoC Family
+
+config ARCH_SUN252I
+	bool "SUN252I"
+	depends on AW_BSP && RISCV
+	help
+	  Allwinner SUN252I SoC Family
+
+endchoice  # SoC Family
+
+choice
+	prompt "SoC Wafer"
+	default ARCH_SUN50IW10
+	depends on AW_BSP
+	help
+	  Select the wafer
+
+config ARCH_SUN8IW11
+	bool "SUN8IW11"
+	depends on ARCH_SUN8I
+	help
+	  Support for Allwinner SUN8IW11 SoC
+
+config ARCH_SUN8IW17
+	bool "SUN8IW17"
+	depends on ARCH_SUN8I
+	help
+	  Support for Allwinner SUN8IW17 SoC
+
+config ARCH_SUN8IW18
+	bool "SUN8IW18"
+	depends on ARCH_SUN8I
+	help
+	  Support for Allwinner SUN8IW18 SoC
+
+config ARCH_SUN8IW20
+	bool "SUN8IW20"
+	depends on ARCH_SUN8I
+	help
+	  Support for Allwinner SUN8IW20 SoC
+
+config ARCH_SUN8IW21
+	bool "SUN8IW21"
+	depends on ARCH_SUN8I
+	help
+	  Support for Allwinner SUN8IW21 SoC
+
+config ARCH_SUN20IW1
+	bool "SUN20IW1"
+	depends on ARCH_SUN20I
+	help
+	  Support for Allwinner SUN20IW1 SoC
+
+config ARCH_SUN50IW9
+	bool "SUN50IW9"
+	depends on ARCH_SUN50I
+	help
+	  Support for Allwinner SUN50IW9 SoC
+
+config ARCH_SUN50IW10
+	bool "SUN50IW10"
+	depends on ARCH_SUN50I
+	help
+	  Support for Allwinner SUN50IW10 SoC
+
+config ARCH_SUN50IW12
+	bool "SUN50IW12"
+	depends on ARCH_SUN50I
+	help
+	  Support for Allwinner SUN50IW12 SoC
+
+config ARCH_SUN50IW15
+	bool "SUN50IW15"
+	depends on ARCH_SUN50I
+	help
+	  Support for Allwinner SUN50IW15 SoC
+
+config ARCH_SUN55IW3
+	bool "SUN55IW3"
+	depends on ARCH_SUN55I
+	help
+	  Support for Allwinner SUN55IW3 SoC
+
+config ARCH_SUN55IW5
+	bool "SUN55IW5"
+	depends on ARCH_SUN55I
+	help
+	  Support for Allwinner SUN55IW5 SoC
+
+config ARCH_SUN55IW6
+	bool "SUN55IW6"
+	depends on ARCH_SUN55I
+	help
+	  Support for Allwinner SUN55IW6 SoC
+
+config ARCH_SUN60IW1
+	bool "SUN60IW1"
+	depends on ARCH_SUN60I
+	help
+	  Support for Allwinner SUN60IW1 SoC
+
+config ARCH_SUN60IW2
+	bool "SUN60IW2"
+	depends on ARCH_SUN60I
+	help
+	  Support for Allwinner SUN60IW2 SoC
+
+config ARCH_SUN65IW1
+	bool "SUN65IW1"
+	depends on ARCH_SUN65I
+	help
+	  Support for Allwinner SUN60IW3 SoC
+
+config ARCH_SUN251IW1
+	bool "SUN251IW1"
+	depends on ARCH_SUN251I
+	help
+	  Support for Allwinner SUN251IW1 SoC
+
+config ARCH_SUN300IW1
+	bool "SUN300IW1"
+	depends on ARCH_SUN300I
+	help
+	  Support for Allwinner SUN300IW1 SoC
+
+config ARCH_SUN252IW1
+	bool "SUN252IW1"
+	depends on ARCH_SUN252I
+	help
+	  Support for Allwinner SUN252IW1 SoC
+
+endchoice  # SoC Wafer
+
+choice
+	prompt "SoC Package"
+	depends on AW_BSP
+	help
+	  Select the SoC
+
+config ARCH_SUN8IW11P1
+	depends on ARCH_SUN8IW11
+	bool "Allwinner SUN8IW11P1"
+
+config ARCH_SUN8IW17P1
+	depends on ARCH_SUN8IW17
+	bool "Allwinner SUN8IW17P1"
+
+config ARCH_SUN8IW18P1
+	depends on ARCH_SUN8IW18
+	bool "Allwinner SUN8IW18P1"
+
+config ARCH_SUN8IW20P1
+	depends on ARCH_SUN8IW20
+	bool "Allwinner SUN8IW20P1"
+
+config ARCH_SUN8IW21P1
+	depends on ARCH_SUN8IW21
+	bool "Allwinner SUN8IW21P1"
+
+config ARCH_SUN20IW1P1
+	depends on ARCH_SUN20IW1
+	bool "Allwinner SUN20IW1P1"
+
+config ARCH_SUN50IW9P1
+	depends on ARCH_SUN50IW9
+	bool "Allwinner SUN50IW9P1"
+
+config ARCH_SUN50IW10P1
+	depends on ARCH_SUN50IW10
+	bool "Allwinner SUN50IW10P1"
+
+config ARCH_SUN50IW12P1
+	depends on ARCH_SUN50IW12
+	bool "Allwinner SUN50IW12P1"
+
+config ARCH_SUN50IW15P1
+	depends on ARCH_SUN50IW15
+	bool "Allwinner SUN50IW15P1"
+
+config ARCH_SUN55IW3P1
+	depends on ARCH_SUN55IW3
+	bool "Allwinner SUN55IW3P1"
+
+config ARCH_SUN55IW5P1
+	depends on ARCH_SUN55IW5
+	bool "Allwinner SUN55IW5P1"
+
+config ARCH_SUN55IW6P1
+	depends on ARCH_SUN55IW6
+	bool "Allwinner SUN55IW6P1"
+
+config ARCH_SUN60IW1P1
+	depends on ARCH_SUN60IW1
+	bool "Allwinner SUN60IW1P1"
+
+config ARCH_SUN60IW2P1
+	depends on ARCH_SUN60IW2
+	bool "Allwinner SUN60IW2P1"
+
+config ARCH_SUN65IW1P1
+	depends on ARCH_SUN65IW1
+	bool "Allwinner SUN65IW1P1"
+
+config ARCH_SUN251IW1P1
+	depends on ARCH_SUN251IW1
+	bool "Allwinner SUN251IW1P1"
+
+config ARCH_SUN300IW1P1
+	depends on ARCH_SUN300IW1
+	bool "Allwinner SUN300IW1P1"
+
+config ARCH_SUN252IW1P1
+	depends on ARCH_SUN252IW1
+	bool "Allwinner SUN252IW1P1"
+
+endchoice  # SoC Package
+
+choice
+	prompt "Board Type"
+	depends on AW_BSP
+	default AW_FPGA_BOARD
+
+config AW_FPGA_BOARD
+	bool "FPGA Board"
+	depends on AW_BSP
+	help
+	  Support for Allwinner FPGA board
+
+config AW_IC_BOARD
+	bool "IC Board"
+	depends on AW_BSP
+	help
+	  Support for Allwinner IC board
+endchoice  # Board Type
+
+choice
+	prompt "FPGA Board Type"
+	depends on AW_FPGA_BOARD
+	default AW_FPGA_S4
+
+config AW_FPGA_S4
+	bool "FPGA S4 Board"
+	help
+	  Support for Allwinner FPGA S4 board
+
+config AW_FPGA_V7
+	bool "FPGA V7 Board"
+	help
+	  Support for Allwinner FPGA V7 board
+
+config AW_FPGA_UV440
+	bool "FPGA UV440 Board"
+	help
+	  Support for Allwinner FPGA UV440 board
+
+endchoice  # FPGA board Type
+
+config AW_SOC_NAME
+	string "SoC Name"
+	default ""
+	depends on AW_BSP
+	help
+	  Used by sysfs: /sys/.../sysinfo
+
+endmenu  # Platform Information

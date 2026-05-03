@@ -1,0 +1,233 @@
+// SPDX-License-Identifier: (GPL-2.0+ or MIT)
+#include <dt-bindings/clock/sun50iw15-ccu.h>
+#include <dt-bindings/clock/sun50iw15-rtc.h>
+#include <dt-bindings/clock/sun50iw15-r-ccu.h>
+#include <dt-bindings/gpio/gpio.h>
+#include <dt-bindings/gpio/sun4i-gpio.h>
+#include <dt-bindings/interrupt-controller/arm-gic.h>
+#include <dt-bindings/reset/sun50iw15-ccu.h>
+#include <dt-bindings/reset/sun50iw15-r-ccu.h>
+#include <dt-bindings/power/a523-power.h>
+#include <dt-bindings/phy/phy.h>
+#include <dt-bindings/thermal/thermal.h>
+
+/ {
+	model = "sun50iw15";
+	interrupt-parent = <&gic>;
+	#address-cells = <2>;
+	#size-cells = <2>;
+
+	aliases {
+		serial0 = &uart0;
+	};
+
+	reserved-memory {
+		#address-cells = <2>;
+		#size-cells = <2>;
+		ranges;
+
+		bl31 {
+			reg = <0x0 0x48000000 0x0 0x01000000>;
+		};
+
+		linux,cma {
+			compatible = "shared-dma-pool";
+			reusable;
+			size = <0x0 0x10000000>;
+			alignment = <0x0 0x2000>;
+			linux,cma-default;
+		};
+
+	};
+
+	/* avoid panic when memory-node err(from uboot) */
+	memory@40000000 {
+		device_type = "memory";
+		reg = <0x00000000 0x40000000 0x00000000 0x20000000>;
+	};
+
+	cpus {
+		#address-cells = <2>;
+		#size-cells = <0>;
+
+		cpu0: cpu@0 {
+			device_type = "cpu";
+			compatible = "arm,cortex-a53";
+			reg = <0x0 0x0>;
+		};
+	};
+
+	dcxo24M: dcxo24M_clk {
+		#clock-cells = <0>;
+		compatible = "fixed-clock";
+		clock-frequency = <24000000>;
+		clock-output-names = "dcxo24M";
+	};
+
+	rc_16m: rc16m_clk {
+		#clock-cells = <0>;
+		compatible = "fixed-clock";
+		clock-frequency = <16000000>;
+		clock-accuracy = <300000000>;
+		clock-output-names = "rc-16m";
+	};
+
+	ext_32k: ext32k_clk {
+		#clock-cells = <0>;
+		compatible = "fixed-clock";
+		clock-frequency = <32768>;
+		clock-output-names = "ext-32k";
+	};
+
+	gic: interrupt-controller@3400000 {
+		compatible = "arm,gic-400";
+		#interrupt-cells = <3>;
+		#address-cells = <0>;
+		device_type = "gic";
+		interrupt-controller;
+		reg = <0x0 0x03401000 0 0x1000>, /* GIC Dist */
+			  <0x0 0x03402000 0 0x2000>, /* GIC CPU */
+			  <0x0 0x03404000 0 0x2000>, /* GIC VCPU Control */
+			  <0x0 0x03406000 0 0x2000>; /* GIC VCPU */
+		interrupts = <GIC_PPI 9 0xf04>;
+		interrupt-parent = <&gic>;
+	};
+
+	timer_arch {
+		compatible = "arm,armv8-timer";
+		interrupts = <GIC_PPI 13 (GIC_CPU_MASK_SIMPLE(4) | IRQ_TYPE_LEVEL_LOW)>,
+			   <GIC_PPI 14 (GIC_CPU_MASK_SIMPLE(4) | IRQ_TYPE_LEVEL_LOW)>,
+			   <GIC_PPI 11 (GIC_CPU_MASK_SIMPLE(4) | IRQ_TYPE_LEVEL_LOW)>,
+			   <GIC_PPI 10 (GIC_CPU_MASK_SIMPLE(4) | IRQ_TYPE_LEVEL_LOW)>;
+		clock-frequency = <24000000>;
+		interrupt-parent = <&gic>;
+		arm,no-tick-in-suspend;
+	};
+
+	mmu_aw: iommu@2010000 {
+		compatible = "allwinner,iommu-v14-sun50iw15";
+		reg = <0x0 0x02010000 0x0 0x1000>;
+		interrupts = <GIC_SPI 71 IRQ_TYPE_LEVEL_HIGH>;
+		interrupt-names = "iommu-irq";
+		clocks = <&ccu CLK_BUS_IOMMU>;
+		clock-names = "iommu";
+		/* clock-frequency = <24000000>; */
+		#iommu-cells = <2>;
+	};
+
+	soc: soc@3000000 {
+		compatible = "simple-bus";
+		#address-cells = <2>;
+		#size-cells = <2>;
+		ranges;
+
+		rtc_ccu: rtc_ccu@7090000 {
+			compatible = "allwinner,sun50iw15-rtc-ccu";
+			reg = <0x0 0x07090000 0x0 0x328>;
+			#clock-cells = <1>;
+			#reset-cells = <1>;
+		};
+
+		ccu: ccu@2002000 {
+			compatible = "allwinner,sun50iw15-ccu";
+			reg = <0x0 0x02002000 0x0 0x2000>;
+			clocks = <&dcxo24M>, <&rtc_ccu CLK_OSC32K>, <&rc_16m>;
+			clock-names = "hosc", "losc", "iosc";
+			#clock-cells = <1>;
+			#reset-cells = <1>;
+		};
+
+		r_ccu: r_ccu@7010000 {
+			compatible = "allwinner,sun50iw15-r-ccu";
+			reg = <0x0 0x07010000 0x0 0x400>;
+			#clock-cells = <1>;
+			#reset-cells = <1>;
+		};
+
+		pio: pinctrl@3604000 {
+			//#address-cells = <1>;
+			//#size-cells = <0>;
+			compatible = "allwinner,sun50iw15-pinctrl";
+			reg = <0x0 0x03604000 0x0 0x600>;
+			interrupts = <GIC_SPI 69 IRQ_TYPE_LEVEL_HIGH>,
+				     <GIC_SPI 71 IRQ_TYPE_LEVEL_HIGH>,
+				     <GIC_SPI 73 IRQ_TYPE_LEVEL_HIGH>,
+				     <GIC_SPI 75 IRQ_TYPE_LEVEL_HIGH>,
+				     <GIC_SPI 77 IRQ_TYPE_LEVEL_HIGH>,
+				     <GIC_SPI 79 IRQ_TYPE_LEVEL_HIGH>,
+				     <GIC_SPI 81 IRQ_TYPE_LEVEL_HIGH>,
+				     <GIC_SPI 83 IRQ_TYPE_LEVEL_HIGH>,
+				     <GIC_SPI 85 IRQ_TYPE_LEVEL_HIGH>,
+				     <GIC_SPI 140 IRQ_TYPE_LEVEL_HIGH>;
+			clocks = <&ccu CLK_APB1>, <&dcxo24M>, <&rtc_ccu CLK_OSC32K>;
+			clock-names = "apb", "hosc", "losc";
+			gpio-controller;
+			#gpio-cells = <3>;
+			interrupt-controller;
+			#interrupt-cells = <3>;
+
+		};
+
+		sdc0: sdmmc@4020000 {
+			compatible = "allwinner,sunxi-mmc-v5p3x";
+			device_type = "sdc0";
+			reg = <0x0 0x04020000 0x0 0x1000>;
+			interrupts = <GIC_SPI 39 IRQ_TYPE_LEVEL_HIGH>;
+			clocks = <&dcxo24M>,
+				 <&ccu CLK_SMHC0>,
+				 <&ccu CLK_BUS_SMHC0>;
+			clock-names = "osc24m","mmc","ahb";
+			resets = <&ccu RST_BUS_SMHC0>;
+			reset-names = "rst";
+			pinctrl-names = "default","mmc_1v8","sleep","uart_jtag";
+			pinctrl-0 = <&sdc0_pins_a>;
+			pinctrl-1 = <&sdc0_pins_b>;
+			pinctrl-2 = <&sdc0_pins_c>;
+			pinctrl-3 = <&sdc0_pins_d &sdc0_pins_e>;
+			max-frequency = <50000000>;
+			bus-width = <4>;
+			req-page-count = <2>;
+			/*non-removable;*/
+			/*broken-cd;*/
+			/*cd-inverted*/
+			/*cd-gpios = <&pio PF 6 GPIO_ACTIVE_LOW>;*/
+			/* vmmc-supply = <&reg_3p3v>;*/
+			/* vqmc-supply = <&reg_3p3v>;*/
+			/* vdmc-supply = <&reg_3p3v>;*/
+			/*vmmc = "vcc-card";*/
+			/*vqmc = "";*/
+			/*vdmc = "";*/
+			cap-sd-highspeed;
+			cap-wait-while-busy;
+			/*sd-uhs-sdr50;*/
+			/*sd-uhs-ddr50;*/
+			/*cap-sdio-irq;*/
+			/*keep-power-in-suspend;*/
+			/*ignore-pm-notify;*/
+			/*sunxi-power-save-mode;*/
+			/*sunxi-dly-400k = <1 0 0 0>; */
+			/*sunxi-dly-26M  = <1 0 0 0>;*/
+			/*sunxi-dly-52M  = <1 0 0 0>;*/
+			/*sunxi-dly-52M-ddr4  = <1 0 0 0>;*/
+			/*sunxi-dly-52M-ddr8  = <1 0 0 0>;*/
+			/*sunxi-dly-104M  = <1 0 0 0>;*/
+			/*sunxi-dly-208M  = <1 0 0 0>;*/
+			/*sunxi-dly-104M-ddr  = <1 0 0 0>;*/
+			/*sunxi-dly-208M-ddr  = <1 0 0 0>;*/
+			ctl-spec-caps = <0x408>;
+			status = "okay";
+		};
+
+		uart0: uart@2600000 {
+			compatible = "allwinner,sun50i-uart";
+			reg = <0x0 0x02600000 0x0 0x400>;
+			interrupts = <GIC_SPI 0 IRQ_TYPE_LEVEL_HIGH>;
+			clocks = <&ccu CLK_BUS_UART0>;
+			resets = <&ccu RST_BUS_UART0>;
+			uart0_port = <0>;
+			uart0_type = <2>;
+			status = "disabled";
+		};
+	};
+};
+

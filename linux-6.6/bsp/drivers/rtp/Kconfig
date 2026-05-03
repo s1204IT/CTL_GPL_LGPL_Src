@@ -1,0 +1,29 @@
+# SPDX-License-Identifier: GPL-2.0-only
+#
+# resistive touch panel driver configuration
+#
+menu "Resistive Touch Panel Drivers"
+	depends on AW_BSP
+
+config AW_RTP
+	tristate "Resistive Touch Panel Support for Allwinner SoCs"
+	select INPUT_EVDEV
+        default n
+	help
+	  This enables the resistive touch panel controller(TPADC)
+	  on Allwinner SoCs.
+
+config AW_TPADC_DYNAMIC_DEBUG
+        bool "Enable tpadc dynamic debug"
+        depends on AW_RTP
+        default y
+        help
+          Enable tpadc dynamic debug
+
+config RTP_USED_AS_NORMAL_ADC
+	bool "enable rtp is used as normal adc"
+	depends on AW_RTP
+	default n
+	help
+	  Enable rtp is used as normal ADC
+endmenu

@@ -1,0 +1,17 @@
+#
+#  Touchscreen driver configuration
+#
+config TOUCHSCREEN_BETTERLIFE_TS
+       tristate  "betterlisfe touchscreen driver"      
+       depends on INPUT && I2C
+       default n
+       help
+         betterlisfe touch panel  
+		 
+config TOUCHSCREEN_BETTERLIFE_TS_FACTORY_TEST
+       tristate  "betterlisfe touchscreen factory test module"      
+       depends on TOUCHSCREEN_BETTERLIFE_TS
+       default n
+       help
+         betterlisfe touch panel factory test module
+         

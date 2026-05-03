@@ -1,0 +1,9 @@
+# Aliases for symbols, used by symbol_request().
+alias symbol:crypto_sha256_finup sha256_generic
+alias symbol:lcd_device_register lcd
+alias symbol:sha224_zero_message_hash sha256_generic
+alias symbol:crypto_sha256_update sha256_generic
+alias symbol:lcd_device_unregister lcd
+alias symbol:devm_lcd_device_register lcd
+alias symbol:sha256_zero_message_hash sha256_generic
+alias symbol:devm_lcd_device_unregister lcd

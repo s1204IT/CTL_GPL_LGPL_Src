@@ -1,0 +1,4 @@
+# SPDX-License-Identifier: GPL-2.0
+config ION_SIZE_POOL_HEAP
+	tristate "Ion size_pool heap"
+	depends on ION

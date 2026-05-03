@@ -1,0 +1,52 @@
+menu "rt-media"
+
+config VIDEO_RT_MEDIA
+	tristate "sunxi rt-media support"
+    select DMA_SHARED_BUFFER
+	default n
+	help
+	  This is the driver for sunxi video decoder, including h264/
+	  mpeg4/mpeg2/vc1/rmvb.
+	  To compile this driver as a module, choose M here: the
+	  module will be called cedar_dev.
+
+choice
+	prompt "Default sunxi rt singel sensor"
+	default RT_MEDIA_SINGEL_SENSOR
+	help
+	  Select sunxi rt singel sensor that will be used by default.
+
+	config RT_MEDIA_SINGEL_SENSOR
+		bool "sunxi rt singel sensor"
+		depends on (VIDEO_RT_MEDIA)
+		help
+		  enable singel sensor setup in kernel stage.
+
+	config RT_MEDIA_DUAL_SENSOR
+		bool "sunxi rt dual sensor"
+		depends on (VIDEO_RT_MEDIA)
+		help
+		  enable dual sensor setup in kernel stage.
+
+	config RT_MEDIA_THREE_SENSOR
+		bool "sunxi rt three sensor"
+		depends on (VIDEO_RT_MEDIA)
+		help
+		  enable three sensor setup in kernel stage.
+endchoice
+
+config RT_MEDIA_CDC_LOG_LEVEL
+	int "set cdc log level, 2:verbose 3:debug 4:info 5:warn 6:err"
+	depends on (VIDEO_RT_MEDIA)
+	default 3
+	help
+	  set cdc log level, 2:verbose 3:debug 4:info 5:warn 6:err
+
+config RT_MEDIA_SETUP_RECORDER_IN_KERNEL
+	bool "setup recorder in kernel"
+	depends on (VIDEO_RT_MEDIA)
+	default y
+	help
+	  y is enable encoder start in kernel poweron state.
+
+endmenu

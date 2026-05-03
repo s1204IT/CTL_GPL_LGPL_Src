@@ -1,0 +1,10 @@
+#
+# Focaltech Touchscreen Spi driver configuration
+#
+
+config TOUCHSCREEN_FTS_SPI
+    tristate "Focaltech Touchscreen spi interface"
+    default n
+    help
+      Say Y here if you have Focaltech spi touch panel.
+      If unsure, say N.

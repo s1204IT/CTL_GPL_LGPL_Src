@@ -1,0 +1,47 @@
+&pio {
+...
+...
+...
+    spi1_pins_a: spi1@0 {
+		pins = "PD11", "PD12", "PD13";
+		function = "spi1";
+		drive-strength = <20>;
+	};
+
+	spi1_pins_b: spi1@1 {
+		pins = "PD10";
+		function = "spi1";
+		drive-strength = <20>;
+		bias-pull-up;	/* only CS should be pulled up */
+	};
+
+	spi1_pins_c: spi1@2 {
+		pins = "PD10", "PD11", "PD12", "PD13";
+		function = "gpio_in";
+	};
+...
+...
+...
+}
+
+
+&spi1 {
+	pinctrl-0 = <&spi1_pins_a &spi1_pins_b>;
+	pinctrl-1 = <&spi1_pins_c>;
+	pinctrl-names = "default", "sleep";
+	spi_slave_mode = <0>;
+	status = "okay";
+
+	spi1_ts@0 {
+		status = "okay";
+		reg = <0x0>;
+		compatible = "sk-spi,common_touch","focaltech,fts-spi","focaltech_new,focaltech_ts_spi_v42";
+		focaltech,reset-gpio = <&pio PD 19 GPIO_ACTIVE_HIGH>;
+		focaltech,irq-gpio = <&pio PD 18 GPIO_ACTIVE_HIGH>;
+		focaltech,max-touch-number = <10>;
+		focaltech,display-coords =  <0 0 1080 2400>;
+		spi-max-frequency = <6000000>;
+		spi-rx-bus-width = <0x1>;
+		spi-tx-bus-width = <0x1>;
+	};
+};

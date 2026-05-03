@@ -1,0 +1,14 @@
+# SPDX-License-Identifier: GPL-2.0-only
+#
+# PHY Layer Configuration
+#
+
+menu "PHY"
+	depends on PHYLIB
+
+config MAXIO_PHY
+	tristate "MAXIO PHYs"
+	help
+	Supports the Maxio MAExxxx PHY.
+
+endmenu

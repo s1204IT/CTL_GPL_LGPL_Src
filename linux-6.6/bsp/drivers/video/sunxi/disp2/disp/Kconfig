@@ -1,0 +1,49 @@
+# SPDX-License-Identifier: GPL-2.0-or-later
+config AW_DISP2_SUPPORT_SMBL
+	bool "Support smart backlight"
+	default y
+	help
+		If you want to support smart backlight, select it.
+
+config AW_DISP2_SUPPORT_ENAHNCE
+	bool "Support Video Enhance Process"
+	default y
+	help
+		If you want to support video enhance process, select it.
+
+config AW_DISP2_DEVICE_OFF_ON_RELEASE
+	bool "Clear all layers and turn off display device on /dev/disp release"
+	default n
+	help
+		Select it to enable this feature.
+
+config AW_DISP2_SET_CLK_BY_IC_VERSION
+	bool "Set the de clock by the ic version"
+	default y
+	help
+		Select it to enable this feature.
+
+config AW_DISP2_OFFLINE_MODE
+	bool "Offline mode is used to avoid screen blur caused by bandwidth"
+	default n
+	help
+		Select it to enable this feature.
+
+config PLL_RATE_AUTO_ADJUST
+	bool "Automatically adjust PLL frequency by clock framework"
+	default n
+	help
+		Do not adjust pll rate in disp dirver, clk framework do this work for us.
+
+config AW_DISP2_SUPPORT_CAPTURE
+	bool "Enable disp capture feature"
+	default y
+	help
+		Select it to enable enable disp capture feature
+
+config AW_DISP2_SUPPORT_DUMP_REG
+	bool "Support dump de register through syfs"
+	default n
+	help
+		Support dump de register through syfs.
+

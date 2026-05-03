@@ -1,0 +1,33 @@
+# SPDX-License-Identifier: GPL-2.0-only
+#
+# hyper system configuration
+#
+
+menu "Kylo Hyper System"
+	depends on AW_BSP
+
+
+config SUPPORT_HYPER
+       tristate "Allwinner Hyper Support"
+       depends on AW_BSP
+       help
+         Support for the Kylo hyper system.
+
+         If unsure, say N here.
+
+if SUPPORT_HYPER
+
+choice
+       prompt "hyper os type"
+       default HYPER_HOST_OS
+
+config HYPER_HOST_OS
+       bool "hyper host os"
+
+config HYPER_GUEST_OS
+       bool "hyper guest os"
+endchoice
+
+endif # AW_IOMMU_DEBUG
+
+endmenu

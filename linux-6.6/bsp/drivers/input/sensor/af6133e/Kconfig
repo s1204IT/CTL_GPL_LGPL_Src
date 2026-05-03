@@ -1,0 +1,6 @@
+config SENSOR_AF6133E
+    tristate "AF6133E Magnetometer driver support"
+    depends on I2C
+    default n
+    help
+        If you say yes here you get support for the AF6133E Magnetometer Sensor.

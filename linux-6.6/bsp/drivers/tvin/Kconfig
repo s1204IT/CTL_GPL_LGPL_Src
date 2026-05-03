@@ -1,0 +1,44 @@
+menu "TVIN Drivers"
+config AW_HRC
+        tristate "HRC Support for Allwinner SoCs"
+        default n
+        select MEDIA_SUPPORT
+        select VIDEOBUF2_DMA_CONTIG
+        select VIDEO_V4L2_SUBDEV_API
+        help
+          Support for sunxi platform HDMI Rx Capture engine,
+          this module is used to capture HDMI RX images to DDR
+          for image display or other image processing work.
+
+          To compile this driver as a module, choose M here.
+          If you are not sure whether the platform supports it, choose N here.
+
+config AW_VIDEO_SUNXI_HDMIRX
+	tristate "sunxi hdmirx driver"
+	default n
+	help
+          Support for sunxi platform HDMI Rx ,
+          this module is used to send signal and buffer to hrc
+
+          To compile this driver as a module, choose M here.
+          If you are not sure whether the platform supports it, choose N here.
+
+config AW_VIDEO_SUNXI_HDMIRX_CEC
+	bool "HDMIRX CEC"
+	depends on (AW_VIDEO_SUNXI_HDMIRX)
+	default n
+	select CEC_CORE
+	select CEC_NOTIFIER
+	help
+          To compile this driver as a module, choose M here.
+          If you are not sure whether the platform supports it, choose N here.
+
+menuconfig AW_VIDEO_SUNXI_HDMIRX_LOG_BUFFER
+        bool "HDMIRX Log Buffer"
+        depends on (AW_VIDEO_SUNXI_HDMIRX)
+        default y
+        help
+          Say Y here if you want to enable hdmirx log buffer.
+          Say N here if you want to disable hdmirx log buffer.
+          If unsure, say N
+endmenu

@@ -1,0 +1,45 @@
+# SPDX-License-Identifier: GPL-2.0-only
+menu "Timer Drivers"
+	depends on GENERIC_CLOCKEVENTS
+	depends on AW_BSP
+
+config AW_TIMER
+	tristate "Timer support for Allwinner SoCs"
+	depends on HAS_IOMEM
+	select CLKSRC_MMIO
+	select TIMER_OF
+	help
+	  Enables support for the Sun4i timer.
+
+config AW_TIMER_SUN50I
+	tristate "Timer support for Allwinner Sun50i SoCs"
+	depends on HAS_IOMEM
+	select CLKSRC_MMIO
+	select TIMER_OF
+	help
+	  Enables support for the Sun50i timer.
+
+config AW_TIMER_SWAP_IVH_CVL_SPACE
+	bool "change IVH reg and CVL reg space"
+	depends on AW_TIMER_SUN50I
+	default n
+	help
+	  If the layout of the IVH reg and CVL reg registers is opposite to that of the
+	  AW1890, this configuration needs to be enabled for adjustment.
+
+config AW_TIMER_DYNAMIC_DEBUG
+	bool "Enable timer dynamic debug"
+	depends on AW_TIMER || AW_TIMER_SUN50I
+	default y
+	help
+	  Enable timer dynamic debug
+
+config AW_ALTERNATIVE_HSTIMER
+	tristate "Hstimer support for Allwinner SoCs"
+	depends on HAS_IOMEM
+	default n
+	help
+	  Support the use of hstimer as a timing or counting in kernel mode, Only modify
+	  sunxi-alternative-hstimer.h if adapt other platform.
+
+endmenu

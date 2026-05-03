@@ -1,0 +1,11 @@
+# SPDX-License-Identifier: GPL-2.0
+#
+# Allwinner GPIO 2803 Motor driver.
+#
+
+config AW_GPIO_MOTOR_2803
+  tristate "Allwinner gpio motor 2803 driver"
+  depends on AW_PINCTRL
+  help
+    allwinner gpio motor 2803 driver
+

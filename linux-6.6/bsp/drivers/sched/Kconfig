@@ -1,0 +1,7 @@
+# SPDX-License-Identifier: GPL-2.0-only
+config AW_SCHEDULER
+        tristate "Allwinner scheduler tunning"
+        depends on ANDROID_VENDOR_HOOKS
+        default n
+        help
+         If you don't sure, please select N

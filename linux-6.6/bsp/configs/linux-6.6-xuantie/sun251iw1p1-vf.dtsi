@@ -1,0 +1,36 @@
+/* SPDX-License-Identifier: GPL-2.0-or-later */
+/{
+	model = "sun251iw1";
+	vf_mapping_table: vf_mapping_table {
+		vf-version = "V0.1";
+		table = <
+			0x00 0x0000
+			>;
+	};
+
+	cluster0_opp_table: cluster0-opp-table {
+		compatible = "operating-points-v2";
+		opp-shared;
+
+		opp@480000000 {
+			opp-hz = /bits/ 64 <480000000>;
+			opp-microvolt-vf0000 = <960000>;
+			clock-latency-ns = <244144>; /* 8 32k periods */
+		};
+		opp@720000000 {
+			opp-hz = /bits/ 64 <720000000>;
+			opp-microvolt-vf0000 = <960000>;
+			clock-latency-ns = <244144>; /* 8 32k periods */
+		};
+		opp@912000000 {
+			opp-hz = /bits/ 64 <912000000>;
+			opp-microvolt-vf0000 = <960000>;
+			clock-latency-ns = <244144>; /* 8 32k periods */
+		};
+		opp@1008000000 {
+			opp-hz = /bits/ 64 <1008000000>;
+			opp-microvolt-vf0000 = <960000>;
+			clock-latency-ns = <244144>; /* 8 32k periods */
+		};
+	};
+};

@@ -1,0 +1,18 @@
+# SPDX-License-Identifier: GPL-2.0-only
+
+menu "sunxi sram ecc Drivers"
+	depends on AW_BSP
+
+config AW_SRAM_ECC
+	tristate "Sram ecc Support for Allwinner SoCs"
+	help
+	  To compile this driver as a module, choose M here: the
+	  module will be called sunxi_sram_ecc.
+
+config AW_SRAM_ECC_TEST
+       bool "SRAM ECC testing"
+       depends on AW_SRAM_ECC
+       default n
+       help
+	 Enables a suite of sram ecc unit testing.
+endmenu

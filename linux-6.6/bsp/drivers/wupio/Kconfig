@@ -1,0 +1,14 @@
+# SPDX-License-Identifier: GPL-2.0-only
+
+menu "WUPIO Drivers"
+	depends on AW_BSP
+
+config AW_WUPIO
+	tristate "WUPIO Support for Allwinner SoCs"
+	depends on AW_BSP
+	help
+	  If you say Y here, you will get support for the WUPIO found on
+	  Allwinner SoCs.
+
+endmenu
+

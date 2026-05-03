@@ -1,0 +1,30 @@
+config V821_SMAC_WLAN
+	tristate "v821 linux mac WLAN support"
+	default n
+	select CFG80211
+	select AVERAGE
+	select CRYPTO
+	select CRYPTO_ARC4
+	help
+	  To compile this code as a module, choose M here.
+
+
+if V821_SMAC_WLAN
+
+choice XRADIO_CHIP_V821_SMAC
+	prompt "Xradio chip"
+        help
+		Specify the xradio chip.
+config USE_V821_SIP_WIFI_T
+	bool "enable v821 sip wifi"
+	help
+		if use v821 sip wifi, please select this.
+
+config XR819_OR_XR819S_WLAN_T
+	bool "enable xr819/xr819s wlan"
+	help
+		if don't use v821 sip wifi, please select this.
+
+
+endchoice
+endif

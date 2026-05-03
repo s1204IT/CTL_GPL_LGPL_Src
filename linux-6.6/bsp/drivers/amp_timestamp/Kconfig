@@ -1,0 +1,12 @@
+# SPDX-License-Identifier: GPL-2.0-only
+#
+# Allwinner AMP timestamp driver.
+#
+
+config AW_AMP_TIMESTAMP
+	tristate "AMP Timestamp Driver"
+	depends on AW_BSP
+	default n
+	help
+	  Allwinner AMP timestamp driver, it provide timestamp
+	  with same timebase on AMP situation.

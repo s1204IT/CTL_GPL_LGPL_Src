@@ -1,0 +1,2 @@
+obj-$(CONFIG_TOUCHSCREEN_BETTERLIFE_TS_FACTORY_TEST)  += betterlife_ts_factory_test.o
+betterlife_ts_factory_test-objs := bl_test.o bl_test_ini.o bl_test_7xx1.o bl_test_7xx6.o bl_test_6xx1.o bl_test_6xx6.o

@@ -1,0 +1,4 @@
+arch: arm
+type: ramfs
+version: 1.0.0
+toolchain: gcc-linaro-5.3.1-2016.05

@@ -1,0 +1,4 @@
+arch: aarch64
+type: ramfs
+version: 1.0.0
+toolchain: gcc-linaro-5.1-2015.08-x86_64_aarch64-linux-gnu

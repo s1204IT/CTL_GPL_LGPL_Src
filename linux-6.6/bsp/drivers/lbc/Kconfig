@@ -1,0 +1,11 @@
+# SPDX-License-Identifier: GPL-2.0-only
+menu "Bus Drivers"
+	depends on AW_BSP
+
+config AW_LBC
+	tristate "Local Bus Ctrl Support for Allwinner SoCs"
+	depends on AW_BSP
+	help
+	  Support the Local Bus Ctrl driver for Allwinner platforms.
+
+endmenu

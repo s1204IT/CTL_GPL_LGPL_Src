@@ -1,0 +1,10 @@
+# SPDX-License-Identifier: GPL-2.0-only
+#
+# Industrial I/O subsystem configuration
+#
+
+menu "Industrial I/O support"
+
+source "$(BSP_TOP)drivers/iio/temperature/Kconfig"
+
+endmenu

@@ -1,0 +1,9 @@
+# SPDX-License-Identifier: GPL-2.0-only
+menu "GPIO Motor support"
+
+config MOTOR_CONTROL
+	tristate "Motor Control Driver"
+	help
+	  Motor Control Driver
+
+endmenu

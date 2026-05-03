@@ -1,0 +1,1911 @@
+/* SPDX-License-Identifier: GPL-2.0-or-later */
+/* Copyright(c) 2020 - 2023 Allwinner Technology Co.,Ltd. All rights reserved. */
+/*
+ * A V4L2 driver for s5k3l2_mipi cameras.
+ *
+ * Copyright (c) 2018 by Allwinnertech Co., Ltd.  http://www.allwinnertech.com
+ *
+ * Authors:  Liu Chensheng <liuchensheng@allwinnertech.com>
+ *    Liang WeiJie <liangweijie@allwinnertech.com>
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License version 2 as
+ * published by the Free Software Foundation.
+ */
+#include "../../utility/vin_log.h"
+#include <linux/init.h>
+#include <linux/module.h>
+#include <linux/slab.h>
+#include <linux/i2c.h>
+#include <linux/delay.h>
+#include <linux/videodev2.h>
+#include <linux/clk.h>
+#include <media/v4l2-device.h>
+#include <media/v4l2-mediabus.h>
+#include <linux/io.h>
+
+#include "camera.h"
+#include "sensor_helper.h"
+
+MODULE_AUTHOR("lcs");
+MODULE_DESCRIPTION("A low-level driver for s5k3l2 sensors");
+MODULE_LICENSE("GPL");
+MODULE_VERSION("1.0.0");
+
+#define MCLK              (12*1000*1000)
+#define V4L2_IDENT_SENSOR 0x30c2
+
+/*
+ * Our nominal (default) frame rate.
+ */
+
+#define SENSOR_FRAME_RATE 17
+
+/*
+ * The s5k3l2_mipi sits on i2c with ID 0x20/0x5a
+ */
+#define I2C_ADDR 0x20
+
+#define SENSOR_NUM    0x2
+#define SENSOR_NAME   "s5k3l2_mipi"
+#define SENSOR_NAME_2 "s5k3l2_mipi_2"
+
+/*
+ * The default register settings
+ *
+ */
+
+struct s5k3l2_regval_list {
+	addr_type reg_addr;
+	data_type data;
+	u32 flag;
+};
+
+static struct s5k3l2_regval_list sensor_default_regs[] = {
+	{0x6028, 0xD000, 1},
+	{0x6010, 0x0001, 1},
+	{REG_DLY, 0x0003, 1},
+	{0x6214, 0x7970, 1},
+	{0x6218, 0x7150, 1},
+	{0x6028, 0x7000, 1},
+	{0x602A, 0x2200, 1},
+	// {0x6F12, 0x2DE9, 1},
+	// {0x6F12, 0x7040, 1},
+	// {0x6F12, 0x9FE5, 1},
+	// {0x6F12, 0x9010, 1},
+	// {0x6F12, 0x9FE5, 1},
+	// {0x6F12, 0x9000, 1},
+	// {0x6F12, 0x80E5, 1},
+	// {0x6F12, 0x0010, 1},
+	// {0x6F12, 0x90E5, 1},
+	// {0x6F12, 0x2C20, 1},
+	// {0x6F12, 0x42E0, 1},
+	// {0x6F12, 0x0110, 1},
+	// {0x6F12, 0xC0E1, 1},
+	// {0x6F12, 0xB410, 1},
+	// {0x6F12, 0x9FE5, 1},
+	// {0x6F12, 0x8010, 1},
+	// {0x6F12, 0x9FE5, 1},
+	// {0x6F12, 0x8000, 1},
+	// {0x6F12, 0x00EB, 1},
+	// {0x6F12, 0x2301, 1},
+	// {0x6F12, 0x9FE5, 1},
+	// {0x6F12, 0x7C50, 1},
+	// {0x6F12, 0x9FE5, 1},
+	// {0x6F12, 0x7C10, 1},
+	// {0x6F12, 0xC5E1, 1},
+	// {0x6F12, 0xB000, 1},
+	// {0x6F12, 0x9FE5, 1},
+	// {0x6F12, 0x7800, 1},
+	// {0x6F12, 0x00EB, 1},
+	// {0x6F12, 0x2001, 1},
+	// {0x6F12, 0x9FE5, 1},
+	// {0x6F12, 0x7400, 1},
+	// {0x6F12, 0x9FE5, 1},
+	// {0x6F12, 0x7410, 1},
+	// {0x6F12, 0xA0E3, 1},
+	// {0x6F12, 0x0040, 1},
+	// {0x6F12, 0x81E5, 1},
+	// {0x6F12, 0x1000, 1},
+	// {0x6F12, 0x85E2, 1},
+	// {0x6F12, 0x0400, 1},
+	// {0x6F12, 0xC0E1, 1},
+	// {0x6F12, 0xB240, 1},
+	// {0x6F12, 0xC0E1, 1},
+	// {0x6F12, 0xB040, 1},
+	// {0x6F12, 0xC0E1, 1},
+	// {0x6F12, 0xB440, 1},
+	// {0x6F12, 0xC0E1, 1},
+	// {0x6F12, 0xB640, 1},
+	// {0x6F12, 0x9FE5, 1},
+	// {0x6F12, 0x5800, 1},
+	// {0x6F12, 0x81E5, 1},
+	// {0x6F12, 0x2400, 1},
+	// {0x6F12, 0x9FE5, 1},
+	// {0x6F12, 0x5410, 1},
+	// {0x6F12, 0x9FE5, 1},
+	// {0x6F12, 0x5400, 1},
+	// {0x6F12, 0x00EB, 1},
+	// {0x6F12, 0x1001, 1},
+	// {0x6F12, 0xC5E1, 1},
+	// {0x6F12, 0xB200, 1},
+	// {0x6F12, 0xA0E3, 1},
+	// {0x6F12, 0x0000, 1},
+	// {0x6F12, 0x85E2, 1},
+	// {0x6F12, 0x0C10, 1},
+	// {0x6F12, 0x81E0, 1},
+	// {0x6F12, 0x8020, 1},
+	// {0x6F12, 0x80E2, 1},
+	// {0x6F12, 0x0100, 1},
+	// {0x6F12, 0x50E3, 1},
+	// {0x6F12, 0x0A00, 1},
+	// {0x6F12, 0xC2E5, 1},
+	// {0x6F12, 0xA540, 1},
+	// {0x6F12, 0xFF3A, 1},
+	// {0x6F12, 0xFAFF, 1},
+	// {0x6F12, 0xBDE8, 1},
+	// {0x6F12, 0x7040, 1},
+	// {0x6F12, 0x2FE1, 1},
+	// {0x6F12, 0x1EFF, 1},
+	// {0x6F12, 0x0070, 1},
+	// {0x6F12, 0x0C28, 1},
+	// {0x6F12, 0x0070, 1},
+	// {0x6F12, 0x6018, 1},
+	// {0x6F12, 0x0070, 1},
+	// {0x6F12, 0x2426, 1},
+	// {0x6F12, 0x0000, 1},
+	// {0x6F12, 0xA436, 1},
+	// {0x6F12, 0x0070, 1},
+	// {0x6F12, 0x4827, 1},
+	// {0x6F12, 0x0070, 1},
+	// {0x6F12, 0xCC25, 1},
+	// {0x6F12, 0x0000, 1},
+	// {0x6F12, 0x08C5, 1},
+	// {0x6F12, 0x0070, 1},
+	// {0x6F12, 0x7024, 1},
+	// {0x6F12, 0x0070, 1},
+	// {0x6F12, 0xF004, 1},
+	// {0x6F12, 0x0070, 1},
+	// {0x6F12, 0xDC23, 1},
+	// {0x6F12, 0x0070, 1},
+	// {0x6F12, 0xCC22, 1},
+	// {0x6F12, 0x0000, 1},
+	// {0x6F12, 0x7CBC, 1},
+	// {0x6F12, 0x2DE9, 1},
+	// {0x6F12, 0x7040, 1},
+	// {0x6F12, 0x9FE5, 1},
+	// {0x6F12, 0xA043, 1},
+	// {0x6F12, 0xA0E3, 1},
+	// {0x6F12, 0x0010, 1},
+	// {0x6F12, 0xD4E1, 1},
+	// {0x6F12, 0xB200, 1},
+	// {0x6F12, 0x00EB, 1},
+	// {0x6F12, 0xF900, 1},
+	// {0x6F12, 0x9FE5, 1},
+	// {0x6F12, 0x9403, 1},
+	// {0x6F12, 0x80E2, 1},
+	// {0x6F12, 0x522F, 1},
+	// {0x6F12, 0x80E2, 1},
+	// {0x6F12, 0x5010, 1},
+	// {0x6F12, 0x9FE5, 1},
+	// {0x6F12, 0x8C03, 1},
+	// {0x6F12, 0x00EB, 1},
+	// {0x6F12, 0xF600, 1},
+	// {0x6F12, 0x84E2, 1},
+	// {0x6F12, 0x0C50, 1},
+	// {0x6F12, 0xD5E1, 1},
+	// {0x6F12, 0xB000, 1},
+	// {0x6F12, 0x50E3, 1},
+	// {0x6F12, 0x0100, 1},
+	// {0x6F12, 0x001A, 1},
+	// {0x6F12, 0x3100, 1},
+	// {0x6F12, 0xD5E1, 1},
+	// {0x6F12, 0xB2E0, 1},
+	// {0x6F12, 0x9FE5, 1},
+	// {0x6F12, 0x7403, 1},
+	// {0x6F12, 0xD0E1, 1},
+	// {0x6F12, 0xB420, 1},
+	// {0x6F12, 0x5EE3, 1},
+	// {0x6F12, 0x0A00, 1},
+	// {0x6F12, 0xA083, 1},
+	// {0x6F12, 0x0AE0, 1},
+	// {0x6F12, 0xA0E3, 1},
+	// {0x6F12, 0x0000, 1},
+	// {0x6F12, 0x00EA, 1},
+	// {0x6F12, 0x2400, 1},
+	// {0x6F12, 0xD1E1, 1},
+	// {0x6F12, 0xB430, 1},
+	// {0x6F12, 0x52E1, 1},
+	// {0x6F12, 0x8301, 1},
+	// {0x6F12, 0xA093, 1},
+	// {0x6F12, 0x0030, 1},
+	// {0x6F12, 0x009A, 1},
+	// {0x6F12, 0x0C00, 1},
+	// {0x6F12, 0xD1E1, 1},
+	// {0x6F12, 0xB630, 1},
+	// {0x6F12, 0x52E1, 1},
+	// {0x6F12, 0x8301, 1},
+	// {0x6F12, 0x002A, 1},
+	// {0x6F12, 0x0500, 1},
+	// {0x6F12, 0x85E0, 1},
+	// {0x6F12, 0x80C0, 1},
+	// {0x6F12, 0xDCE5, 1},
+	// {0x6F12, 0xA530, 1},
+	// {0x6F12, 0x53E3, 1},
+	// {0x6F12, 0x0200, 1},
+	// {0x6F12, 0x001A, 1},
+	// {0x6F12, 0x0F00, 1},
+	// {0x6F12, 0xA0E3, 1},
+	// {0x6F12, 0x0130, 1},
+	// {0x6F12, 0x00EA, 1},
+	// {0x6F12, 0x0D00, 1},
+	// {0x6F12, 0xD1E1, 1},
+	// {0x6F12, 0xB830, 1},
+	// {0x6F12, 0x52E1, 1},
+	// {0x6F12, 0x8301, 1},
+	// {0x6F12, 0x008A, 1},
+	// {0x6F12, 0x0200, 1},
+	// {0x6F12, 0xA0E3, 1},
+	// {0x6F12, 0x0130, 1},
+	// {0x6F12, 0x85E0, 1},
+	// {0x6F12, 0x80C0, 1},
+	// {0x6F12, 0x00EA, 1},
+	// {0x6F12, 0x0700, 1},
+	// {0x6F12, 0xD1E1, 1},
+	// {0x6F12, 0xBA30, 1},
+	// {0x6F12, 0x52E1, 1},
+	// {0x6F12, 0x8301, 1},
+	// {0x6F12, 0xA023, 1},
+	// {0x6F12, 0x0230, 1},
+	// {0x6F12, 0xFF2A, 1},
+	// {0x6F12, 0xF9FF, 1},
+	// {0x6F12, 0x85E0, 1},
+	// {0x6F12, 0x80C0, 1},
+	// {0x6F12, 0xDCE5, 1},
+	// {0x6F12, 0xA530, 1},
+	// {0x6F12, 0x53E3, 1},
+	// {0x6F12, 0x0000, 1},
+	// {0x6F12, 0xFF0A, 1},
+	// {0x6F12, 0xEFFF, 1},
+	// {0x6F12, 0xCCE5, 1},
+	// {0x6F12, 0xA430, 1},
+	// {0x6F12, 0x85E0, 1},
+	// {0x6F12, 0x8030, 1},
+	// {0x6F12, 0xD3E5, 1},
+	// {0x6F12, 0xA4C0, 1},
+	// {0x6F12, 0xC3E5, 1},
+	// {0x6F12, 0xA5C0, 1},
+	// {0x6F12, 0x81E0, 1},
+	// {0x6F12, 0x8C30, 1},
+	// {0x6F12, 0xD1E1, 1},
+	// {0x6F12, 0xBC10, 1},
+	// {0x6F12, 0xD3E1, 1},
+	// {0x6F12, 0xBE30, 1},
+	// {0x6F12, 0x81E2, 1},
+	// {0x6F12, 0x0D12, 1},
+	// {0x6F12, 0xC1E1, 1},
+	// {0x6F12, 0xB030, 1},
+	// {0x6F12, 0x80E2, 1},
+	// {0x6F12, 0x0100, 1},
+	// {0x6F12, 0x50E1, 1},
+	// {0x6F12, 0x0E00, 1},
+	// {0x6F12, 0x002A, 1},
+	// {0x6F12, 0x0300, 1},
+	// {0x6F12, 0x85E0, 1},
+	// {0x6F12, 0x0012, 1},
+	// {0x6F12, 0xD1E1, 1},
+	// {0x6F12, 0xBC30, 1},
+	// {0x6F12, 0x53E3, 1},
+	// {0x6F12, 0x0000, 1},
+	// {0x6F12, 0xFF1A, 1},
+	// {0x6F12, 0xD4FF, 1},
+	// {0x6F12, 0xD4E1, 1},
+	// {0x6F12, 0xB200, 1},
+	// {0x6F12, 0xBDE8, 1},
+	// {0x6F12, 0x7040, 1},
+	// {0x6F12, 0xA0E3, 1},
+	// {0x6F12, 0x0110, 1},
+	// {0x6F12, 0x00EA, 1},
+	// {0x6F12, 0xBA00, 1},
+	// {0x6F12, 0x2DE9, 1},
+	// {0x6F12, 0x3840, 1},
+	// {0x6F12, 0x9DE5, 1},
+	// {0x6F12, 0x1040, 1},
+	// {0x6F12, 0x8DE5, 1},
+	// {0x6F12, 0x0040, 1},
+	// {0x6F12, 0x00EB, 1},
+	// {0x6F12, 0xBA00, 1},
+	// {0x6F12, 0x9FE5, 1},
+	// {0x6F12, 0x9402, 1},
+	// {0x6F12, 0xD4E1, 1},
+	// {0x6F12, 0xB420, 1},
+	// {0x6F12, 0x90E5, 1},
+	// {0x6F12, 0x0030, 1},
+	// {0x6F12, 0xA0E3, 1},
+	// {0x6F12, 0x0010, 1},
+	// {0x6F12, 0x83E0, 1},
+	// {0x6F12, 0x8101, 1},
+	// {0x6F12, 0x80E2, 1},
+	// {0x6F12, 0x250E, 1},
+	// {0x6F12, 0xD0E1, 1},
+	// {0x6F12, 0xB0C0, 1},
+	// {0x6F12, 0x5CE1, 1},
+	// {0x6F12, 0x0200, 1},
+	// {0x6F12, 0x00CA, 1},
+	// {0x6F12, 0x1300, 1},
+	// {0x6F12, 0xD0E1, 1},
+	// {0x6F12, 0xB2C0, 1},
+	// {0x6F12, 0x5CE1, 1},
+	// {0x6F12, 0x0200, 1},
+	// {0x6F12, 0x00BA, 1},
+	// {0x6F12, 0x1000, 1},
+	// {0x6F12, 0xD0E1, 1},
+	// {0x6F12, 0xF450, 1},
+	// {0x6F12, 0xD0E1, 1},
+	// {0x6F12, 0xF610, 1},
+	// {0x6F12, 0x41E0, 1},
+	// {0x6F12, 0x0530, 1},
+	// {0x6F12, 0xD0E1, 1},
+	// {0x6F12, 0xB210, 1},
+	// {0x6F12, 0xD0E1, 1},
+	// {0x6F12, 0xB000, 1},
+	// {0x6F12, 0x41E0, 1},
+	// {0x6F12, 0x0010, 1},
+	// {0x6F12, 0x42E0, 1},
+	// {0x6F12, 0x0000, 1},
+	// {0x6F12, 0x00E0, 1},
+	// {0x6F12, 0x9300, 1},
+	// {0x6F12, 0x00EB, 1},
+	// {0x6F12, 0xA700, 1},
+	// {0x6F12, 0xD4E1, 1},
+	// {0x6F12, 0xB610, 1},
+	// {0x6F12, 0x80E0, 1},
+	// {0x6F12, 0x0500, 1},
+	// {0x6F12, 0x00E0, 1},
+	// {0x6F12, 0x9100, 1},
+	// {0x6F12, 0xA0E1, 1},
+	// {0x6F12, 0x0003, 1},
+	// {0x6F12, 0xA0E1, 1},
+	// {0x6F12, 0x2008, 1},
+	// {0x6F12, 0xC4E1, 1},
+	// {0x6F12, 0xB600, 1},
+	// {0x6F12, 0xBDE8, 1},
+	// {0x6F12, 0x3840, 1},
+	// {0x6F12, 0x2FE1, 1},
+	// {0x6F12, 0x1EFF, 1},
+	// {0x6F12, 0x81E2, 1},
+	// {0x6F12, 0x0110, 1},
+	// {0x6F12, 0x51E3, 1},
+	// {0x6F12, 0x0500, 1},
+	// {0x6F12, 0xFF3A, 1},
+	// {0x6F12, 0xE3FF, 1},
+	// {0x6F12, 0xFFEA, 1},
+	// {0x6F12, 0xF9FF, 1},
+	// {0x6F12, 0x2DE9, 1},
+	// {0x6F12, 0x7040, 1},
+	// {0x6F12, 0x9FE5, 1},
+	// {0x6F12, 0x0C52, 1},
+	// {0x6F12, 0x95E5, 1},
+	// {0x6F12, 0x0000, 1},
+	// {0x6F12, 0x80E2, 1},
+	// {0x6F12, 0x020C, 1},
+	// {0x6F12, 0xD0E1, 1},
+	// {0x6F12, 0xB012, 1},
+	// {0x6F12, 0x51E3, 1},
+	// {0x6F12, 0x0000, 1},
+	// {0x6F12, 0x9F15, 1},
+	// {0x6F12, 0xFC11, 1},
+	// {0x6F12, 0xD115, 1},
+	// {0x6F12, 0x0B10, 1},
+	// {0x6F12, 0x5113, 1},
+	// {0x6F12, 0x0000, 1},
+	// {0x6F12, 0x000A, 1},
+	// {0x6F12, 0x3E00, 1},
+	// {0x6F12, 0x9FE5, 1},
+	// {0x6F12, 0xF011, 1},
+	// {0x6F12, 0xD1E1, 1},
+	// {0x6F12, 0xB210, 1},
+	// {0x6F12, 0xD0E1, 1},
+	// {0x6F12, 0xB222, 1},
+	// {0x6F12, 0x9FE5, 1},
+	// {0x6F12, 0xE841, 1},
+	// {0x6F12, 0x51E1, 1},
+	// {0x6F12, 0x0200, 1},
+	// {0x6F12, 0xA023, 1},
+	// {0x6F12, 0x0010, 1},
+	// {0x6F12, 0xA033, 1},
+	// {0x6F12, 0x0110, 1},
+	// {0x6F12, 0xC4E1, 1},
+	// {0x6F12, 0xB410, 1},
+	// {0x6F12, 0xD0E1, 1},
+	// {0x6F12, 0xB402, 1},
+	// {0x6F12, 0x00EB, 1},
+	// {0x6F12, 0x8900, 1},
+	// {0x6F12, 0xA0E1, 1},
+	// {0x6F12, 0x0060, 1},
+	// {0x6F12, 0x95E5, 1},
+	// {0x6F12, 0x0000, 1},
+	// {0x6F12, 0x80E2, 1},
+	// {0x6F12, 0x020C, 1},
+	// {0x6F12, 0xD0E1, 1},
+	// {0x6F12, 0xB602, 1},
+	// {0x6F12, 0x00EB, 1},
+	// {0x6F12, 0x8400, 1},
+	// {0x6F12, 0x9FE5, 1},
+	// {0x6F12, 0xA811, 1},
+	// {0x6F12, 0xA0E3, 1},
+	// {0x6F12, 0x0120, 1},
+	// {0x6F12, 0xD1E1, 1},
+	// {0x6F12, 0xB811, 1},
+	// {0x6F12, 0xA0E3, 1},
+	// {0x6F12, 0x0030, 1},
+	// {0x6F12, 0x51E1, 1},
+	// {0x6F12, 0x0600, 1},
+	// {0x6F12, 0xC491, 1},
+	// {0x6F12, 0xB220, 1},
+	// {0x6F12, 0x009A, 1},
+	// {0x6F12, 0x0100, 1},
+	// {0x6F12, 0x51E1, 1},
+	// {0x6F12, 0x0000, 1},
+	// {0x6F12, 0xC481, 1},
+	// {0x6F12, 0xB230, 1},
+	// {0x6F12, 0x95E5, 1},
+	// {0x6F12, 0x0010, 1},
+	// {0x6F12, 0x91E5, 1},
+	// {0x6F12, 0x3002, 1},
+	// {0x6F12, 0x50E3, 1},
+	// {0x6F12, 0x0000, 1},
+	// {0x6F12, 0x001A, 1},
+	// {0x6F12, 0x0B00, 1},
+	// {0x6F12, 0xA0E3, 1},
+	// {0x6F12, 0x8D0F, 1},
+	// {0x6F12, 0x90E1, 1},
+	// {0x6F12, 0xB1E0, 1},
+	// {0x6F12, 0x9FE5, 1},
+	// {0x6F12, 0x8001, 1},
+	// {0x6F12, 0x9FE5, 1},
+	// {0x6F12, 0x80C1, 1},
+	// {0x6F12, 0x5EE3, 1},
+	// {0x6F12, 0x0000, 1},
+	// {0x6F12, 0xD001, 1},
+	// {0x6F12, 0xB0E6, 1},
+	// {0x6F12, 0xD001, 1},
+	// {0x6F12, 0xB206, 1},
+	// {0x6F12, 0xD011, 1},
+	// {0x6F12, 0xB4E5, 1},
+	// {0x6F12, 0xD011, 1},
+	// {0x6F12, 0xB605, 1},
+	// {0x6F12, 0x8EE1, 1},
+	// {0x6F12, 0x0008, 1},
+	// {0x6F12, 0x8C05, 1},
+	// {0x6F12, 0x2C00, 1},
+	// {0x6F12, 0x8C15, 1},
+	// {0x6F12, 0x1800, 1},
+	// {0x6F12, 0x91E5, 1},
+	// {0x6F12, 0x2CC2, 1},
+	// {0x6F12, 0x5CE1, 1},
+	// {0x6F12, 0x0000, 1},
+	// {0x6F12, 0xC4D1, 1},
+	// {0x6F12, 0xB020, 1},
+	// {0x6F12, 0x00DA, 1},
+	// {0x6F12, 0x0200, 1},
+	// {0x6F12, 0x91E5, 1},
+	// {0x6F12, 0x28C2, 1},
+	// {0x6F12, 0x5CE1, 1},
+	// {0x6F12, 0x0000, 1},
+	// {0x6F12, 0xC4C1, 1},
+	// {0x6F12, 0xB030, 1},
+	// {0x6F12, 0xD4E1, 1},
+	// {0x6F12, 0xB400, 1},
+	// {0x6F12, 0x50E3, 1},
+	// {0x6F12, 0x0000, 1},
+	// {0x6F12, 0xD411, 1},
+	// {0x6F12, 0xB200, 1},
+	// {0x6F12, 0x5013, 1},
+	// {0x6F12, 0x0000, 1},
+	// {0x6F12, 0xD411, 1},
+	// {0x6F12, 0xB000, 1},
+	// {0x6F12, 0x5013, 1},
+	// {0x6F12, 0x0000, 1},
+	// {0x6F12, 0x9F15, 1},
+	// {0x6F12, 0x2C01, 1},
+	// {0x6F12, 0x9011, 1},
+	// {0x6F12, 0xB100, 1},
+	// {0x6F12, 0xC411, 1},
+	// {0x6F12, 0xB600, 1},
+	// {0x6F12, 0xD4E1, 1},
+	// {0x6F12, 0xB600, 1},
+	// {0x6F12, 0x50E3, 1},
+	// {0x6F12, 0x0000, 1},
+	// {0x6F12, 0x4012, 1},
+	// {0x6F12, 0x0100, 1},
+	// {0x6F12, 0xC411, 1},
+	// {0x6F12, 0xB600, 1},
+	// {0x6F12, 0x9F15, 1},
+	// {0x6F12, 0x1401, 1},
+	// {0x6F12, 0xC011, 1},
+	// {0x6F12, 0xB030, 1},
+	// {0x6F12, 0xC011, 1},
+	// {0x6F12, 0xB820, 1},
+	// {0x6F12, 0x00EB, 1},
+	// {0x6F12, 0x5500, 1},
+	// {0x6F12, 0x00EB, 1},
+	// {0x6F12, 0x5600, 1},
+	// {0x6F12, 0xA0E1, 1},
+	// {0x6F12, 0x0040, 1},
+	// {0x6F12, 0x9FE5, 1},
+	// {0x6F12, 0x0001, 1},
+	// {0x6F12, 0x00EB, 1},
+	// {0x6F12, 0x5500, 1},
+	// {0x6F12, 0x54E1, 1},
+	// {0x6F12, 0x0000, 1},
+	// {0x6F12, 0x4480, 1},
+	// {0x6F12, 0x0000, 1},
+	// {0x6F12, 0xBD88, 1},
+	// {0x6F12, 0x7040, 1},
+	// {0x6F12, 0xA081, 1},
+	// {0x6F12, 0x0018, 1},
+	// {0x6F12, 0xA081, 1},
+	// {0x6F12, 0x2118, 1},
+	// {0x6F12, 0xA083, 1},
+	// {0x6F12, 0x2100, 1},
+	// {0x6F12, 0x008A, 1},
+	// {0x6F12, 0x5000, 1},
+	// {0x6F12, 0xBDE8, 1},
+	// {0x6F12, 0x7040, 1},
+	// {0x6F12, 0x2FE1, 1},
+	// {0x6F12, 0x1EFF, 1},
+	// {0x6F12, 0x2DE9, 1},
+	// {0x6F12, 0x1040, 1},
+	// {0x6F12, 0x00EB, 1},
+	// {0x6F12, 0x4E00, 1},
+	// {0x6F12, 0x50E3, 1},
+	// {0x6F12, 0x0000, 1},
+	// {0x6F12, 0x000B, 1},
+	// {0x6F12, 0x4E00, 1},
+	// {0x6F12, 0x00EA, 1},
+	// {0x6F12, 0x0100, 1},
+	// {0x6F12, 0xA0E3, 1},
+	// {0x6F12, 0x0100, 1},
+	// {0x6F12, 0x00EB, 1},
+	// {0x6F12, 0x4D00, 1},
+	// {0x6F12, 0x00EB, 1},
+	// {0x6F12, 0x4E00, 1},
+	// {0x6F12, 0x50E3, 1},
+	// {0x6F12, 0x0000, 1},
+	// {0x6F12, 0xFF0A, 1},
+	// {0x6F12, 0xFAFF, 1},
+	// {0x6F12, 0x9FE5, 1},
+	// {0x6F12, 0xB000, 1},
+	// {0x6F12, 0xA0E3, 1},
+	// {0x6F12, 0x0020, 1},
+	// {0x6F12, 0xA0E3, 1},
+	// {0x6F12, 0x0810, 1},
+	// {0x6F12, 0x00EB, 1},
+	// {0x6F12, 0x4A00, 1},
+	// {0x6F12, 0x9FE5, 1},
+	// {0x6F12, 0x8000, 1},
+	// {0x6F12, 0x9FE5, 1},
+	// {0x6F12, 0xA010, 1},
+	// {0x6F12, 0xD0E1, 1},
+	// {0x6F12, 0xB020, 1},
+	// {0x6F12, 0xC1E1, 1},
+	// {0x6F12, 0xB421, 1},
+	// {0x6F12, 0xD0E1, 1},
+	// {0x6F12, 0xB200, 1},
+	// {0x6F12, 0xC1E1, 1},
+	// {0x6F12, 0xB801, 1},
+	// {0x6F12, 0xBDE8, 1},
+	// {0x6F12, 0x1040, 1},
+	// {0x6F12, 0x2FE1, 1},
+	// {0x6F12, 0x1EFF, 1},
+	// {0x6F12, 0x2DE9, 1},
+	// {0x6F12, 0x7040, 1},
+	// {0x6F12, 0x9FE5, 1},
+	// {0x6F12, 0x4850, 1},
+	// {0x6F12, 0x9FE5, 1},
+	// {0x6F12, 0x7440, 1},
+	// {0x6F12, 0xD5E1, 1},
+	// {0x6F12, 0xB000, 1},
+	// {0x6F12, 0xA0E3, 1},
+	// {0x6F12, 0x0010, 1},
+	// {0x6F12, 0x00EB, 1},
+	// {0x6F12, 0x2200, 1},
+	// {0x6F12, 0xD4E1, 1},
+	// {0x6F12, 0xB200, 1},
+	// {0x6F12, 0xD4E5, 1},
+	// {0x6F12, 0x4210, 1},
+	// {0x6F12, 0x80E0, 1},
+	// {0x6F12, 0x0100, 1},
+	// {0x6F12, 0x00EB, 1},
+	// {0x6F12, 0x3A00, 1},
+	// {0x6F12, 0xD4E1, 1},
+	// {0x6F12, 0xB612, 1},
+	// {0x6F12, 0xC0E3, 1},
+	// {0x6F12, 0x0100, 1},
+	// {0x6F12, 0x80E0, 1},
+	// {0x6F12, 0x0100, 1},
+	// {0x6F12, 0x9FE5, 1},
+	// {0x6F12, 0x5410, 1},
+	// {0x6F12, 0x81E5, 1},
+	// {0x6F12, 0x0400, 1},
+	// {0x6F12, 0xA0E1, 1},
+	// {0x6F12, 0x0400, 1},
+	// {0x6F12, 0x00EB, 1},
+	// {0x6F12, 0x3500, 1},
+	// {0x6F12, 0xD5E1, 1},
+	// {0x6F12, 0xB000, 1},
+	// {0x6F12, 0xBDE8, 1},
+	// {0x6F12, 0x7040, 1},
+	// {0x6F12, 0xA0E3, 1},
+	// {0x6F12, 0x0110, 1},
+	// {0x6F12, 0x00EA, 1},
+	// {0x6F12, 0x1300, 1},
+	// {0x6F12, 0x0070, 1},
+	// {0x6F12, 0x4827, 1},
+	// {0x6F12, 0x0070, 1},
+	// {0x6F12, 0x9018, 1},
+	// {0x6F12, 0x0070, 1},
+	// {0x6F12, 0x1018, 1},
+	// {0x6F12, 0x0070, 1},
+	// {0x6F12, 0x901F, 1},
+	// {0x6F12, 0x0070, 1},
+	// {0x6F12, 0x0000, 1},
+	// {0x6F12, 0x0070, 1},
+	// {0x6F12, 0x4005, 1},
+	// {0x6F12, 0x00D0, 1},
+	// {0x6F12, 0x00C2, 1},
+	// {0x6F12, 0x0070, 1},
+	// {0x6F12, 0x4C27, 1},
+	// {0x6F12, 0x00D0, 1},
+	// {0x6F12, 0x0096, 1},
+	// {0x6F12, 0x0070, 1},
+	// {0x6F12, 0x801E, 1},
+	// {0x6F12, 0x0000, 1},
+	// {0x6F12, 0x3602, 1},
+	// {0x6F12, 0x00D0, 1},
+	// {0x6F12, 0x00A6, 1},
+	// {0x6F12, 0x0070, 1},
+	// {0x6F12, 0xE018, 1},
+	// {0x6F12, 0x0000, 1},
+	// {0x6F12, 0x1662, 1},
+	// {0x6F12, 0x00D0, 1},
+	// {0x6F12, 0x0062, 1},
+	// {0x6F12, 0x0070, 1},
+	// {0x6F12, 0x0014, 1},
+	// {0x6F12, 0x1FE5, 1},
+	// {0x6F12, 0x04F0, 1},
+	// {0x6F12, 0x0000, 1},
+	// {0x6F12, 0xD0DD, 1},
+	// {0x6F12, 0x1FE5, 1},
+	// {0x6F12, 0x04F0, 1},
+	// {0x6F12, 0x0000, 1},
+	// {0x6F12, 0x44DD, 1},
+	// {0x6F12, 0x1FE5, 1},
+	// {0x6F12, 0x04F0, 1},
+	// {0x6F12, 0x0000, 1},
+	// {0x6F12, 0x68DC, 1},
+	// {0x6F12, 0x1FE5, 1},
+	// {0x6F12, 0x04F0, 1},
+	// {0x6F12, 0x0000, 1},
+	// {0x6F12, 0x7CBC, 1},
+	// {0x6F12, 0x1FE5, 1},
+	// {0x6F12, 0x04F0, 1},
+	// {0x6F12, 0x0000, 1},
+	// {0x6F12, 0xA0B1, 1},
+	// {0x6F12, 0x1FE5, 1},
+	// {0x6F12, 0x04F0, 1},
+	// {0x6F12, 0x0000, 1},
+	// {0x6F12, 0x7CE4, 1},
+	// {0x6F12, 0x1FE5, 1},
+	// {0x6F12, 0x04F0, 1},
+	// {0x6F12, 0x0000, 1},
+	// {0x6F12, 0x5055, 1},
+	// {0x6F12, 0x1FE5, 1},
+	// {0x6F12, 0x04F0, 1},
+	// {0x6F12, 0x0000, 1},
+	// {0x6F12, 0x9090, 1},
+	// {0x6F12, 0x1FE5, 1},
+	// {0x6F12, 0x04F0, 1},
+	// {0x6F12, 0x0000, 1},
+	// {0x6F12, 0x50B8, 1},
+	// {0x6F12, 0x1FE5, 1},
+	// {0x6F12, 0x04F0, 1},
+	// {0x6F12, 0x0000, 1},
+	// {0x6F12, 0x5C9D, 1},
+	// {0x6F12, 0x1FE5, 1},
+	// {0x6F12, 0x04F0, 1},
+	// {0x6F12, 0x0000, 1},
+	// {0x6F12, 0x1402, 1},
+	// {0x6F12, 0x1FE5, 1},
+	// {0x6F12, 0x04F0, 1},
+	// {0x6F12, 0x0000, 1},
+	// {0x6F12, 0x187F, 1},
+	// {0x6F12, 0x1FE5, 1},
+	// {0x6F12, 0x04F0, 1},
+	// {0x6F12, 0x0000, 1},
+	// {0x6F12, 0x00C0, 1},
+	// {0x6F12, 0x1FE5, 1},
+	// {0x6F12, 0x04F0, 1},
+	// {0x6F12, 0x0000, 1},
+	// {0x6F12, 0x98C4, 1},
+	// {0x6F12, 0x1FE5, 1},
+	// {0x6F12, 0x04F0, 1},
+	// {0x6F12, 0x0000, 1},
+	// {0x6F12, 0x2C4B, 1},
+	// {0x6F12, 0x1FE5, 1},
+	// {0x6F12, 0x04F0, 1},
+	// {0x6F12, 0x0000, 1},
+	// {0x6F12, 0xDC0C, 1},
+	// {0x6F12, 0x1FE5, 1},
+	// {0x6F12, 0x04F0, 1},
+	// {0x6F12, 0x0000, 1},
+	// {0x6F12, 0xFCE5, 1},
+	// {0x6F12, 0x1FE5, 1},
+	// {0x6F12, 0x04F0, 1},
+	// {0x6F12, 0x0000, 1},
+	//{0x6F12, 0xA436, 1},
+	{0x6028, 0xD000, 1},
+	{0x3690, 0x01, 0},
+	{0x3692, 0x0060, 1},
+	{0x369A, 0xF446, 1},
+	{0x369C, 0x5176, 1},
+	{0x369E, 0x5C76, 1},
+	{0x36A0, 0x5C76, 1},
+	{0x36AE, 0xF40E, 1},
+	{0x36B0, 0x0B00, 1},
+	{0x36B2, 0x4B00, 1},
+	{0x36B4, 0x4B00, 1},
+	{0xF412, 0x0040, 1},
+	{0x3664, 0x0BB8, 1},
+	{0x35E4, 0x4776, 1},
+	{0x3675, 0x76, 0},
+	{0x3672, 0x0520, 1},
+	{0x367A, 0x00ED, 1},
+	{0x372A, 0x01, 0},
+	{0x3246, 0x0092, 1},
+	{0x324A, 0x009C, 1},
+	{0x3256, 0x01BD, 1},
+	{0x325A, 0x01C7, 1},
+	{0x3248, 0x0092, 1},
+	{0x324C, 0x009C, 1},
+	{0x3258, 0x01B2, 1},
+	{0x325C, 0x01BC, 1},
+	{0x3792, 0x0000, 1},
+	{0x3794, 0x0000, 1},
+	{0x3796, 0x0000, 1},
+	{0x379A, 0x0000, 1},
+	{0x379C, 0x0000, 1},
+	{0x379E, 0x0000, 1},
+	{0x33DA, 0x00BC, 1},
+	{0x33DC, 0x00BC, 1},
+	{0x33DE, 0x00BE, 1},
+	{0x33E0, 0x00BE, 1},
+	{0x33EA, 0x00BC, 1},
+	{0x33EC, 0x00BC, 1},
+	{0x33EE, 0x00D8, 1},
+	{0x33F0, 0x00D8, 1},
+	{0x36A2, 0x5176, 1},
+	{0x36A4, 0x2F76, 1},
+	{0x36A6, 0x2F76, 1},
+	{0x36B6, 0x0B00, 1},
+	{0x36B8, 0x4B00, 1},
+	{0x36BA, 0x4B00, 1},
+	{0x372C, 0x48, 0},
+	{0x372D, 0x48, 0},
+	{0x372E, 0x0002, 1},
+	{0x3730, 0x1106, 1},
+	{0x6028, 0x7000, 1},
+	{0x602A, 0x2754, 1},
+	//{0x6F12, 0x0100, 1},
+	//{0x6F12, 0x0300, 1},
+	{0x602A, 0x2760, 1},
+	//{0x6F12, 0x080B, 1},
+	{0x602A, 0x2758, 1},
+	//{0x6F12, 0x4500, 1},
+	//{0x6F12, 0x4700, 1},
+	//{0x6F12, 0xF800, 1},
+	//{0x6F12, 0x0001, 1},
+	{0x602A, 0x2762, 1},
+	//{0x6F12, 0x0000, 1},
+	//{0x6F12, 0x0001, 1},
+	//{0x6F12, 0x0001, 1},
+	{0x602A, 0x2770, 1},
+	//{0x6F12, 0xE63B, 1},
+	{0x602A, 0x2768, 1},
+	//{0x6F12, 0x4500, 1},
+	//{0x6F12, 0x4700, 1},
+	//{0x6F12, 0xF800, 1},
+	//{0x6F12, 0x0001, 1},
+	{0x602A, 0x2772, 1},
+	//{0x6F12, 0x0100, 1},
+	//{0x6F12, 0x0100, 1},
+	//{0x6F12, 0x0200, 1},
+	{0x602A, 0x2780, 1},
+	//{0x6F12, 0xFA3B, 1},
+	{0x602A, 0x2778, 1},
+	//{0x6F12, 0x4500, 1},
+	//{0x6F12, 0x4700, 1},
+	//{0x6F12, 0xF800, 1},
+	//{0x6F12, 0x0001, 1},
+	{0x602A, 0x2782, 1},
+	//{0x6F12, 0x0100, 1},
+	//{0x6F12, 0x0100, 1},
+	{0x6F12, 0x0200, 1},
+	{0x6028, 0xD000, 1},
+	{0x0C00, 0x0100, 1},
+	{0x0C02, 0x01FF, 1},
+	{0x0C04, 0x0400, 1},
+	{0x0C06, 0x0438, 1},
+	{0x0C08, 0x0200, 1},
+	{0x0C0A, 0x03FF, 1},
+	{0x0C0C, 0x0415, 1},
+	{0x0C0E, 0x045B, 1},
+	{0x0C10, 0x0400, 1},
+	{0x0C12, 0x07FF, 1},
+	{0x0C14, 0x0421, 1},
+	{0x0C16, 0x043B, 1},
+	{0x0C18, 0x0800, 1},
+	{0x0C1A, 0x0FFF, 1},
+	{0x0C1C, 0x0423, 1},
+	{0x0C1E, 0x043B, 1},
+	{0x0C20, 0x1000, 1},
+	{0x0C22, 0x1FFF, 1},
+	{0x0C24, 0x0426, 1},
+	{0x0C26, 0x0426, 1},
+	{0x0B80, 0x0001, 1},
+	{0x0B86, 0x0020, 1},
+	{0x0B84, 0x0020, 1},
+	{0x0B82, 0x0003, 1},
+	{0x0B8C, 0x000A, 1},
+	{0x0B88, 0x0008, 1},
+	{0x0B96, 0x0005, 1},
+	{0x0B94, 0x0001, 1},
+	{0x0602, 0x03FF, 1},
+	{0x0604, 0x03FF, 1},
+	{0x0606, 0x03FF, 1},
+	{0x0608, 0x03FF, 1},
+	{0x3BE0, 0x03DA, 1},
+	{0x3BE2, 0x01D6, 1},
+	{0x3BE4, 0x01BF, 1},
+	{0x3BE6, 0x0001, 1},
+	{0x3BE8, 0x0003, 1},
+	{0x3BEA, 0x000A, 1},
+	{0x3BEC, 0x0022, 1},
+	{0x3BEE, 0x000A, 1},
+	{0x3BF0, 0x0022, 1},
+	{0x3BF2, 0x000A, 1},
+	{0x3BF4, 0x0022, 1},
+	{0x3BF6, 0x000A, 1},
+	{0x3BF8, 0x0022, 1},
+	{0x3BFA, 0x0001, 1},
+	{0x3BFC, 0x0003, 1},
+	{0x3BFE, 0x000A, 1},
+	{0x3C00, 0x0022, 1},
+	{0x3C02, 0x000A, 1},
+	{0x3C04, 0x0022, 1},
+	{0x3C06, 0x000A, 1},
+	{0x3C08, 0x0022, 1},
+	{0x3C0A, 0x000A, 1},
+	{0x3C0C, 0x0022, 1},
+	{0x3C0E, 0x0200, 1},
+	{0x3C10, 0x0200, 1},
+	{0x3C12, 0x0002, 1},
+	{0x3C14, 0x0003, 1},
+	{0x3C16, 0x0008, 1},
+	{0x3C18, 0x0018, 1},
+	{0x3C1A, 0x0008, 1},
+	{0x3C1C, 0x0018, 1},
+	{0x3C1E, 0x0008, 1},
+	{0x3C20, 0x0018, 1},
+	{0x3C22, 0x0008, 1},
+	{0x3C24, 0x0018, 1},
+	{0x3C26, 0x0002, 1},
+	{0x3C28, 0x0003, 1},
+	{0x3C2A, 0x0008, 1},
+	{0x3C2C, 0x0018, 1},
+	{0x3C2E, 0x0008, 1},
+	{0x3C30, 0x0018, 1},
+	{0x3C32, 0x0008, 1},
+	{0x3C34, 0x0018, 1},
+	{0x3C36, 0x0008, 1},
+	{0x3C38, 0x0018, 1},
+	{0x3C3A, 0x0200, 1},
+	{0x3C3C, 0x0200, 1},
+	{0x3C3E, 0x0002, 1},
+	{0x3C40, 0x0003, 1},
+	{0x3C42, 0x0014, 1},
+	{0x3C44, 0x0040, 1},
+	{0x3C46, 0x0014, 1},
+	{0x3C48, 0x0040, 1},
+	{0x3C4A, 0x0014, 1},
+	{0x3C4C, 0x0040, 1},
+	{0x3C4E, 0x0014, 1},
+	{0x3C50, 0x0040, 1},
+	{0x3C52, 0x0002, 1},
+	{0x3C54, 0x0003, 1},
+	{0x3C56, 0x0014, 1},
+	{0x3C58, 0x0040, 1},
+	{0x3C5A, 0x0014, 1},
+	{0x3C5C, 0x0040, 1},
+	{0x3C5E, 0x0014, 1},
+	{0x3C60, 0x0040, 1},
+	{0x3C62, 0x0014, 1},
+	{0x3C64, 0x0040, 1},
+	{0x3C66, 0x0200, 1},
+	{0x3C68, 0x0200, 1},
+	{0x3C6A, 0x0002, 1},
+	{0x3C6C, 0x0003, 1},
+	{0x3C6E, 0x0008, 1},
+	{0x3C70, 0x0018, 1},
+	{0x3C72, 0x0008, 1},
+	{0x3C74, 0x0018, 1},
+	{0x3C76, 0x0008, 1},
+	{0x3C78, 0x0018, 1},
+	{0x3C7A, 0x0008, 1},
+	{0x3C7C, 0x0018, 1},
+	{0x3C7E, 0x0002, 1},
+	{0x3C80, 0x0003, 1},
+	{0x3C82, 0x0008, 1},
+	{0x3C84, 0x0018, 1},
+	{0x3C86, 0x0008, 1},
+	{0x3C88, 0x0018, 1},
+	{0x3C8A, 0x0008, 1},
+	{0x3C8C, 0x0018, 1},
+	{0x3C8E, 0x0008, 1},
+	{0x3C90, 0x0018, 1},
+	{0x3C92, 0x0200, 1},
+	{0x3C94, 0x0200, 1},
+	{0x3C96, 0x0002, 1},
+	{0x3C98, 0x0003, 1},
+	{0x3C9A, 0x0014, 1},
+	{0x3C9C, 0x0040, 1},
+	{0x3C9E, 0x0014, 1},
+	{0x3CA0, 0x0040, 1},
+	{0x3CA2, 0x0014, 1},
+	{0x3CA4, 0x0040, 1},
+	{0x3CA6, 0x0014, 1},
+	{0x3CA8, 0x0040, 1},
+	{0x3CAA, 0x0002, 1},
+	{0x3CAC, 0x0003, 1},
+	{0x3CAE, 0x0014, 1},
+	{0x3CB0, 0x0040, 1},
+	{0x3CB2, 0x0014, 1},
+	{0x3CB4, 0x0040, 1},
+	{0x3CB6, 0x0014, 1},
+	{0x3CB8, 0x0040, 1},
+	{0x3CBA, 0x0014, 1},
+	{0x3CBC, 0x0040, 1},
+	{0x3CBE, 0x0200, 1},
+	{0x3CC0, 0x0200, 1},
+	{0x3CC2, 0x0002, 1},
+	{0x3CC4, 0x0003, 1},
+	{0x3CC6, 0x0008, 1},
+	{0x3CC8, 0x0018, 1},
+	{0x3CCA, 0x0008, 1},
+	{0x3CCC, 0x0018, 1},
+	{0x3CCE, 0x0008, 1},
+	{0x3CD0, 0x0018, 1},
+	{0x3CD2, 0x0008, 1},
+	{0x3CD4, 0x0018, 1},
+	{0x3CD6, 0x0002, 1},
+	{0x3CD8, 0x0003, 1},
+	{0x3CDA, 0x0008, 1},
+	{0x3CDC, 0x0018, 1},
+	{0x3CDE, 0x0008, 1},
+	{0x3CE0, 0x0018, 1},
+	{0x3CE2, 0x0008, 1},
+	{0x3CE4, 0x0018, 1},
+	{0x3CE6, 0x0008, 1},
+	{0x3CE8, 0x0018, 1},
+	{0x3CEA, 0x0200, 1},
+	{0x3CEC, 0x0200, 1},
+	{0x3CEE, 0x0002, 1},
+	{0x3CF0, 0x0003, 1},
+	{0x3CF2, 0x0014, 1},
+	{0x3CF4, 0x0040, 1},
+	{0x3CF6, 0x0014, 1},
+	{0x3CF8, 0x0040, 1},
+	{0x3CFA, 0x0014, 1},
+	{0x3CFC, 0x0040, 1},
+	{0x3CFE, 0x0014, 1},
+	{0x3D00, 0x0040, 1},
+	{0x3D02, 0x0002, 1},
+	{0x3D04, 0x0003, 1},
+	{0x3D06, 0x0014, 1},
+	{0x3D08, 0x0040, 1},
+	{0x3D0A, 0x0014, 1},
+	{0x3D0C, 0x0040, 1},
+	{0x3D0E, 0x0014, 1},
+	{0x3D10, 0x0040, 1},
+	{0x3D12, 0x0014, 1},
+	{0x3D14, 0x0040, 1},
+	{0x3D16, 0x0200, 1},
+	{0x3D18, 0x0200, 1},
+	{0x3D1A, 0x0002, 1},
+	{0x3D1C, 0x0003, 1},
+	{0x3D1E, 0x0008, 1},
+	{0x3D20, 0x0018, 1},
+	{0x3D22, 0x0008, 1},
+	{0x3D24, 0x0018, 1},
+	{0x3D26, 0x0008, 1},
+	{0x3D28, 0x0018, 1},
+	{0x3D2A, 0x0008, 1},
+	{0x3D2C, 0x0018, 1},
+	{0x3D2E, 0x0002, 1},
+	{0x3D30, 0x0003, 1},
+	{0x3D32, 0x0008, 1},
+	{0x3D34, 0x0018, 1},
+	{0x3D36, 0x0008, 1},
+	{0x3D38, 0x0018, 1},
+	{0x3D3A, 0x0008, 1},
+	{0x3D3C, 0x0018, 1},
+	{0x3D3E, 0x0008, 1},
+	{0x3D40, 0x0018, 1},
+	{0x3D42, 0x0200, 1},
+	{0x3D44, 0x0200, 1},
+	{0x3D46, 0x0002, 1},
+	{0x3D48, 0x0003, 1},
+	{0x3D4A, 0x0014, 1},
+	{0x3D4C, 0x0040, 1},
+	{0x3D4E, 0x0014, 1},
+	{0x3D50, 0x0040, 1},
+	{0x3D52, 0x0014, 1},
+	{0x3D54, 0x0040, 1},
+	{0x3D56, 0x0014, 1},
+	{0x3D58, 0x0040, 1},
+	{0x3D5A, 0x0002, 1},
+	{0x3D5C, 0x0003, 1},
+	{0x3D5E, 0x0014, 1},
+	{0x3D60, 0x0040, 1},
+	{0x3D62, 0x0014, 1},
+	{0x3D64, 0x0040, 1},
+	{0x3D66, 0x0014, 1},
+	{0x3D68, 0x0040, 1},
+	{0x3D6A, 0x0014, 1},
+	{0x3D6C, 0x0040, 1},
+	{0x3D6E, 0x0200, 1},
+	{0x3D70, 0x0200, 1},
+	{0x3D72, 0x0002, 1},
+	{0x3D74, 0x0003, 1},
+	{0x3D76, 0x0008, 1},
+	{0x3D78, 0x0018, 1},
+	{0x3D7A, 0x0008, 1},
+	{0x3D7C, 0x0018, 1},
+	{0x3D7E, 0x0008, 1},
+	{0x3D80, 0x0018, 1},
+	{0x3D82, 0x0008, 1},
+	{0x3D84, 0x0018, 1},
+	{0x3D86, 0x0002, 1},
+	{0x3D88, 0x0003, 1},
+	{0x3D8A, 0x0008, 1},
+	{0x3D8C, 0x0018, 1},
+	{0x3D8E, 0x0008, 1},
+	{0x3D90, 0x0018, 1},
+	{0x3D92, 0x0008, 1},
+	{0x3D94, 0x0018, 1},
+	{0x3D96, 0x0008, 1},
+	{0x3D98, 0x0018, 1},
+	{0x3D9A, 0x0200, 1},
+	{0x3D9C, 0x0200, 1},
+	{0x3D9E, 0x0F00, 1},
+	{0x3DA0, 0x4B00, 1},
+	{0x3DA2, 0x8700, 1},
+	{0x3DA4, 0xC300, 1},
+	{0x3DA6, 0xFF00, 1},
+	{0x3DA8, 0x0032, 1},
+	{0x3DAA, 0x42, 0},
+	{0x3DAB, 0xFF, 0},
+	{0x3DAC, 0x08, 0},
+	{0x3DAE, 0x0001, 1},
+	{0x3DB0, 0x00, 0},
+	{0x3DB1, 0x08, 0},
+	{0x3DB2, 0x00FF, 1},
+	{0x3DB4, 0x00, 0},
+	{0x3DB5, 0x08, 0},
+	{0x3DB6, 0x0100, 1},
+	{0x3DB8, 0x01, 0},
+	{0x3DBA, 0x0F00, 1},
+};
+
+static struct s5k3l2_regval_list sensor_4208x3120_regs[] = {
+	{0x0100, 0x0000, 1},
+	{REG_DLY, 0x0050, 1},
+	{0x6028, 0xD000, 1},
+	{0x0200, 0x000A, 1},
+	{0x0202, 0x0014, 1},
+	{0x0136, 0x1800, 1},
+	{0x0204, 0x00, 0},
+	{0x0205, 0x80, 0},
+	{0x0202, 0x03ff, 1},
+	{0x0304, 0x0006, 1},
+	{0x0306, 0x00D8, 1},
+	{0x030C, 0x0006, 1},
+	{0x030E, 0x010E, 1},
+	{0x0302, 0x0001, 1},
+	{0x0300, 0x0002, 1},
+	{0x030A, 0x0001, 1},
+	{0x0308, 0x0008, 1},
+	{0x304F, 0x00, 0},
+	{0x35D9, 0x00, 0},
+	{0x303A, 0x02BC, 1},
+	{0x0B05, 0x01, 0},
+	{0x0B08, 0x01, 0},
+	{0x380E, 0x01, 0},
+	{0x3027, 0x10, 0},
+	{0x0342, 0x11A0, 1},
+	{0x0340, 0x0C6C, 1},
+	{0x034C, 0x1070, 1},
+	{0x034E, 0x0C30, 1},
+	{0x0114, 0x03, 0},
+	{0x0344, 0x0004, 1},
+	{0x0346, 0x0004, 1},
+	{0x0348, 0x1073, 1},
+	{0x034A, 0x0C35, 1},
+	{0x3010, 0x0000, 1},
+	{0x3012, 0x0001, 1},
+	{0x0386, 0x0001, 1},
+	{0x0382, 0x0001, 1},
+	{0x0900, 0x00, 0},
+	{0x0901, 0x11, 0},
+	{0x3027, 0x10, 0},
+	{0x0400, 0x0000, 1},
+	{0x0404, 0x0010, 1},
+	{0x0111, 0x02, 0},
+	{0x0112, 0x0A0A, 1},
+	{0x302A, 0x00, 0},
+	{0x0500, 0x0000, 1},
+	{0x303E, 0x00A0, 1},
+	{0x30DE, 0x01, 0},
+	{0x0100, 0x01, 0},
+};
+
+static struct s5k3l2_regval_list sensor_2448x2448_regs[] = {
+	{0x0100, 0x0000, 1},
+	{0x0200, 0x000A, 1},
+	{0x0136, 0x1800, 1},
+	{0x0304, 0x0006, 1},
+	{0x0306, 0x00D8, 1},
+	{0x030C, 0x0006, 1},
+	{0x030E, 0x00A2, 1},
+	{0x0302, 0x0001, 1},
+	{0x0300, 0x0002, 1},
+	{0x030A, 0x0001, 1},
+	{0x0308, 0x0008, 1},
+	{0x304F, 0x0100, 1},
+	{0x35D9, 0x0000, 1},
+	{0x303A, 0x02BC, 1},
+	{0x0B05, 0x0100, 1},
+	{0x0B08, 0x0100, 1},
+	{0x380E, 0x0100, 1},
+	{0x3027, 0x1000, 1},
+	{0x0202, 0x0014, 1},
+	{0x0340, 0x0734, 1},
+	{0x0342, 0x1E80, 1},
+	{0x034C, 0x0838, 1},
+	{0x034E, 0x0618, 1},
+	{0x0114, 0x0300, 1},
+	{0x0344, 0x0004, 1},
+	{0x0346, 0x0004, 1},
+	{0x0348, 0x1073, 1},
+	{0x034A, 0x0C35, 1},
+	{0x3010, 0x0000, 1},
+	{0x3012, 0x0001, 1},
+	{0x0386, 0x0003, 1},
+	{0x0382, 0x0003, 1},
+	{0x0900, 0x0100, 1},
+	{0x0901, 0x2200, 1},
+	{0x3027, 0x1000, 1},
+	{0x0400, 0x0000, 1},
+	{0x0404, 0x0010, 1},
+	{0x0111, 0x0200, 1},
+	{0x0112, 0x0A0A, 1},
+	{0x302A, 0x0000, 1},
+	{0x0500, 0x0000, 1},
+	{0x303E, 0x00A0, 1},
+	{0x30DE, 0x0100, 1},
+	{0x0100, 0x01, 0},
+};
+
+/*
+ * Here we'll try to encapsulate the changes for just the output
+ * video format.
+ *
+ */
+static struct regval_list sensor_fmt_raw[] = {
+
+};
+
+/*
+ * Code for dealing with controls.
+ * fill with different sensor module
+ * different sensor module has different settings here
+ * if not support the follow function ,retrun -EINVAL
+ */
+
+static int sensor_g_exp(struct v4l2_subdev *sd, __s32 *value)
+{
+	struct sensor_info *info = to_state(sd);
+	*value = info->exp;
+	sensor_dbg("sensor_get_exposure = %d\n", info->exp);
+	return 0;
+}
+
+static int sensor_s_exp(struct v4l2_subdev *sd, unsigned int exp_val)
+{
+	struct sensor_info *info = to_state(sd);
+
+	exp_val = exp_val >>  4;
+	sensor_write(sd, 0x0202, exp_val);
+
+	sensor_dbg("sensor_s_exp info->exp %d\n", exp_val);
+	info->exp = exp_val << 4;
+	return 0;
+}
+
+static int sensor_g_gain(struct v4l2_subdev *sd, __s32 *value)
+{
+	struct sensor_info *info = to_state(sd);
+	*value = info->gain;
+	sensor_dbg("sensor_get_gain = %d\n", info->gain);
+	return 0;
+}
+
+
+static int sensor_s_gain(struct v4l2_subdev *sd, unsigned int gain_val)
+{
+	struct sensor_info *info = to_state(sd);
+	data_type gainlow = 0;
+	data_type gainhigh = 0;
+
+	gain_val = gain_val * 2;
+	gainlow = (unsigned char)(gain_val & 0xff);
+	gainhigh = (unsigned char)((gain_val >> 8) & 0xff);
+
+	cci_write_a16_d8(sd, 0x0205, gainlow);
+	cci_write_a16_d8(sd, 0x0204, gainhigh);
+
+	sensor_dbg("sensor_s_gain info->gain %d\n", gain_val);
+	info->gain = gain_val / 2;
+	return 0;
+}
+
+static int s5k3l2_sensor_vts;
+static int frame_length = 3180;
+static int sensor_s_exp_gain(struct v4l2_subdev *sd,
+				struct sensor_exp_gain *exp_gain)
+{
+	int exp_val = 0, gain_val = 0, shutter = 0;
+	//struct sensor_info *info = to_state(sd);
+
+	exp_val = exp_gain->exp_val;
+	gain_val = exp_gain->gain_val;
+
+	shutter = exp_val >> 4;
+	if (shutter > s5k3l2_sensor_vts - 16)
+		frame_length = shutter + 16;
+	else
+		frame_length = s5k3l2_sensor_vts;
+
+	sensor_write(sd, 0x0104, 0x01);
+	sensor_write(sd, 0x0340, frame_length);
+	sensor_s_exp(sd, exp_val);
+	sensor_s_gain(sd, gain_val);
+	sensor_write(sd, 0x0104, 0x00);
+
+	sensor_dbg("sensor_set_gain exp = %d, %d Done!\n", gain_val, exp_val);
+
+	return 0;
+}
+
+static int sensor_s_fps(struct v4l2_subdev *sd,
+			struct sensor_fps *fps)
+{
+	struct sensor_info *info = to_state(sd);
+	struct sensor_win_size *wsize = info->current_wins;
+
+	s5k3l2_sensor_vts = wsize->pclk/fps->fps/wsize->hts;
+	sensor_write(sd, 0x0104, 0x01);
+	sensor_write(sd, 0x0340, s5k3l2_sensor_vts);
+	sensor_write(sd, 0x0104, 0x00);
+
+	return 0;
+}
+
+static int sensor_s_sw_stby(struct v4l2_subdev *sd, int on_off)
+{
+	int ret;
+	data_type rdval;
+
+	ret = sensor_read(sd, 0x0100, &rdval);
+
+	if (ret != 0)
+		return ret;
+
+	if (on_off == STBY_ON)
+		ret = sensor_write(sd, 0x0100, rdval & 0xfe);
+	else
+		ret = sensor_write(sd, 0x0100, rdval | 0x01);
+
+	return ret;
+}
+
+/*
+ * Stuff that knows about the sensor.
+ */
+static int sensor_power(struct v4l2_subdev *sd, int on)
+{
+	int ret;
+
+	ret = 0;
+	switch (on) {
+	case STBY_ON:
+		ret = sensor_s_sw_stby(sd, 1);
+		if (ret < 0)
+			sensor_err("soft stby falied!\n");
+		usleep_range(10000, 12000);
+
+		cci_lock(sd);
+		/* standby on io */
+		vin_gpio_write(sd, PWDN, CSI_GPIO_LOW);
+		cci_unlock(sd);
+		/* inactive mclk after stadby in */
+		vin_set_mclk(sd, OFF);
+		break;
+	case STBY_OFF:
+		cci_lock(sd);
+
+		vin_set_mclk_freq(sd, MCLK);
+		vin_set_mclk(sd, ON);
+		usleep_range(10000, 12000);
+
+		vin_gpio_write(sd, PWDN, CSI_GPIO_HIGH);
+		usleep_range(10000, 12000);
+
+		cci_unlock(sd);
+		ret = sensor_s_sw_stby(sd, 0);
+		if (ret < 0)
+			sensor_err("soft stby off falied!\n");
+		usleep_range(10000, 12000);
+
+		break;
+	case PWR_ON:
+		sensor_dbg("PWR_ON!\n");
+
+		cci_lock(sd);
+		vin_set_pmu_channel(sd, CAMERAVDD, ON);
+
+		vin_gpio_set_status(sd, PWDN, 1);
+		vin_gpio_set_status(sd, RESET, 1);
+
+		vin_gpio_write(sd, PWDN, CSI_GPIO_LOW);
+		vin_gpio_write(sd, RESET, CSI_GPIO_LOW);
+		usleep_range(100, 120);
+		vin_set_pmu_channel(sd, IOVDD, ON);
+		vin_set_pmu_channel(sd, AVDD, ON);
+		vin_set_pmu_channel(sd, DVDD, ON);
+		vin_set_pmu_channel(sd, AFVDD, ON);
+		usleep_range(1000, 1200);
+
+		vin_gpio_write(sd, RESET, CSI_GPIO_HIGH);
+		vin_gpio_write(sd, PWDN, CSI_GPIO_HIGH);
+		usleep_range(1000, 1200);
+
+		vin_set_mclk_freq(sd, MCLK);
+		usleep_range(1000, 1200);
+		vin_set_mclk(sd, ON);
+		usleep_range(100, 120);
+		cci_unlock(sd);
+		break;
+	case PWR_OFF:
+		sensor_dbg("PWR_OFF!\n");
+		cci_lock(sd);
+		vin_set_mclk(sd, OFF);
+		vin_gpio_write(sd, RESET, CSI_GPIO_HIGH);
+		vin_gpio_write(sd, PWDN, CSI_GPIO_HIGH);
+		usleep_range(1000, 1200);
+		vin_set_pmu_channel(sd, DVDD, OFF);
+		vin_set_pmu_channel(sd, AVDD, OFF);
+		vin_set_pmu_channel(sd, IOVDD, OFF);
+		vin_set_pmu_channel(sd, AFVDD, OFF);
+		vin_set_pmu_channel(sd, CAMERAVDD, OFF);
+		vin_gpio_write(sd, RESET, CSI_GPIO_LOW);
+		vin_gpio_write(sd, PWDN, CSI_GPIO_LOW);
+		cci_unlock(sd);
+		break;
+	default:
+		return -EINVAL;
+	}
+
+	return 0;
+}
+
+static int sensor_reset(struct v4l2_subdev *sd, u32 val)
+{
+	switch (val) {
+	case 0:
+		vin_gpio_write(sd, RESET, CSI_GPIO_HIGH);
+		usleep_range(10000, 12000);
+		break;
+	case 1:
+		vin_gpio_write(sd, RESET, CSI_GPIO_LOW);
+		usleep_range(10000, 12000);
+		break;
+	default:
+		return -EINVAL;
+	}
+	return 0;
+}
+
+static int sensor_detect(struct v4l2_subdev *sd)
+{
+	data_type rdval;
+	int ret;
+
+	ret = sensor_read(sd, 0x0000, &rdval);
+	sensor_print("read 0x0000:0x%x\n", (rdval >> 8));
+	if ((rdval >> 8) != (V4L2_IDENT_SENSOR >> 8)) {
+		sensor_err(" read 0x0000 return 0x%x\n", (rdval >> 8));
+		return -ENODEV;
+	}
+
+	ret = sensor_read(sd, 0x0001, &rdval);
+	sensor_print("read 0x0001:0x%x\n", (rdval >> 8));
+	if ((rdval >> 8) != (V4L2_IDENT_SENSOR & 0xff)) {
+		sensor_err(" read 0x0001 return 0x%x\n", (rdval >> 8));
+		return -ENODEV;
+	}
+
+	return 0;
+}
+
+static int sensor_init(struct v4l2_subdev *sd, u32 val)
+{
+	int ret;
+	struct sensor_info *info = to_state(sd);
+
+	sensor_dbg("sensor_init\n");
+
+	/*Make sure it is a target sensor */
+	ret = sensor_detect(sd);
+	if (ret) {
+		sensor_err("chip found is not an target chip.\n");
+		return ret;
+	}
+
+	info->focus_status = 0;
+	info->low_speed = 0;
+	info->width = 4208;
+	info->height = 3120;
+	info->hflip = 0;
+	info->vflip = 0;
+
+	info->tpf.numerator = 1;
+	info->tpf.denominator = 18; /* 15fps */
+
+	return 0;
+}
+
+static long sensor_ioctl(struct v4l2_subdev *sd, unsigned int cmd, void *arg)
+{
+	int ret = 0;
+	struct sensor_info *info = to_state(sd);
+
+	switch (cmd) {
+	case GET_CURRENT_WIN_CFG:
+		if (info->current_wins != NULL) {
+			memcpy(arg, info->current_wins,
+			       sizeof(struct sensor_win_size));
+			ret = 0;
+		} else {
+			sensor_err("empty wins!\n");
+			ret = -1;
+		}
+		break;
+	case SET_FPS:
+		ret = 0;
+		break;
+	case VIDIOC_VIN_SENSOR_EXP_GAIN:
+		ret = sensor_s_exp_gain(sd, (struct sensor_exp_gain *)arg);
+		break;
+	case VIDIOC_VIN_SENSOR_CFG_REQ:
+		sensor_cfg_req(sd, (struct sensor_config *)arg);
+		break;
+	case VIDIOC_VIN_SENSOR_SET_FPS:
+		ret = sensor_s_fps(sd, (struct sensor_fps *)arg);
+		break;
+	case VIDIOC_VIN_ACT_INIT:
+		ret = actuator_init(sd, (struct actuator_para *)arg);
+		break;
+	case VIDIOC_VIN_ACT_SET_CODE:
+		ret = actuator_set_code(sd, (struct actuator_ctrl *)arg);
+		break;
+	case VIDIOC_VIN_FLASH_EN:
+		ret = flash_en(sd, (struct flash_para *)arg);
+		break;
+	default:
+		return -EINVAL;
+	}
+	return ret;
+}
+
+/*
+ * Store information about the video data format.
+ */
+static struct sensor_format_struct sensor_formats[] = {
+	{
+		.desc = "Raw RGB Bayer",
+		.mbus_code = MEDIA_BUS_FMT_SBGGR10_1X10,
+		.regs = sensor_fmt_raw,
+		.regs_size = ARRAY_SIZE(sensor_fmt_raw),
+		.bpp = 1
+	},
+};
+#define N_FMTS ARRAY_SIZE(sensor_formats)
+
+/*
+ * Then there is the issue of window sizes.  Try to capture the info here.
+ */
+
+static struct sensor_win_size sensor_win_sizes[] = {
+	{
+		.width      = 4208,
+		.height     = 3120,
+		.hoffset    = 0,
+		.voffset    = 0,
+		.hts        = 4512,
+		.vts        = 3180,
+		.pclk       = 215222400,
+		.mipi_bps   = 1125 * 1000 * 1000,
+		.fps_fixed  = 15,
+		.bin_factor = 1,
+		.intg_min   = 1 << 4,
+		.intg_max   = (3180 - 16) << 4,
+		.gain_min   = 1 << 4,
+		.gain_max   = 16 << 4,
+		.regs       = sensor_4208x3120_regs,
+		.regs_size  = ARRAY_SIZE(sensor_4208x3120_regs),
+		.set_size   = NULL,
+	},
+
+	{
+		.width      = 2104,
+		.height     = 1560,
+		.hoffset    = 0,
+		.voffset    = 0,
+		.hts        = 7818,
+		.vts        = 1844,
+		.pclk       = 216245880,
+		.mipi_bps   = 648 * 1000 * 1000,
+		.fps_fixed  = 15,
+		.bin_factor = 1,
+		.intg_min   = 1 << 4,
+		.intg_max   = (1844 - 16) << 4,
+		.gain_min   = 1 << 4,
+		.gain_max   = 16 << 4,
+		.regs       = sensor_2448x2448_regs,
+		.regs_size  = ARRAY_SIZE(sensor_2448x2448_regs),
+		.set_size   = NULL,
+	},
+};
+
+#define N_WIN_SIZES (ARRAY_SIZE(sensor_win_sizes))
+
+static int sensor_g_mbus_config(struct v4l2_subdev *sd, unsigned int pad,
+				struct v4l2_mbus_config *cfg)
+{
+/*	struct sensor_info *info = to_state(sd); */
+
+	cfg->type = V4L2_MBUS_CSI2_DPHY;
+#if LINUX_VERSION_CODE >= KERNEL_VERSION(6, 1, 0)
+	cfg->bus.mipi_csi2.num_data_lanes = 0 | V4L2_MBUS_CSI2_4_LANE | V4L2_MBUS_CSI2_CHANNEL_0;
+#else
+	cfg->flags = 0 | V4L2_MBUS_CSI2_4_LANE | V4L2_MBUS_CSI2_CHANNEL_0;
+#endif
+
+	return 0;
+}
+
+static int sensor_g_ctrl(struct v4l2_ctrl *ctrl)
+{
+	struct sensor_info *info =
+		container_of(ctrl->handler, struct sensor_info, handler);
+	struct v4l2_subdev *sd = &info->sd;
+
+	switch (ctrl->id) {
+	case V4L2_CID_GAIN:
+		return sensor_g_gain(sd, &ctrl->val);
+	case V4L2_CID_EXPOSURE:
+		return sensor_g_exp(sd, &ctrl->val);
+	}
+	return -EINVAL;
+}
+
+static int sensor_s_ctrl(struct v4l2_ctrl *ctrl)
+{
+	struct sensor_info *info =
+		container_of(ctrl->handler, struct sensor_info, handler);
+	struct v4l2_subdev *sd = &info->sd;
+
+	switch (ctrl->id) {
+	case V4L2_CID_GAIN:
+		return sensor_s_gain(sd, ctrl->val);
+	case V4L2_CID_EXPOSURE:
+		return sensor_s_exp(sd, ctrl->val);
+	}
+	return -EINVAL;
+}
+
+static void s5k3l2_write_reg(struct v4l2_subdev *sd, struct s5k3l2_regval_list *regs, int array_size)
+{
+	int i;
+
+	for (i = 0; i < array_size; i++) {
+		if (regs[i].reg_addr == REG_DLY) {
+			usleep_range(regs[i].data * 1000, regs[i].data * 1000 + 100);
+		} else if (regs[i].flag == 1) {
+			cci_write_a16_d16(sd, regs[i].reg_addr, regs[i].data);
+		} else {
+			cci_write_a16_d8(sd, regs[i].reg_addr, regs[i].data);
+		}
+	}
+}
+
+static int sensor_reg_init(struct sensor_info *info)
+{
+	struct v4l2_subdev *sd = &info->sd;
+	struct sensor_format_struct *sensor_fmt = info->fmt;
+	struct sensor_win_size *wsize = info->current_wins;
+	struct sensor_exp_gain exp_gain;
+
+	s5k3l2_write_reg(sd, sensor_default_regs, ARRAY_SIZE(sensor_default_regs));
+
+	sensor_write_array(sd, sensor_fmt->regs, sensor_fmt->regs_size);
+
+	if (wsize->regs)
+		s5k3l2_write_reg(sd, wsize->regs, wsize->regs_size);
+
+	if (wsize->set_size)
+		wsize->set_size(sd);
+
+	info->width = wsize->width;
+	info->height = wsize->height;
+	s5k3l2_sensor_vts = wsize->vts;
+	exp_gain.exp_val = info->exp;
+	exp_gain.gain_val = info->gain;
+	sensor_s_exp_gain(sd, &exp_gain);
+
+	return 0;
+}
+
+static int sensor_s_stream(struct v4l2_subdev *sd, int enable)
+{
+	struct sensor_info *info = to_state(sd);
+
+	sensor_dbg("%s on = %d, %d*%d fps: %d code: %x\n", __func__, enable,
+	       info->current_wins->width, info->current_wins->height,
+	       info->current_wins->fps_fixed, info->fmt->mbus_code);
+
+	if (!enable)
+		return 0;
+
+	return sensor_reg_init(info);
+}
+
+/* ----------------------------------------------------------------------- */
+
+static const struct v4l2_ctrl_ops sensor_ctrl_ops = {
+	.g_volatile_ctrl = sensor_g_ctrl,
+	.s_ctrl = sensor_s_ctrl,
+};
+
+static const struct v4l2_subdev_core_ops sensor_core_ops = {
+	.reset = sensor_reset,
+	.init = sensor_init,
+	.s_power = sensor_power,
+	.ioctl = sensor_ioctl,
+#if IS_ENABLED(CONFIG_COMPAT)
+	.compat_ioctl32 = sensor_compat_ioctl32,
+#endif
+};
+
+static const struct v4l2_subdev_video_ops sensor_video_ops = {
+	.s_stream = sensor_s_stream,
+
+};
+
+static const struct v4l2_subdev_pad_ops sensor_pad_ops = {
+	.enum_mbus_code = sensor_enum_mbus_code,
+	.enum_frame_size = sensor_enum_frame_size,
+	.enum_frame_interval = sensor_enum_frame_interval,
+	.get_fmt = sensor_get_fmt,
+	.set_fmt = sensor_set_fmt,
+	.get_mbus_config = sensor_g_mbus_config,
+};
+
+static const struct v4l2_subdev_ops sensor_ops = {
+	.core = &sensor_core_ops,
+	.video = &sensor_video_ops,
+	.pad = &sensor_pad_ops,
+};
+
+static struct cci_driver cci_drv[] = {
+	{
+		.name = SENSOR_NAME,
+		.addr_width = CCI_BITS_16,
+		.data_width = CCI_BITS_16,
+	}, {
+		.name = SENSOR_NAME_2,
+		.addr_width = CCI_BITS_16,
+		.data_width = CCI_BITS_16,
+	}
+};
+
+static int sensor_init_controls(struct v4l2_subdev *sd, const struct v4l2_ctrl_ops *ops)
+{
+	struct sensor_info *info = to_state(sd);
+	struct v4l2_ctrl_handler *handler = &info->handler;
+	struct v4l2_ctrl *ctrl;
+	int ret = 0;
+
+	v4l2_ctrl_handler_init(handler, 2);
+
+	v4l2_ctrl_new_std(handler, ops, V4L2_CID_GAIN, 1 * 32, 16 * 32, 1, 32);
+	ctrl = v4l2_ctrl_new_std(handler, ops, V4L2_CID_EXPOSURE, 3 * 16, 65536 * 16, 1, 3 * 16);
+	if (ctrl != NULL)
+		ctrl->flags |= V4L2_CTRL_FLAG_VOLATILE;
+
+	if (handler->error) {
+		ret = handler->error;
+		v4l2_ctrl_handler_free(handler);
+	}
+
+	sd->ctrl_handler = handler;
+
+	return ret;
+}
+
+static int sensor_dev_id;
+#if LINUX_VERSION_CODE >= KERNEL_VERSION(6, 6, 0)
+static int sensor_probe(struct i2c_client *client)
+#else
+static int sensor_probe(struct i2c_client *client,
+			const struct i2c_device_id *id)
+#endif
+{
+	struct v4l2_subdev *sd;
+	struct sensor_info *info;
+	int i = 0;
+
+	info = kzalloc(sizeof(struct sensor_info), GFP_KERNEL);
+	if (info == NULL)
+		return -ENOMEM;
+	sd = &info->sd;
+
+	if (client) {
+		for (i = 0; i < SENSOR_NUM; i++) {
+			if (!strcmp(cci_drv[i].name, client->name))
+				break;
+		}
+		cci_dev_probe_helper(sd, client, &sensor_ops, &cci_drv[i]);
+	} else {
+		cci_dev_probe_helper(sd, client, &sensor_ops, &cci_drv[sensor_dev_id++]);
+	}
+
+	sensor_init_controls(sd, &sensor_ctrl_ops);
+
+	mutex_init(&info->lock);
+
+#if IS_ENABLED(CONFIG_SAME_I2C)
+	info->sensor_i2c_addr = I2C_ADDR >> 1;
+#endif
+	info->fmt = &sensor_formats[0];
+	info->fmt_pt = &sensor_formats[0];
+	info->win_pt = &sensor_win_sizes[0];
+	info->fmt_num = N_FMTS;
+	info->win_size_num = N_WIN_SIZES;
+	info->sensor_field = V4L2_FIELD_NONE;
+	info->stream_seq = MIPI_BEFORE_SENSOR;
+	info->af_first_flag = 1;
+	info->exp = 1024 * 16;
+	info->gain = 128;
+
+	return 0;
+}
+
+#if LINUX_VERSION_CODE >= KERNEL_VERSION(6, 1, 0)
+static void sensor_remove(struct i2c_client *client)
+{
+	struct v4l2_subdev *sd;
+	int i;
+
+	if (client) {
+		for (i = 0; i < SENSOR_NUM; i++) {
+			if (!strcmp(cci_drv[i].name, client->name))
+				break;
+		}
+		sd = cci_dev_remove_helper(client, &cci_drv[i]);
+	} else {
+		sd = cci_dev_remove_helper(client, &cci_drv[sensor_dev_id++]);
+	}
+
+	kfree(to_state(sd));
+}
+#else
+static int sensor_remove(struct i2c_client *client)
+{
+	struct v4l2_subdev *sd;
+	int i;
+
+	if (client) {
+		for (i = 0; i < SENSOR_NUM; i++) {
+			if (!strcmp(cci_drv[i].name, client->name))
+				break;
+		}
+		sd = cci_dev_remove_helper(client, &cci_drv[i]);
+	} else {
+		sd = cci_dev_remove_helper(client, &cci_drv[sensor_dev_id++]);
+	}
+
+	kfree(to_state(sd));
+	return 0;
+}
+#endif
+static const struct i2c_device_id sensor_id_1[] = {
+	{SENSOR_NAME, 0},
+	{}
+};
+
+static const struct i2c_device_id sensor_id_2[] = {
+	{SENSOR_NAME_2, 0},
+	{}
+};
+
+MODULE_DEVICE_TABLE(i2c, sensor_id_1);
+MODULE_DEVICE_TABLE(i2c, sensor_id_2);
+
+static struct i2c_driver sensor_driver[] = {
+	{
+		.driver = {
+			   .owner = THIS_MODULE,
+			   .name = SENSOR_NAME,
+			   },
+		.probe = sensor_probe,
+		.remove = sensor_remove,
+		.id_table = sensor_id_1,
+	},
+	{
+		.driver = {
+			   .owner = THIS_MODULE,
+			   .name = SENSOR_NAME_2,
+			   },
+		.probe = sensor_probe,
+		.remove = sensor_remove,
+		.id_table = sensor_id_2,
+	},
+};
+
+static __init int init_sensor(void)
+{
+	int i, ret = 0;
+
+	sensor_dev_id = 0;
+
+	for (i = 0; i < SENSOR_NUM; i++)
+		ret = cci_dev_init_helper(&sensor_driver[i]);
+
+	return ret;
+}
+
+static __exit void exit_sensor(void)
+{
+	int i;
+
+	sensor_dev_id = 0;
+
+	for (i = 0; i < SENSOR_NUM; i++)
+		cci_dev_exit_helper(&sensor_driver[i]);
+}
+
+VIN_INIT_DRIVERS(init_sensor);
+module_exit(exit_sensor);

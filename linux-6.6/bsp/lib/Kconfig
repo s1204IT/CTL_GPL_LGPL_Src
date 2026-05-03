@@ -1,0 +1,10 @@
+
+menu "Library routines"
+
+config LIBM
+        tristate "support softfloat"
+        default n
+        help
+         support softfloat in kernel
+
+endmenu
