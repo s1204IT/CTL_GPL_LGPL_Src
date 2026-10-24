@@ -1,4 +1,0 @@
-arch: riscv64
-type: ramfs
-version: 1.0.0
-toolchain: riscv64-linux-x86_64-20200528

@@ -8,6 +8,7 @@
 #include <linux/mm.h>
 #include <linux/mmzone.h>
 #include <linux/pagemap.h>
+#include <linux/page_size_compat.h>
 #include <linux/rmap.h>
 #include <linux/mmu_notifier.h>
 #include <linux/page_ext.h>
@@ -96,19 +97,15 @@ static void page_idle_clear_pte_refs(struct folio *folio)
 		.rmap_one = page_idle_clear_pte_refs_one,
 		.anon_lock = folio_lock_anon_vma_read,
 	};
-	bool need_lock;
 
 	if (!folio_mapped(folio) || !folio_raw_mapping(folio))
 		return;
 
-	need_lock = !folio_test_anon(folio) || folio_test_ksm(folio);
-	if (need_lock && !folio_trylock(folio))
+	if (!folio_trylock(folio))
 		return;
 
 	rmap_walk(folio, &rwc);
-
-	if (need_lock)
-		folio_unlock(folio);
+	folio_unlock(folio);
 }
 
 static ssize_t page_idle_bitmap_read(struct file *file, struct kobject *kobj,
@@ -210,6 +207,9 @@ static const struct attribute_group page_idle_attr_group = {
 static int __init page_idle_init(void)
 {
 	int err;
+
+	if (__PAGE_SIZE != PAGE_SIZE)
+		return 0;
 
 	err = sysfs_create_group(mm_kobj, &page_idle_attr_group);
 	if (err) {

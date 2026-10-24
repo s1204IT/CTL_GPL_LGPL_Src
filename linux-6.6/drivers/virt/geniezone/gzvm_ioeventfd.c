@@ -23,13 +23,13 @@ struct gzvm_ioevent {
 };
 
 /**
- * ioeventfd_check_collision() - Check collison assumes gzvm->ioevent_lock held.
+ * ioeventfd_check_collision() - Check collision assumes gzvm->ioevent_lock held.
  * @gzvm: Pointer to gzvm.
  * @p: Pointer to gzvm_ioevent.
  *
  * Return:
- * * true			- collison found
- * * false			- no collison
+ * * true			- collision found
+ * * false			- no collision
  */
 static bool ioeventfd_check_collision(struct gzvm *gzvm, struct gzvm_ioevent *p)
 {
@@ -278,4 +278,14 @@ int gzvm_init_ioeventfd(struct gzvm *gzvm)
 	mutex_init(&gzvm->ioevent_lock);
 
 	return 0;
+}
+
+void gzvm_vm_ioeventfd_release(struct gzvm *gzvm)
+{
+	struct gzvm_ioevent *p, *tmp;
+
+	mutex_lock(&gzvm->ioevent_lock);
+	list_for_each_entry_safe(p, tmp, &gzvm->ioevents, list)
+		gzvm_ioevent_release(p);
+	mutex_unlock(&gzvm->ioevent_lock);
 }

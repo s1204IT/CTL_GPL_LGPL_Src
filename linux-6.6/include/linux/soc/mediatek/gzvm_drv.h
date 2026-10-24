@@ -13,6 +13,28 @@
 #include <linux/gzvm.h>
 #include <linux/srcu.h>
 #include <linux/rbtree.h>
+#include <linux/kref.h>
+
+/* GZVM version encode */
+#define GZVM_DRV_MAJOR_VERSION		16
+#define GZVM_DRV_MINOR_VERSION		0
+
+struct gzvm_version {
+	u32 major;
+	u32 minor;
+	u64 sub;	/* currently, used by hypervisor */
+};
+
+struct gzvm_driver {
+	struct gzvm_version hyp_version;
+	struct gzvm_version drv_version;
+
+	struct kobject *sysfs_root_dir;
+	u32 demand_paging_batch_pages;
+	u32 destroy_batch_pages;
+
+	struct dentry *gzvm_debugfs_dir;
+};
 
 /*
  * For the normal physical address, the highest 12 bits should be zero, so we
@@ -33,6 +55,7 @@
 #define ERR_INVALID_ARGS        (-8)
 #define ERR_NOT_SUPPORTED       (-24)
 #define ERR_NOT_IMPLEMENTED     (-27)
+#define ERR_BUSY                (-33)
 #define ERR_FAULT               (-40)
 #define GZVM_IRQFD_RESAMPLE_IRQ_SOURCE_ID       1
 
@@ -43,9 +66,12 @@
 #define GZVM_MAX_VCPUS		 8
 #define GZVM_MAX_MEM_REGION	10
 
-#define GZVM_VCPU_RUN_MAP_SIZE		(PAGE_SIZE * 2)
+#define GZVM_VCPU_RUN_MAP_SIZE			(PAGE_SIZE * 2)
 
-#define GZVM_BLOCK_BASED_DEMAND_PAGE_SIZE	(2 * 1024 * 1024) /* 2MB */
+#define GZVM_BLOCK_BASED_DEMAND_PAGE_SIZE	(PMD_SIZE) /* 2MB */
+#define GZVM_DRV_DEMAND_PAGING_BATCH_PAGES	\
+	(GZVM_BLOCK_BASED_DEMAND_PAGE_SIZE / PAGE_SIZE)
+#define GZVM_DRV_DESTROY_PAGING_BATCH_PAGES	(128)
 
 #define GZVM_MAX_DEBUGFS_DIR_NAME_SIZE  20
 #define GZVM_MAX_DEBUGFS_VALUE_SIZE	20
@@ -129,6 +155,7 @@ struct gzvm_vm_stat {
 /**
  * struct gzvm: the following data structures are for data transferring between
  * driver and hypervisor, and they're aligned with hypervisor definitions.
+ * @gzvm_drv: the data structure is used to keep driver's information
  * @vcpus: VM's cpu descriptors
  * @mm: userspace tied to this vm
  * @memslot: VM's memory slot descriptor
@@ -151,8 +178,10 @@ struct gzvm_vm_stat {
  * page mailbox at the same time
  * @stat: information for VM memory statistics
  * @debug_dir: debugfs directory node for VM memory statistics
+ * @kref: reference counter between vm and vcpu when destroy happened
  */
 struct gzvm {
+	struct gzvm_driver *gzvm_drv;
 	struct gzvm_vcpu *vcpus[GZVM_MAX_VCPUS];
 	struct mm_struct *mm;
 	struct gzvm_memslot memslot[GZVM_MAX_MEM_REGION];
@@ -185,10 +214,11 @@ struct gzvm {
 
 	struct gzvm_vm_stat stat;
 	struct dentry *debug_dir;
+	struct kref kref;
 };
 
 long gzvm_dev_ioctl_check_extension(struct gzvm *gzvm, unsigned long args);
-int gzvm_dev_ioctl_create_vm(unsigned long vm_type);
+int gzvm_dev_ioctl_create_vm(struct gzvm_driver *drv, unsigned long vm_type);
 
 int gzvm_err_to_errno(unsigned long err);
 
@@ -197,12 +227,18 @@ void gzvm_destroy_all_vms(void);
 void gzvm_destroy_vcpus(struct gzvm *gzvm);
 
 /* arch-dependant functions */
-int gzvm_arch_probe(void);
+int gzvm_arch_probe(struct gzvm_version drv_version,
+		    struct gzvm_version *hyp_version);
+int gzvm_arch_query_hyp_batch_pages(struct gzvm_enable_cap *cap,
+				    void __user *argp);
+int gzvm_arch_query_destroy_batch_pages(struct gzvm_enable_cap *cap,
+					void __user *argp);
+
 int gzvm_arch_set_memregion(u16 vm_id, size_t buf_size,
 			    phys_addr_t region);
 int gzvm_arch_check_extension(struct gzvm *gzvm, __u64 cap, void __user *argp);
 int gzvm_arch_create_vm(unsigned long vm_type);
-int gzvm_arch_destroy_vm(u16 vm_id);
+int gzvm_arch_destroy_vm(u16 vm_id, u64 destroy_page_gran);
 int gzvm_arch_map_guest(u16 vm_id, int memslot_id, u64 pfn, u64 gfn,
 			u64 nr_pages);
 int gzvm_arch_map_guest_block(u16 vm_id, int memslot_id, u64 gfn, u64 nr_pages);
@@ -231,9 +267,6 @@ u64 gzvm_vcpu_arch_get_timer_delay_ns(struct gzvm_vcpu *vcpu);
 void gzvm_vtimer_set(struct gzvm_vcpu *vcpu, u64 ns);
 void gzvm_vtimer_release(struct gzvm_vcpu *vcpu);
 
-int gzvm_drv_debug_init(void);
-void gzvm_drv_debug_exit(void);
-
 int gzvm_find_memslot(struct gzvm *vm, u64 gpa);
 int gzvm_handle_page_fault(struct gzvm_vcpu *vcpu);
 bool gzvm_handle_guest_exception(struct gzvm_vcpu *vcpu);
@@ -260,6 +293,7 @@ int gzvm_arch_memregion_purpose(struct gzvm *gzvm,
 int gzvm_arch_set_dtb_config(struct gzvm *gzvm, struct gzvm_dtb_config *args);
 
 int gzvm_init_ioeventfd(struct gzvm *gzvm);
+void gzvm_vm_ioeventfd_release(struct gzvm *gzvm);
 int gzvm_ioeventfd(struct gzvm *gzvm, struct gzvm_ioeventfd *args);
 bool gzvm_ioevent_write(struct gzvm_vcpu *vcpu, __u64 addr, int len,
 			const void *val);
@@ -267,5 +301,7 @@ void eventfd_ctx_do_read(struct eventfd_ctx *ctx, __u64 *cnt);
 struct vm_area_struct *vma_lookup(struct mm_struct *mm, unsigned long addr);
 void add_wait_queue_priority(struct wait_queue_head *wq_head,
 			     struct wait_queue_entry *wq_entry);
+void gzvm_vm_put(struct gzvm *gzvm);
+void gzvm_vm_get(struct gzvm *gzvm);
 
 #endif /* __GZVM_DRV_H__ */

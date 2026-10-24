@@ -7,8 +7,6 @@ mainmenu "Linux/$(ARCH) $(KERNELVERSION) Kernel Configuration"
 
 source "scripts/Kconfig.include"
 
-source "bsp/Kconfig"
-
 source "init/Kconfig"
 
 source "kernel/Kconfig.freezer"

@@ -135,7 +135,6 @@ GTAGS
 # id-utils files
 ID
 
-*.orig
 *~
 \#*#
 
@@ -170,6 +169,3 @@ sphinx_*/
 
 # Rust analyzer configuration
 /rust-project.json
-
-# Independent BSP repo (Symlinks)
-bsp

@@ -184,7 +184,7 @@ static int hyp_allocator_map(struct hyp_allocator *allocator,
 		u8 *missing_donations = this_cpu_ptr(&hyp_allocator_missing_donations);
 		u32 delta = (size >> PAGE_SHIFT) - mc->nr_pages;
 
-		*missing_donations = (u8)min(delta, (u32)~((u8)0));
+		*missing_donations = min(delta, U8_MAX);
 
 		return -ENOMEM;
 	}
@@ -556,7 +556,13 @@ void *hyp_alloc(size_t size)
 	unsigned long chunk_addr;
 	int missing_map, ret = 0;
 
-	size = ALIGN(size, MIN_ALLOC);
+	/* constrained by chunk_hdr *_size types */
+	if (size > U32_MAX) {
+		ret = -E2BIG;
+		goto end_unlocked;
+	}
+
+	size = ALIGN(size ?: MIN_ALLOC, MIN_ALLOC);
 
 	hyp_spin_lock(&allocator->lock);
 
@@ -591,9 +597,11 @@ void *hyp_alloc(size_t size)
 	}
 
 	WARN_ON(chunk_install(chunk, size, last_chunk, allocator));
+
 end:
 	hyp_spin_unlock(&allocator->lock);
 
+end_unlocked:
 	*(this_cpu_ptr(&hyp_allocator_errno)) = ret;
 
 	/* Enforce zeroing allocated memory */
